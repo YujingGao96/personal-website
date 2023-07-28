@@ -1,0 +1,118 @@
+body {
+    background-color: #121212;
+    margin-top: 6em;
+}
+
+section {
+    margin-bottom: 6em;
+}
+
+a:focus, span:focus, button:focus{
+    outline: none;
+}
+
+.dark-shadow {
+    box-shadow: 7px 8px 29px 0 rgba(0, 0, 0, 1);
+}
+
+#root {
+    overflow-x: hidden;
+    -ms-overflow-y: hidden;
+}
+
+#navbar-bg {
+    background: rgba(33, 33, 33, 0.7);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
+    box-shadow: 7px 3px 7px 4px rgb(0 0 0 / 50%);
+    border-radius: 0 0 10px 10px;
+}
+
+@media (min-width: 992px) {
+    #navbar-bg a:hover {
+        transform: scale(1.02);
+        transition: .2s ease-in;
+    }
+}
+
+#particle-bg {
+    position: fixed;
+    z-index: -1;
+    width: 100vw;
+    height: 100vh;
+    background-size: contain;
+}
+
+#bottom-frame {
+    background-image: url("images/city-line.png");
+    height: 7em;
+    width: 100%;
+    background-size: contain;
+}
+
+#intro-head {
+    background-image: url("images/trophy.png");
+    height: 65px;
+    width: auto;
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: translate(10%, 15%);
+}
+
+.dark-bg {
+    background-color: #212121df;
+    box-shadow: rgb(0 0 0 / 50%) 6px 4px 9px 3px;
+}
+
+.rounded-all {
+    border-radius: .7em;
+}
+
+.rounded-top {
+    border-top-left-radius: .7rem !important;
+    border-top-right-radius: .7rem !important;
+}
+
+.gradient-text-1 {
+    background: #16BFFD; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #CB3066, #16BFFD); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #CB3066, #16BFFD); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-size: 100%;
+    background-repeat: repeat;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-2 {
+    background: #EECDA3; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #EF629F, #EECDA3); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #EF629F, #EECDA3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-size: 100%;
+    background-repeat: repeat;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-3 {
+    background: #FF8008;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #FFC837, #FF8008);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #FFC837, #FF8008); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-size: 100%;
+    background-repeat: repeat;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-4 {
+    background: #1FA2FF;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #A6FFCB, #12D8FA, #1FA2FF);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #A6FFCB, #12D8FA, #1FA2FF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-size: 100%;
+    background-repeat: repeat;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.quote-text {
+    font-family: 'The Girl Next Door', cursive;
+}
