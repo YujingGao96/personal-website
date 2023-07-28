@@ -3,7 +3,8 @@ import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
 import {darcula} from "react-syntax-highlighter/dist/cjs/styles/prism";
 import {MacTerminal} from "react-window-ui";
 import Zoom from "react-reveal/Zoom";
-import {age, name, gender, jobTitle, department, company, email, phoneNumber} from "../resolvers/profileResolver";
+import {age, name, gender, jobTitle, department, company, email, phoneNumber} from "../../resolvers/profileResolver";
+import profilePicture from './profile.jpg'
 
 const Intro = () => {
     const codeString = 'PersonBuilder' +
@@ -40,7 +41,7 @@ const Intro = () => {
                             <div className="row p-2">
                                 <div className="col-md-5 col-sm-12 p-3 text-center">
                                     <img className="rounded-circle border border-light dark-shadow"
-                                         height="auto" width="50%" src="./profile.jpg" alt="profile"
+                                         height="auto" width="50%" src={profilePicture} alt="profile"
                                          onMouseDown={e => e.preventDefault()}
                                          onContextMenu={e => e.preventDefault()}/>
                                     <h2 className="pt-4">Yujing Gao</h2>

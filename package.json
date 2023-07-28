@@ -1,6 +1,6 @@
 {
   "name": "y-gao",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
@@ -12,12 +12,16 @@
     "react": "^16.13.1",
     "react-anchor-link-smooth-scroll": "^1.0.12",
     "react-dom": "^16.13.1",
-    "react-particles-js": "^3.3.0",
     "react-reveal": "^1.2.2",
-    "react-scripts": "3.4.3",
+    "react-scripts": "5.0.1",
     "react-syntax-highlighter": "^13.5.3",
+    "react-tsparticles": "^2.11.0",
     "react-vertical-timeline-component": "^3.0.2",
-    "react-window-ui": "^2.2.0"
+    "react-window-ui": "^2.2.0",
+    "tsparticles": "^2.11.1"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "7.21.11"
   },
   "scripts": {
     "start": "react-scripts start",
