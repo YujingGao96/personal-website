@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import Intro from "./components/intro/Intro";
+import Intro from "./components/Intro";
 import NavBar from "./components/NavBar";
 import './App.css';
 import ParticleBG from "./components/ParticleBG";

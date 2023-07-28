@@ -6,7 +6,7 @@ const MyProjectsCards = () => {
         return (
             <div className="row mt-5">
                 <ProjectCard
-                    src="./ieee.jpg"
+                    src="./ieee.jpeg"
                     title="Spring 2019, IEEE SoutheastCon, Huntsville, Alabama"
                     text="Published paper on 2019 IEEE SoutheastCon entitled Multi-Factor Stateful Authentication using NFC and Mobile Phones. The project implemented a Windows Authentication System using technologies like AES Encryption, pGina, and Android Host-based Card Emulation."
                     link="https://ieeexplore.ieee.org/abstract/document/9020559"/>
@@ -26,7 +26,7 @@ const MyProjectsCards = () => {
                     text="The Team Gao project was launched under Server Side Web Development class. Four members was assigned to create an aesthetic movie searching engine. The website utilized OMDb RESTful API along with PHP as backend. It aims to bring the best user experience to our audiences."
                     link="https://web-project-team-gao.herokuapp.com/"/>
                 <ProjectCard
-                    src="./group-chat.jpg"
+                    src="./group-chat.jpeg"
                     title="Spring 2019, Mobile Computing, Columbus State University"
                     text="A final project for Mobile Computing class. The app is built for Android Mobile Operating System. It utilized the most popular Firebase real-time database framework & phone number authentication API from Google, and bring the best user experience to the customers. "
                     link="https://play.google.com/store/apps/details?id=com.gao.groupchat"/>
