@@ -77,7 +77,7 @@ const TimeLine = () => {
                     <h5 className="vertical-timeline-element-subtitle">Aflac, Columbus, GA</h5>
                     <b className="hr anim red"></b>
                     <p>
-                        🕸️ I carry a specialized expertise in crafting web services using J2EE and Websphere.
+                        🕸 I carry a specialized expertise in crafting web services using J2EE and Websphere.
                     </p>
                     <p>
                         💾 I have had the privilege to significantly participate in the transformation of legacy
@@ -120,9 +120,32 @@ const TimeLine = () => {
                     <h5 className="vertical-timeline-element-subtitle">Columbus State University, Columbus, GA</h5>
                     <b className="hr anim lime"></b>
                     <p>
-                        While studying at Columbus State University, I worked as a graduate assistance and a STEM
-                        program
-                        mentor.
+                        👨🏻‍🏫 Throughout this role, I honed my teaching and coaching skills, effectively guiding and
+                        inspiring
+                        students in the fields of science, technology, engineering, and mathematics.
+                    </p>
+                    <p>
+                        📋 As a Graduate Assistant, I collaborated with professors to design and deliver engaging
+                        instructional
+                        materials, fostering a dynamic learning environment that encouraged active participation and
+                        critical thinking among students.
+                    </p>
+                    <p>
+                        🧭 Additionally, my role as a STEM Program Mentor allowed me to provide one-on-one support,
+                        guiding
+                        students through complex concepts, and nurturing their problem-solving abilities.
+                    </p>
+                    <p>
+                        💪🏼 These experiences have not only strengthened my technical expertise but have also cultivated
+                        my
+                        communication skills, adaptability, and empathy in order to tailor my approach to each student's
+                        unique learning style.
+                    </p>
+                    <p>
+                        ⚡️ As I continue to grow in my career as a software developer, I am eager to apply these
+                        invaluable
+                        teaching and coaching skills to contribute effectively to any team and foster a culture of
+                        continuous learning and development.
                     </p>
                 </VerticalTimelineElement>
 
@@ -146,9 +169,29 @@ const TimeLine = () => {
                     <h5 className="vertical-timeline-element-subtitle">Columbus State University, Columbus, GA</h5>
                     <b className="hr anim green"></b>
                     <p>
-                        Studied <b><i> Applied Computer Science - Software Development</i></b> at Columbus
-                        State
-                        University.
+                        ⭐️ During my pursuit of a Master of Computer Science (Software Development track) degree at
+                        Columbus State University, I have acquired a diverse and comprehensive skill set through a
+                        rigorous curriculum that emphasized both theoretical knowledge and practical application.
+                    </p>
+                    <p>
+                        📚 Relevant Courses:
+                        <ul>
+                            <li>Modeling and Simulation</li>
+                            <li>Computer Language Design and Interpretation</li>
+                            <li>Software Estimation and Measure</li>
+                            <li>Object-Oriented Development with Components</li>
+                            <li>Contemporary Issues In DB Management System</li>
+                            <li>Data Visualization and Presentation</li>
+                            <li>Software Design and Development</li>
+                            <li>Introduction to Cyber-security</li>
+                            <li>Mobile Systems & Applications</li>
+                        </ul>
+                    </p>
+                    <p>
+                        🏁 I am proud of my academic achievements and the diverse range of skills I have acquired
+                        throughout my Master's program. These experiences have equipped me with a strong foundation to
+                        excel as a software developer, capable of tackling complex challenges and contributing
+                        effectively to the development of cutting-edge software solutions.
                     </p>
                 </VerticalTimelineElement>
 
@@ -172,7 +215,26 @@ const TimeLine = () => {
                     <h6 className="vertical-timeline-element-subtitle">Columbus State University, Columbus, GA</h6>
                     <b className="hr anim blue"></b>
                     <p>
-                        Studied <b><i>Computer Science - Applied Computing</i></b> at Columbus State University.
+                        👨🏻‍🎓 During my pursuit of a Bachelor of Computer Science degree, I gained a solid foundation in
+                        various fundamental areas of computer science. The program covered a wide range of essential
+                        topics, enabling me to develop a comprehensive skill set as a software developer.
+                    </p>
+                    <p>
+                        🔑 Key Areas of Study:
+                        <ul>
+                            <li>Object-Oriented Language and Design Patterns</li>
+                            <li>Operating Systems</li>
+                            <li>Computer Networks</li>
+                            <li>Internet Programming and Web Development</li>
+                            <li>Database Systems</li>
+                            <li>Mobile Computing</li>
+                            <li>etc.</li>
+                        </ul>
+                    </p>
+                    <p>
+                        🌈 My bachelor's degree in computer science has laid a solid groundwork for my continued growth
+                        as a software developer, enabling me to adapt to diverse challenges and stay abreast of the latest
+                        advancements in the ever-evolving field of computer science.
                     </p>
                 </VerticalTimelineElement>
 
