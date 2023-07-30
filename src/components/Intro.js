@@ -3,10 +3,11 @@ import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
 import {darcula} from "react-syntax-highlighter/dist/cjs/styles/prism";
 import {MacTerminal} from "react-window-ui";
 import Zoom from "react-reveal/Zoom";
-import {age, name, gender, jobTitle, company, email, phoneNumber} from "../resolvers/profileResolver";
+import {age, name, gender, jobTitle, company, email, phoneNumber, linkedin} from "../resolvers/profileResolver";
 import globalPaymentsIcon from "../images/gp.png";
 import emailIcon from "../images/email.png";
-import phoneIcon from "../images/phone.png"
+import phoneIcon from "../images/phone.png";
+import linkedinIcon from "../images/linkedin.png";
 
 const Intro = () => {
     const codeString = 'PersonBuilder' +
@@ -50,14 +51,17 @@ const Intro = () => {
                                     <h4 className="text-muted pt-3">{jobTitle}</h4>
                                     <div className="mx-auto">
                                         <div className="text-left d-inline-block">
-                                            <h6 className="text-muted pt-2 ">
+                                            <h6 className="text-muted pt-1 ">
                                                 <span className="mx-3"><img src={globalPaymentsIcon} alt="Global Payments" height="20px" width="20px"/></span>{company}
                                             </h6>
-                                            <a href={`mailto:${email}`} className="text-muted pt-2 h6">
+                                            <h6 className="text-muted pt-1">
                                                 <span className="mx-3"><img src={emailIcon} alt="Email" height="20px" width="20px"/></span>{email}
-                                            </a>
-                                            <h6 className="text-muted pt-2">
+                                            </h6>
+                                            <h6 className="text-muted pt-1">
                                                 <span className="mx-3"><img src={phoneIcon} alt="Phone" height="20px" width="20px"/></span>{phoneNumber}
+                                            </h6>
+                                            <h6 className="text-muted pt-1">
+                                                <span className="mx-3"><img src={linkedinIcon} alt="Linkedin" height="20px" width="20px"/></span>{linkedin}
                                             </h6>
                                         </div>
                                     </div>
