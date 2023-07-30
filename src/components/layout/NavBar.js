@@ -80,19 +80,19 @@ const NavBar = ({showMenu, setShowMenu}) => {
                                 Timeline{currentTab === 'timeline' ? currentSelectJSX : null}
                             </AnchorLink>
                         </li>
-                        <li className={`px-2 nav-item ${currentTab === 'quotes' ? 'active' : ''}`}>
+                        <li className={`px-2 nav-item ${currentTab === 'compliments' ? 'active' : ''}`}>
                             <AnchorLink
                                 offset="100"
                                 className="nav-link"
-                                href="#quotes"
+                                href="#compliments"
                                 data-toggle="collapse"
                                 data-target="#navbarNav"
                                 onClick={() => {
-                                    setCurrentTab('quotes');
+                                    setCurrentTab('compliments');
                                     setShowMenu(!showMenu)
                                 }}>
                                 <FontAwesomeIcon icon={faQuoteRight} size="lg" fixedWidth/> &nbsp;
-                                Quotes{currentTab === 'quotes' ? currentSelectJSX : null}
+                                Compliments{currentTab === 'compliments' ? currentSelectJSX : null}
                             </AnchorLink>
                         </li>
                         <li className={`px-2 nav-item ${currentTab === 'blogs' ? 'active' : ''}`}>
