@@ -5,7 +5,7 @@ import {faChevronRight} from "@fortawesome/free-solid-svg-icons/faChevronRight";
 import Fade from "react-reveal/Fade";
 import HeadShake from 'react-reveal/HeadShake';
 
-const ProjectCard = ({src, title, text, link}) => {
+const PreviewCard = ({src, title, text, link}) => {
     const [show, setShow] = useState(false);
     return (
         <Fade up>
@@ -23,7 +23,7 @@ const ProjectCard = ({src, title, text, link}) => {
                            onMouseOver={() => setShow(true)}
                            onMouseLeave={() => setShow(false)}
                         >
-                            Learn More &nbsp;
+                            Read More &nbsp;
                             <FontAwesomeIcon icon={faChevronRight}/>
                         </a>
                     </HeadShake>
@@ -33,4 +33,4 @@ const ProjectCard = ({src, title, text, link}) => {
     );
 };
 
-export default ProjectCard;
+export default PreviewCard;
