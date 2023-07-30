@@ -14,7 +14,6 @@ const Blogs = () => {
             <Swiper
                 modules={[Pagination]}
                 spaceBetween={30}
-                slidesPerView={2}
                 pagination={{clickable: true}}
                 className="py-5 px-3"
                 style={{
@@ -23,6 +22,18 @@ const Blogs = () => {
                     "--swiper-pagination-bullet-inactive-opacity": "1",
                     "--swiper-pagination-bullet-size": "12px",
                     "--swiper-pagination-bullet-horizontal-gap": "6px"
+                }}
+                breakpoints={{
+                    // when window width is >= 640px
+                    640: {
+                        width: 640,
+                        slidesPerView: 1,
+                    },
+                    // when window width is >= 768px
+                    768: {
+                        width: 768,
+                        slidesPerView: 2,
+                    },
                 }}
             >
 
