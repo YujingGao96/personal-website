@@ -21,12 +21,12 @@ const Intro = () => {
         '\n\t)' +
         '\n\t.addEducation(' +
         '\n\t\tnew Degree(' +
-        '\n\t\t\t"B.S. in CS", ' +
+        '\n\t\t\t"B.S. in Computer Science", ' +
         '\n\t\t\t"CSU, Columbus, GA", ' +
         '\n\t\t\t"May 15th, 2020"' +
         '\n\t\t),' +
         '\n\t\tnew Degree(' +
-        '\n\t\t\t"M.S. in CS",' +
+        '\n\t\t\t"M.S. in Computer Science",' +
         '\n\t\t\t"CSU, Columbus, GA",' +
         '\n\t\t\t"Aug 4th, 2021"' +
         '\n\t\t)' +
