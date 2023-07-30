@@ -10,7 +10,6 @@ import {
     faChalkboardTeacher
 } from "@fortawesome/free-solid-svg-icons";
 import 'react-vertical-timeline-component/style.min.css';
-import csuLogo from "../images/csu.png";
 
 const TimeLine = () => {
     const body = () => {
