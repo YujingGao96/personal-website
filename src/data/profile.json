@@ -1,6 +1,8 @@
 {
   "name": "Yujing Gao",
   "birthYear": 1996,
+  "birthMonth": 3,
+  "birthDate": 27,
   "gender": "Male",
   "jobTitle": "Full Stack Developer",
   "company": "Global Payments Inc.",

@@ -1,18 +1,27 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
 import {darcula} from "react-syntax-highlighter/dist/cjs/styles/prism";
 import {MacTerminal} from "react-window-ui";
 import Zoom from "react-reveal/Zoom";
-import {age, name, gender, jobTitle, company, email, phoneNumber, linkedin} from "../resolvers/profileResolver";
+import {getAge, birthday, name, gender, jobTitle, company, email, phoneNumber, linkedin} from "../resolvers/profileResolver";
 import globalPaymentsIcon from "../images/gp.png";
 import emailIcon from "../images/email.png";
 import phoneIcon from "../images/phone.png";
 import linkedinIcon from "../images/linkedin.png";
 
 const Intro = () => {
+    const [ageState, setAgeState] = useState(getAge(birthday));
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setAgeState(getAge(birthday))
+        }, 100);
+        return () => clearInterval(interval);
+    }, []);
+
     const codeString = 'PersonBuilder' +
         `\n\t.setName("${name}")` +
-        `\n\t.setAge(${age})` +
+        `\n\t.setAge(${ageState}d)` +
         `\n\t.setGender(Gender.${gender.toUpperCase()})` +
         `\n\t.setJob("${jobTitle}")` +
         '\n\t.isAppleFan(true)' +
@@ -47,7 +56,7 @@ const Intro = () => {
                                          height="auto" width="50%" src="/profile.jpg" alt="profile"
                                          onMouseDown={e => e.preventDefault()}
                                          onContextMenu={e => e.preventDefault()}/>
-                                    <h2 className="pt-4">Yujing Gao</h2>
+                                    <h2 className="pt-4">{name}</h2>
                                     <h4 className="text-muted pt-3">{jobTitle}</h4>
                                     <div className="mx-auto">
                                         <div className="text-left d-inline-block">
