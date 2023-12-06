@@ -21,7 +21,7 @@ const Intro = () => {
 
     const codeString = 'PersonBuilder' +
         `\n\t.setName("${name}")` +
-        `\n\t.setAge(${ageState}d)` +
+        `\n\t.setAge(${ageState})` +
         `\n\t.setGender(Gender.${gender.toUpperCase()})` +
         `\n\t.setJob("${jobTitle}")` +
         '\n\t.isAppleFan(true)' +
