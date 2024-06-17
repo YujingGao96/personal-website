@@ -1,5 +1,4 @@
-import React, {Fragment} from "react";
-import {useState} from "react";
+import React, {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronRight} from "@fortawesome/free-solid-svg-icons/faChevronRight";
 import Fade from "react-reveal/Fade";
