@@ -72,7 +72,9 @@ const Intro = () => {
                                          onMouseOver={e => setShowConfetti(true)}
                                          onMouseLeave={e => setShowConfetti(false)}
                                          onMouseDown={e => e.preventDefault()}
-                                         onContextMenu={e => e.preventDefault()}/>
+                                         onMouseUp={e => e.preventDefault()}
+                                         onContextMenu={e => e.preventDefault()}
+                                    on/>
                                     <h2 className="pt-4">{name}</h2>
                                     <h4 className="text-muted pt-3">{jobTitle}</h4>
                                     <div className="mx-auto">
