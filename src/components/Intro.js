@@ -57,7 +57,7 @@ const Intro = () => {
             <Zoom>
                 <div className="mt-2 blur-background">
                     <div className="mt-5">
-                        <Terminal style={{overflow: "hidden", marginTop: 0, borderRadius: "1.2rem"}}
+                        <Terminal style={{overflow: "hidden", marginTop: 0, borderRadius: "1.2rem 1.2rem 2rem 2rem"}}
                                   border="1px solid rgba(48, 47, 47, 0.41)"
                                   background="rgba(33, 33, 33, 0.3)"
                                   boxShadow="rgb(0 0 0 / 50%) 6px 4px 9px 3px"
@@ -75,21 +75,21 @@ const Intro = () => {
                                         <div className="text-left d-inline-block">
                                             <h6 className="text-muted pt-1 ">
                                                 <span className="mx-3"><img src={globalPaymentsIcon}
-                                                                            alt="Global Payments" height="20px"
-                                                                            width="20px"/></span>{company}
+                                                                            alt="Global Payments" height="23px"
+                                                                            width="23px"/></span>{company}
                                             </h6>
                                             <h6 className="text-muted pt-1">
-                                                <span className="mx-3"><img src={emailIcon} alt="Email" height="20px"
-                                                                            width="20px"/></span>{email}
+                                                <span className="mx-3"><img src={emailIcon} alt="Email" height="23px"
+                                                                            width="23px"/></span>{email}
                                             </h6>
                                             <h6 className="text-muted pt-1">
-                                                <span className="mx-3"><img src={phoneIcon} alt="Phone" height="20px"
-                                                                            width="20px"/></span>{phoneNumber}
+                                                <span className="mx-3"><img src={phoneIcon} alt="Phone" height="23px"
+                                                                            width="23px"/></span>{phoneNumber}
                                             </h6>
                                             <h6 className="text-muted pt-1">
                                                 <span className="mx-3"><img src={linkedinIcon} alt="Linkedin"
-                                                                            height="20px"
-                                                                            width="20px"/></span>{linkedin}
+                                                                            height="23px"
+                                                                            width="23px"/></span>{linkedin}
                                             </h6>
                                         </div>
                                     </div>
