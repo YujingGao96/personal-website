@@ -90,8 +90,9 @@ a:focus, span:focus, button:focus {
     box-shadow: rgb(0 0 0 / 50%) 6px 4px 9px 3px;
 }
 
-.project-card {
-    backdrop-filter: blur(4px);
+.blur-background {
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
 }
 
 .rounded-all {

@@ -10,7 +10,7 @@ const ProjectCard = ({src, title, text, link}) => {
     return (
 
         <Fade up>
-            <div className="col-lg-4 col-md-6 col-sm-12 mb-5 project-card">
+            <div className="col-lg-4 col-md-6 col-sm-12 mb-5 blur-background">
                 <div className="card dark-bg text-light rounded-all h-100">
                     <img src={src} className="card-img-top rounded-top" alt={src}/>
                     <div className="card-body">

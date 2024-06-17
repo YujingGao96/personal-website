@@ -23,7 +23,8 @@ const TimeLine = () => {
                             color: '#fff',
                             boxShadow: '2px 3px 29px 7px rgba(79, 34, 0, 0.7)',
                             borderTop: '3px solid white',
-                            borderRadius: '1.2em'
+                            borderRadius: '1.2em',
+                            backdropFilter: 'blur(2px)'
                         }
                     }
                     contentArrowStyle={{borderRight: '7px solid #ff6d00AF'}}
@@ -64,7 +65,8 @@ const TimeLine = () => {
                             color: '#fff',
                             boxShadow: '2px 3px 29px 7px rgba(79, 6, 21, 0.7)',
                             borderTop: '3px solid white',
-                            borderRadius: '1.2em'
+                            borderRadius: '1.2em',
+                            backdropFilter: 'blur(2px)'
                         }
                     }
                     contentArrowStyle={{borderRight: '7px solid #FF1744AF'}}
@@ -107,7 +109,8 @@ const TimeLine = () => {
                             color: '#fff',
                             boxShadow: '2px 3px 29px 7px rgba(50, 66, 0, 0.7)',
                             borderTop: '3px solid white',
-                            borderRadius: '1.2em'
+                            borderRadius: '1.2em',
+                            backdropFilter: 'blur(2px)'
                         }
                     }
                     contentArrowStyle={{borderRight: '7px solid #AEEA00AF'}}
@@ -156,7 +159,8 @@ const TimeLine = () => {
                             color: '#fff',
                             boxShadow: '2px 3px 29px 7px rgba(8, 64, 50, 0.7)',
                             borderTop: '3px solid white',
-                            borderRadius: '1.2em'
+                            borderRadius: '1.2em',
+                            backdropFilter: 'blur(2px)'
                         }
                     }
                     contentArrowStyle={{borderRight: '7px solid #1DE9B6AF'}}
@@ -202,7 +206,8 @@ const TimeLine = () => {
                             color: '#fff',
                             boxShadow: '2px 3px 29px 7px rgba(0, 77, 89, 0.7)',
                             borderTop: '3px solid white',
-                            borderRadius: '1.2em'
+                            borderRadius: '1.2em',
+                            backdropFilter: 'blur(2px)'
                         }
                     }
                     contentArrowStyle={{borderRight: '7px solid #00B8D4AF'}}

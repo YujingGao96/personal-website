@@ -55,7 +55,7 @@ const Intro = () => {
     const body = () => {
         return (
             <Zoom>
-                <div className="mt-2 project-card">
+                <div className="mt-2 blur-background">
                     <div className="mt-5">
                         <Terminal style={{overflow: "hidden", marginTop: 0, borderRadius: "1.2rem"}}
                                   border="1px solid rgba(48, 47, 47, 0.41)"
@@ -100,6 +100,7 @@ const Intro = () => {
                                                        customStyle={{
                                                            background: "transparent",
                                                            backdropFilter: "blur(10px)",
+                                                           WebkitBackdropFilter: "blur(10px)",
                                                            border: "1px solid rgba(48, 47, 47, 0.41)",
                                                            borderRadius: "1.5rem"
                                                        }}>

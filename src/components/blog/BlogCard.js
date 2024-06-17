@@ -4,7 +4,7 @@ import blogImage from "../../images/git-merge-rebase.webp"
 const BlogCard = () => {
     return (
 
-        <div className="card dark-bg text-light rounded-all h-100">
+        <div className="card dark-bg text-light rounded-all h-100 blur-background">
             <img src={blogImage} className="card-img-top rounded-top" alt={blogImage}/>
             <div className="card-body">
                 <h5 className="card-title">Difference Between Git Merge and Git Rebase</h5>
