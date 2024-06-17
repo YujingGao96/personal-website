@@ -13,9 +13,10 @@ const App = () => {
     const [showMenu, setShowMenu] = useState(false);
     return (
         <React.Fragment>
-            <NavBar showMenu={showMenu} setShowMenu={setShowMenu}/>
+
             <ParticleBG/>
             <div className="container">
+                <section><NavBar showMenu={showMenu} setShowMenu={setShowMenu}/></section>
                 <section><Intro/></section>
                 <section><Projects/></section>
                 <section><TimeLine/></section>

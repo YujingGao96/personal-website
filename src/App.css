@@ -1,6 +1,29 @@
 body {
-    background-color: #121212;
+
     margin-top: 6em;
+    background: linear-gradient(270deg, #121212, #1e0404, #13031e, #121212);
+    background-size: 200% 200%;
+
+    -webkit-animation: AnimationName 15s ease infinite;
+    -moz-animation: AnimationName 15s ease infinite;
+    animation: AnimationName 15s ease infinite;
+}
+
+
+@-webkit-keyframes AnimationName {
+    0%{background-position:0% 91%}
+    50%{background-position:100% 10%}
+    100%{background-position:0% 91%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:0% 91%}
+    50%{background-position:100% 10%}
+    100%{background-position:0% 91%}
+}
+@keyframes AnimationName {
+    0%{background-position:0% 91%}
+    50%{background-position:100% 10%}
+    100%{background-position:0% 91%}
 }
 
 section {
@@ -21,11 +44,12 @@ a:focus, span:focus, button:focus {
 }
 
 #navbar-bg {
-    background: rgba(0, 3, 16, 0.6);
+    background: rgba(33, 33, 41, 0.45);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     backdrop-filter: saturate(180%) blur(20px);
     box-shadow: 7px 3px 7px 4px rgb(0 0 0 / 50%);
-    border-radius: 0 0 10px 10px;
+    border-radius: 3rem;
+    margin: 0.75rem;
 }
 
 @media (min-width: 992px) {
@@ -60,17 +84,23 @@ a:focus, span:focus, button:focus {
 }
 
 .dark-bg {
-    background-color: #212121df;
+    border-radius: 1.2rem;
+    border: 1px solid rgba(48, 47, 47, 0.41);
+    background-color: rgba(33, 33, 33, 0.3);
     box-shadow: rgb(0 0 0 / 50%) 6px 4px 9px 3px;
 }
 
+.project-card {
+    backdrop-filter: blur(4px);
+}
+
 .rounded-all {
-    border-radius: .7em;
+    border-radius: 1.2em;
 }
 
 .rounded-top {
-    border-top-left-radius: .7rem !important;
-    border-top-right-radius: .7rem !important;
+    border-top-left-radius: 1.2rem !important;
+    border-top-right-radius: 1.2rem !important;
 }
 
 .gradient-text-1 {

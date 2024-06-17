@@ -1,13 +1,23 @@
 import React, {useEffect, useState} from "react";
 import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
 import {darcula} from "react-syntax-highlighter/dist/cjs/styles/prism";
-import {MacTerminal} from "react-window-ui";
 import Zoom from "react-reveal/Zoom";
-import {getAge, birthday, name, gender, jobTitle, company, email, phoneNumber, linkedin} from "../resolvers/profileResolver";
+import {
+    getAge,
+    birthday,
+    name,
+    gender,
+    jobTitle,
+    company,
+    email,
+    phoneNumber,
+    linkedin
+} from "../resolvers/profileResolver";
 import globalPaymentsIcon from "../images/gp.png";
 import emailIcon from "../images/email.png";
 import phoneIcon from "../images/phone.png";
 import linkedinIcon from "../images/linkedin.png";
+import {Terminal} from "react-window-ui/src";
 
 const Intro = () => {
     const [ageState, setAgeState] = useState(getAge(birthday));
@@ -45,11 +55,14 @@ const Intro = () => {
     const body = () => {
         return (
             <Zoom>
-                <div className="mt-2">
-                    <div id="intro-head"/>
-                    <MacTerminal style={{overflow: "hidden", marginTop: 0}} background="#212121df"
-                                 boxShadow="rgb(0 0 0 / 50%) 6px 4px 9px 3px">
-                        <div>
+                <div className="mt-2 project-card">
+                    <div className="mt-5">
+                        <Terminal style={{overflow: "hidden", marginTop: 0, borderRadius: "1.2rem"}}
+                                  border="1px solid rgba(48, 47, 47, 0.41)"
+                                  background="rgba(33, 33, 33, 0.3)"
+                                  boxShadow="rgb(0 0 0 / 50%) 6px 4px 9px 3px"
+                                  topbarColor="rgba(85, 85, 85, 0.3)">
+
                             <div className="row p-2">
                                 <div className="col-md-5 col-sm-12 p-3 text-center">
                                     <img className="rounded-circle border border-light dark-shadow"
@@ -61,28 +74,41 @@ const Intro = () => {
                                     <div className="mx-auto">
                                         <div className="text-left d-inline-block">
                                             <h6 className="text-muted pt-1 ">
-                                                <span className="mx-3"><img src={globalPaymentsIcon} alt="Global Payments" height="20px" width="20px"/></span>{company}
+                                                <span className="mx-3"><img src={globalPaymentsIcon}
+                                                                            alt="Global Payments" height="20px"
+                                                                            width="20px"/></span>{company}
                                             </h6>
                                             <h6 className="text-muted pt-1">
-                                                <span className="mx-3"><img src={emailIcon} alt="Email" height="20px" width="20px"/></span>{email}
+                                                <span className="mx-3"><img src={emailIcon} alt="Email" height="20px"
+                                                                            width="20px"/></span>{email}
                                             </h6>
                                             <h6 className="text-muted pt-1">
-                                                <span className="mx-3"><img src={phoneIcon} alt="Phone" height="20px" width="20px"/></span>{phoneNumber}
+                                                <span className="mx-3"><img src={phoneIcon} alt="Phone" height="20px"
+                                                                            width="20px"/></span>{phoneNumber}
                                             </h6>
                                             <h6 className="text-muted pt-1">
-                                                <span className="mx-3"><img src={linkedinIcon} alt="Linkedin" height="20px" width="20px"/></span>{linkedin}
+                                                <span className="mx-3"><img src={linkedinIcon} alt="Linkedin"
+                                                                            height="20px"
+                                                                            width="20px"/></span>{linkedin}
                                             </h6>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="col-md-7 col-sm-12">
-                                    <SyntaxHighlighter className="rounded" language="java" style={darcula}>
+                                    <SyntaxHighlighter language="java"
+                                                       style={darcula}
+                                                       customStyle={{
+                                                           background: "transparent",
+                                                           backdropFilter: "blur(10px)",
+                                                           border: "1px solid rgba(48, 47, 47, 0.41)",
+                                                           borderRadius: "1.5rem"
+                                                       }}>
                                         {codeString}
                                     </SyntaxHighlighter>
                                 </div>
                             </div>
-                        </div>
-                    </MacTerminal>
+
+                        </Terminal></div>
                 </div>
             </Zoom>
         );

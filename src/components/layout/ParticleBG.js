@@ -1,27 +1,22 @@
 import React, {useCallback} from "react";
 import Particles from "react-tsparticles";
-import { loadFull } from "tsparticles";
+import {loadFull} from "tsparticles";
 
 const ParticleBG = () => {
     const particlesInit = useCallback(async engine => {
         await loadFull(engine);
     }, []);
 
-
     return (
         <Particles
             id="tsparticles"
             init={particlesInit}
             options={{
-                fpsLimit: 120,
+                fpsLimit: 30,
                 interactivity: {
                     events: {
-                        onClick: {
-                            enable: true,
-                            mode: "push",
-                        },
                         resize: true,
-                    }
+                    },
                 },
                 particles: {
                     move: {
@@ -39,22 +34,21 @@ const ParticleBG = () => {
                             enable: true,
                             area: 350,
                         },
-                        value: 80,
+                        value: 50,
                     },
                     opacity: {
-                        value: 0.5,
+                        value: .5,
                     },
                     shape: {
                         type: "circle",
                     },
                     size: {
-                        value: { min: 0.3, max: 3 },
+                        value: {min: 1, max: 4},
                     },
                 },
                 detectRetina: true,
             }}
         />
-
     );
 };
 

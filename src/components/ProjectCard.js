@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Fragment} from "react";
 import {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronRight} from "@fortawesome/free-solid-svg-icons/faChevronRight";
@@ -8,8 +8,9 @@ import HeadShake from 'react-reveal/HeadShake';
 const ProjectCard = ({src, title, text, link}) => {
     const [show, setShow] = useState(false);
     return (
+
         <Fade up>
-            <div className="col-lg-4 col-md-6 col-sm-12 mb-5">
+            <div className="col-lg-4 col-md-6 col-sm-12 mb-5 project-card">
                 <div className="card dark-bg text-light rounded-all h-100">
                     <img src={src} className="card-img-top rounded-top" alt={src}/>
                     <div className="card-body">
