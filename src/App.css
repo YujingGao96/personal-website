@@ -75,7 +75,7 @@ a:focus, span:focus, button:focus {
 }
 
 #intro-head {
-    background-image: url("images/trophy.png");
+    background-image: url("../public/trophy.png");
     height: 65px;
     width: auto;
     background-size: contain;

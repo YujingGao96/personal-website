@@ -13,7 +13,7 @@ const NavBar = ({showMenu, setShowMenu}) => {
         <nav className="navbar navbar-expand-lg navbar-dark fixed-top" id="navbar-bg">
             <div className="container">
                 <a className="navbar-brand text-warning pl-2" href="/#about">
-                    <img src={process.env.PUBLIC_URL + "/logo-navbar.png"} alt="Logo" height="44px"/>
+                    <img src={process.env.PUBLIC_URL + "/trophy.png"} alt="Logo" height="44px"/>
                 </a>
                 <button
                     className={`navbar-toggler pr-2 hamburger hamburger--spring ${showMenu ? "is-active" : ''}`}
