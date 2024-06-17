@@ -99,10 +99,9 @@ const Intro = () => {
                                                        style={darcula}
                                                        customStyle={{
                                                            background: "transparent",
-                                                           backdropFilter: "blur(10px)",
-                                                           WebkitBackdropFilter: "blur(10px)",
+                                                           backdropFilter: "sepia()",
                                                            border: "1px solid rgba(48, 47, 47, 0.41)",
-                                                           borderRadius: "1.5rem"
+                                                           borderRadius: "1.2rem"
                                                        }}>
                                         {codeString}
                                     </SyntaxHighlighter>
