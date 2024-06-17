@@ -18,9 +18,11 @@ import emailIcon from "../images/email.png";
 import phoneIcon from "../images/phone.png";
 import linkedinIcon from "../images/linkedin.png";
 import {Terminal} from "react-window-ui/src";
+import Confetti from 'react-confetti'
 
 const Intro = () => {
     const [ageState, setAgeState] = useState(getAge(birthday));
+    const [showConfetti, setShowConfetti] = useState(false);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -62,11 +64,13 @@ const Intro = () => {
                                   background="rgba(33, 33, 33, 0.3)"
                                   boxShadow="rgb(0 0 0 / 50%) 6px 4px 9px 3px"
                                   topbarColor="rgba(85, 85, 85, 0.3)">
-
+                            <Confetti recycle={showConfetti}/>
                             <div className="row p-2">
                                 <div className="col-md-5 col-sm-12 p-3 text-center">
                                     <img className="rounded-circle border border-light dark-shadow"
                                          height="auto" width="50%" src="/profile.jpg" alt="profile"
+                                         onMouseOver={e => setShowConfetti(true)}
+                                         onMouseLeave={e => setShowConfetti(false)}
                                          onMouseDown={e => e.preventDefault()}
                                          onContextMenu={e => e.preventDefault()}/>
                                     <h2 className="pt-4">{name}</h2>
