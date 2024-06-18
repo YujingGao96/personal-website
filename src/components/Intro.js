@@ -54,6 +54,11 @@ const Intro = () => {
         '\n\t)' +
         '\n\t.build();';
 
+    const showConfettiFor1Sec = () => {
+        setShowConfetti(true);
+        setTimeout(() => setShowConfetti(false), 1000)
+    }
+
     const body = () => {
         return (
             <Zoom>
@@ -69,10 +74,8 @@ const Intro = () => {
                                 <div className="col-md-5 col-sm-12 p-3 text-center">
                                     <img className="rounded-circle border border-light dark-shadow"
                                          height="auto" width="50%" src="/profile.jpg" alt="profile"
-                                         onMouseOver={_ => {
-                                             setShowConfetti(true);
-                                             setTimeout(() => setShowConfetti(false), 1000)
-                                         }}
+                                         onMouseOver={_ => showConfettiFor1Sec()}
+                                         onClick={_ => showConfettiFor1Sec()}
                                          onMouseLeave={_ => setShowConfetti(false)}
                                          onMouseDown={e => e.preventDefault()}
                                          onMouseUp={e => e.preventDefault()}
