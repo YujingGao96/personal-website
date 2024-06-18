@@ -69,12 +69,14 @@ const Intro = () => {
                                 <div className="col-md-5 col-sm-12 p-3 text-center">
                                     <img className="rounded-circle border border-light dark-shadow"
                                          height="auto" width="50%" src="/profile.jpg" alt="profile"
-                                         onMouseOver={e => setShowConfetti(true)}
-                                         onMouseLeave={e => setShowConfetti(false)}
+                                         onMouseOver={_ => {
+                                             setShowConfetti(true);
+                                             setTimeout(() => setShowConfetti(false), 1000)
+                                         }}
+                                         onMouseLeave={_ => setShowConfetti(false)}
                                          onMouseDown={e => e.preventDefault()}
                                          onMouseUp={e => e.preventDefault()}
-                                         onContextMenu={e => e.preventDefault()}
-                                    on/>
+                                         onContextMenu={e => e.preventDefault()}/>
                                     <h2 className="pt-4">{name}</h2>
                                     <h4 className="text-muted pt-3">{jobTitle}</h4>
                                     <div className="mx-auto">

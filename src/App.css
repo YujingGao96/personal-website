@@ -1,29 +1,36 @@
 body {
 
     margin-top: 6em;
-    background: linear-gradient(270deg, #121212, #1e0404, #13031e, #121212);
-    background-size: 200% 200%;
+    background: linear-gradient(270deg,
+    #121212,
+    #1e0404,
+    #13031e,
+    #010c00,
+    #1e1001,
+    #121212
+    );
+    background-size: 300% 100%;
 
-    -webkit-animation: AnimationName 15s ease infinite;
-    -moz-animation: AnimationName 15s ease infinite;
-    animation: AnimationName 15s ease infinite;
+    -webkit-animation: AnimationName 15s linear infinite;
+    -moz-animation: AnimationName 15s linear infinite;
+    animation: AnimationName 15s linear infinite;
 }
 
 
 @-webkit-keyframes AnimationName {
-    0%{background-position:0% 91%}
+    0%{background-position:0 80%}
     50%{background-position:100% 10%}
-    100%{background-position:0% 91%}
+    100%{background-position:0 80%}
 }
 @-moz-keyframes AnimationName {
-    0%{background-position:0% 91%}
+    0%{background-position:0 80%}
     50%{background-position:100% 10%}
-    100%{background-position:0% 91%}
+    100%{background-position:0 80%}
 }
 @keyframes AnimationName {
-    0%{background-position:0% 91%}
+    0%{background-position:0 80%}
     50%{background-position:100% 10%}
-    100%{background-position:0% 91%}
+    100%{background-position:0 80%}
 }
 
 section {
@@ -91,8 +98,8 @@ a:focus, span:focus, button:focus {
 }
 
 .blur-background {
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
 }
 
 .rounded-all {
