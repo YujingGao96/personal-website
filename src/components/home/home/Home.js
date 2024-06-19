@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 
 
 import './Home.css';
@@ -13,11 +13,11 @@ import Blogs from "../blog/Blogs";
 import BottomFrame from "../bottomframe/BottomFrame";
 
 const Home = () => {
-    const [showMenu, setShowMenu] = useState(false);
+
     return (
         <>
             <ParticleBG/>
-            <NavBar showMenu={showMenu} setShowMenu={setShowMenu}/>
+            <NavBar/>
             <div className="container mt-5">
                 <section><Intro/></section>
                 <section><Projects/></section>

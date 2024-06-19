@@ -75,7 +75,7 @@
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     backdrop-filter: saturate(180%) blur(20px);
     box-shadow: 7px 3px 7px 4px rgb(0 0 0 / 50%);
-    border-radius: 3rem;
+    border-radius: 2rem;
     top: 0.5em;
 }
 

@@ -1,9 +1,8 @@
-import React, {useEffect} from "react";
+import React from "react";
 
 import 'swiper/css';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {Pagination} from 'swiper/modules';
-import 'swiper/css';
 import 'swiper/css/pagination';
 import BlogCard from "./BlogCard";
 import {blogsInHomePage} from "../../../resolvers/blogPicker";
