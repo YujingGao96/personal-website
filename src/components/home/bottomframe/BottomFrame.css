@@ -1,0 +1,6 @@
+#bottom-frame {
+    background-image: url("./city-line.png");
+    height: 7em;
+    width: 100%;
+    background-size: contain;
+}

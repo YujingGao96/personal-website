@@ -14,7 +14,7 @@ const ProjectCard = ({src, title, text, link}) => {
                     <img src={src} className="card-img-top rounded-top" alt={src}/>
                     <div className="card-body">
                         <h5 className="card-title">{title}</h5>
-                        <p className="card-text font-weight-light">{text}</p>
+                        <p className="card-text fw-light">{text}</p>
                     </div>
                     <HeadShake when={show}>
                         <a target="_blank"

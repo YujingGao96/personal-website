@@ -251,7 +251,7 @@ const TimeLine = () => {
     }
     return (
         <div id="timeline">
-            <h1 className="text-center gradient-text-3 font-weight-bold">Life Timeline</h1>
+            <h1 className="text-center gradient-text-3 fw-bold">Life Timeline</h1>
             {body()}
         </div>
     );

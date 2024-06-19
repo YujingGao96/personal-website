@@ -69,3 +69,19 @@
     top: 0;
     transition: top 0.2s cubic-bezier(0.33333, 0, 0.66667, 0.33333), transform 0.13s 0.22s cubic-bezier(0.215, 0.61, 0.355, 1);
     transform: translate3d(0, 10px, 0) rotate(-45deg); }
+
+#navbar-bg {
+    background: rgba(33, 33, 41, 0.45);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
+    box-shadow: 7px 3px 7px 4px rgb(0 0 0 / 50%);
+    border-radius: 3rem;
+    top: 0.5em;
+}
+
+@media (min-width: 992px) {
+    #navbar-bg a:hover {
+        transform: scale(1.02);
+        transition: .2s ease-in;
+    }
+}

@@ -1,6 +1,4 @@
 body {
-
-    margin-top: 6em;
     background: linear-gradient(270deg,
     #121212,
     #1e0404,
@@ -10,7 +8,6 @@ body {
     #121212
     );
     background-size: 300% 100%;
-
     -webkit-animation: AnimationName 15s linear infinite;
     -moz-animation: AnimationName 15s linear infinite;
     animation: AnimationName 15s linear infinite;
@@ -45,26 +42,7 @@ a:focus, span:focus, button:focus {
     box-shadow: 7px 8px 29px 0 rgba(0, 0, 0, 1);
 }
 
-#root {
-    overflow-x: hidden;
-    -ms-overflow-y: hidden;
-}
 
-#navbar-bg {
-    background: rgba(33, 33, 41, 0.45);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    backdrop-filter: saturate(180%) blur(20px);
-    box-shadow: 7px 3px 7px 4px rgb(0 0 0 / 50%);
-    border-radius: 3rem;
-    margin: 0.75rem;
-}
-
-@media (min-width: 992px) {
-    #navbar-bg a:hover {
-        transform: scale(1.02);
-        transition: .2s ease-in;
-    }
-}
 
 #particle-bg {
     position: fixed;
@@ -74,21 +52,7 @@ a:focus, span:focus, button:focus {
     background-size: contain;
 }
 
-#bottom-frame {
-    background-image: url("images/city-line.png");
-    height: 7em;
-    width: 100%;
-    background-size: contain;
-}
 
-#intro-head {
-    background-image: url("../public/trophy.png");
-    height: 65px;
-    width: auto;
-    background-size: contain;
-    background-repeat: no-repeat;
-    transform: translate(10%, 15%);
-}
 
 .dark-bg {
     border-radius: 1.2rem;

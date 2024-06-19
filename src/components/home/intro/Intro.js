@@ -3,22 +3,22 @@ import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
 import {darcula} from "react-syntax-highlighter/dist/cjs/styles/prism";
 import Zoom from "react-reveal/Zoom";
 import {
-    getAge,
     birthday,
-    name,
-    gender,
-    jobTitle,
     company,
     email,
-    phoneNumber,
-    linkedin
-} from "../resolvers/profileResolver";
-import globalPaymentsIcon from "../images/gp.png";
-import emailIcon from "../images/email.png";
-import phoneIcon from "../images/phone.png";
-import linkedinIcon from "../images/linkedin.png";
+    gender,
+    getAge,
+    jobTitle,
+    linkedin,
+    name,
+    phoneNumber
+} from "../../../resolvers/profileResolver";
+import globalPaymentsIcon from "../../../images/gp.png";
+import emailIcon from "../../../images/email.png";
+import phoneIcon from "../../../images/phone.png";
+import linkedinIcon from "../../../images/linkedin.png";
 import {Terminal} from "react-window-ui/src";
-import Confetti from 'react-confetti'
+import Confetti from 'react-confetti';
 
 const Intro = () => {
     const [ageState, setAgeState] = useState(getAge(birthday));
@@ -62,17 +62,18 @@ const Intro = () => {
     const body = () => {
         return (
             <Zoom>
-                <div className="mt-2 blur-background">
+                <div className="blur-background">
                     <div className="mt-5">
                         <Terminal style={{overflow: "hidden", marginTop: 0, borderRadius: "1.2rem 1.2rem 2rem 2rem"}}
                                   border="1px solid rgba(48, 47, 47, 0.41)"
                                   background="rgba(33, 33, 33, 0.3)"
                                   boxShadow="rgb(0 0 0 / 50%) 6px 4px 9px 3px"
                                   topbarColor="rgba(85, 85, 85, 0.3)">
-                            <Confetti recycle={showConfetti}/>
+
                             <div className="row p-2">
+                                <Confetti recycle={showConfetti}/>
                                 <div className="col-md-5 col-sm-12 p-3 text-center">
-                                    <img className="rounded-circle border border-light dark-shadow"
+                                    <img className="rounded-circle border border-light dark-shadow border-opacity-10 border-2"
                                          height="auto" width="50%" src="/profile.jpg" alt="profile"
                                          onMouseOver={_ => showConfettiFor1Sec()}
                                          onClick={_ => showConfettiFor1Sec()}
@@ -81,27 +82,27 @@ const Intro = () => {
                                          onMouseUp={e => e.preventDefault()}
                                          onContextMenu={e => e.preventDefault()}/>
                                     <h2 className="pt-4">{name}</h2>
-                                    <h4 className="text-muted pt-3">{jobTitle}</h4>
+                                    <h4 className="text-secondary pt-3">{jobTitle}</h4>
                                     <div className="mx-auto">
-                                        <div className="text-left d-inline-block">
-                                            <h6 className="text-muted pt-1 ">
+                                        <div className="text-start d-inline-block">
+                                            <a className="text-secondary pt-1 h6 text-decoration-none d-block" target="_blank" href="https://www.globalpayments.com/">
                                                 <span className="mx-3"><img src={globalPaymentsIcon}
                                                                             alt="Global Payments" height="23px"
                                                                             width="23px"/></span>{company}
-                                            </h6>
-                                            <h6 className="text-muted pt-1">
+                                            </a>
+                                            <a className="text-secondary pt-1 h6 text-decoration-none d-block" href="mailto:1@ygao.app">
                                                 <span className="mx-3"><img src={emailIcon} alt="Email" height="23px"
                                                                             width="23px"/></span>{email}
-                                            </h6>
-                                            <h6 className="text-muted pt-1">
-                                                <span className="mx-3"><img src={phoneIcon} alt="Phone" height="23px"
+                                            </a>
+                                            <a className="text-secondary pt-1 h6 text-decoration-none d-block">
+                                                <span className="mx-3"><img src={phoneIcon} alt="Phone" height="23px" href={"tel:"+ phoneNumber}
                                                                             width="23px"/></span>{phoneNumber}
-                                            </h6>
-                                            <h6 className="text-muted pt-1">
+                                            </a>
+                                            <a className="text-secondary pt-1 h6 text-decoration-none d-block" target="_blank" href="https://www.linkedin.com/in/yujing-gao">
                                                 <span className="mx-3"><img src={linkedinIcon} alt="Linkedin"
                                                                             height="23px"
                                                                             width="23px"/></span>{linkedin}
-                                            </h6>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -127,7 +128,7 @@ const Intro = () => {
 
     return (
         <div id="about">
-            <h1 className="text-center gradient-text-1 font-weight-bold">About Me</h1>
+            <h1 className="text-center gradient-text-1 fw-bold">About Me</h1>
             {body()}
         </div>
 

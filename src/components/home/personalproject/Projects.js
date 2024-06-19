@@ -41,7 +41,7 @@ const Projects = () => {
 
     return (
         <div id="experience">
-            <h1 className="text-center gradient-text-2 font-weight-bold">Related Experience</h1>
+            <h1 className="text-center gradient-text-2 fw-bold">Related Experience</h1>
             {body()}
         </div>
     );

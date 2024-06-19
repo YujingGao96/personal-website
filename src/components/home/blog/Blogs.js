@@ -6,11 +6,12 @@ import {Pagination} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import BlogCard from "./BlogCard";
+import blogImage from "../../../images/git-merge-rebase.webp"
 
 const Blogs = () => {
     return (
         <div id="blogs">
-            <h1 className="text-center gradient-text-5 font-weight-bold">Blogs</h1>
+            <h1 className="text-center gradient-text-5 fw-bold">Blogs</h1>
             <Swiper
                 modules={[Pagination]}
                 spaceBetween={30}
@@ -37,10 +38,9 @@ const Blogs = () => {
                 }}
             >
 
-                <SwiperSlide><BlogCard/></SwiperSlide>
-                <SwiperSlide><BlogCard/></SwiperSlide>
-                <SwiperSlide><BlogCard/></SwiperSlide>
-                <SwiperSlide><BlogCard/></SwiperSlide>
+                <SwiperSlide><BlogCard picture={blogImage} title="some title" link="www.google.com"/></SwiperSlide>
+                <SwiperSlide><BlogCard picture={blogImage} title="some title" link="www.google.com"/></SwiperSlide>
+                <SwiperSlide><BlogCard picture={blogImage} title="some title" link="www.google.com"/></SwiperSlide>
             </Swiper>
         </div>
 
