@@ -1,12 +1,18 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import { NotionRenderer } from "react-notion-x";
+import fetchData from "../../api/GetBlog";
+import "react-notion-x/src/styles.css";
 
-const BlogPage = () => {
-    return (
-        <div>
-            <h1>Blog Page</h1>
-            <p>This is the Blog Page content.</p>
-        </div>
-    );
+const BlogPage = ({pageId}) => {
+
+    const [recordMap, setRecordMap] = useState(null);
+    useEffect(() => {
+        fetchData(pageId).then(r => setRecordMap(r));
+    }, []);
+
+    return recordMap == null ?
+            <div/> :
+            <NotionRenderer recordMap={recordMap} fullPage={true} darkMode/>;
 };
 
 export default BlogPage;

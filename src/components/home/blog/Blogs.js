@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 
 import 'swiper/css';
 import {Swiper, SwiperSlide} from 'swiper/react';
@@ -6,9 +6,16 @@ import {Pagination} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import BlogCard from "./BlogCard";
-import blogImage from "../../../images/git-merge-rebase.webp"
+import {blogsInHomePage} from "../../../resolvers/blogPicker";
+import {extractBeforeLastDash} from "../../../util/StringUtil";
+
+
+const blogCards = blogsInHomePage.map(pageId =>
+    <SwiperSlide key={pageId}><BlogCard title={extractBeforeLastDash(pageId)} link={pageId}/></SwiperSlide>
+)
 
 const Blogs = () => {
+
     return (
         <div id="blogs">
             <h1 className="text-center gradient-text-5 fw-bold">Blogs</h1>
@@ -37,10 +44,8 @@ const Blogs = () => {
                     },
                 }}
             >
+                {blogCards}
 
-                <SwiperSlide><BlogCard picture={blogImage} title="some title" link="www.google.com"/></SwiperSlide>
-                <SwiperSlide><BlogCard picture={blogImage} title="some title" link="www.google.com"/></SwiperSlide>
-                <SwiperSlide><BlogCard picture={blogImage} title="some title" link="www.google.com"/></SwiperSlide>
             </Swiper>
         </div>
 
