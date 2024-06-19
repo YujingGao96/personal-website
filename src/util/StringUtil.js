@@ -4,5 +4,5 @@ export function extractBeforeLastDash(inputString) {
     // Remove the last part
     parts.pop();
     // Join the remaining parts back together with dashes
-    return parts.join('-');
+    return parts.join(' ');
 }
