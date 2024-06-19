@@ -8,6 +8,7 @@ import Projects from "./components/Projects";
 import TimeLine from "./components/Timeline";
 import Compliments from "./components/Compliments";
 import Blogs from "./components/blog/Blogs";
+import BlogPage from "./components/blog/BlogPage";
 
 const App = () => {
     const [showMenu, setShowMenu] = useState(false);
@@ -22,6 +23,7 @@ const App = () => {
                 <section><TimeLine/></section>
                 <section><Compliments/></section>
                 <section><Blogs/></section>
+                <section><BlogPage/></section>
             </div>
             <BottomFrame/>
         </React.Fragment>
