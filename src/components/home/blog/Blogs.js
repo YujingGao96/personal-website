@@ -8,7 +8,6 @@ import BlogCard from "./BlogCard";
 import {blogsInHomePage} from "../../../resolvers/blogPicker";
 import {extractBeforeLastDash} from "../../../util/StringUtil";
 
-
 const blogCards = blogsInHomePage.map(pageId =>
     <SwiperSlide key={pageId}><BlogCard title={extractBeforeLastDash(pageId)} link={pageId}/></SwiperSlide>
 )
@@ -26,28 +25,28 @@ const Blogs = () => {
                 style={{
                     "--swiper-pagination-color": "#c595ea",
                     "--swiper-pagination-bullet-inactive-color": "#999999",
-                    "--swiper-pagination-bullet-inactive-opacity": "1",
-                    "--swiper-pagination-bullet-size": "12px",
-                    "--swiper-pagination-bullet-horizontal-gap": "6px"
+                    "--swiper-pagination-bullet-inactive-opacity": "0.3",
+                    "--swiper-pagination-bullet-size": "0.7em",
+                    "--swiper-pagination-bullet-horizontal-gap": "0.5em"
                 }}
                 breakpoints={{
                     // when window width is >= 640px
                     640: {
-                        width: 640,
                         slidesPerView: 1,
                     },
                     // when window width is >= 768px
                     768: {
-                        width: 768,
                         slidesPerView: 2,
+                    },
+                    // when window width is >= 1024px
+                    1024: {
+                        slidesPerView: 3, // Added a breakpoint for larger screens
                     },
                 }}
             >
                 {blogCards}
-
             </Swiper>
         </div>
-
     );
 };
 
