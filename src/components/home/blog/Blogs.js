@@ -7,12 +7,21 @@ import 'swiper/css/pagination';
 import BlogCard from "./BlogCard";
 import {blogsInHomePage} from "../../../resolvers/blogPicker";
 import {extractBeforeLastDash} from "../../../util/StringUtil";
+import {shuffleArray} from "../../../util/ArrayUtil";
 
-const blogCards = blogsInHomePage.map(pageId =>
-    <SwiperSlide key={pageId}><BlogCard title={extractBeforeLastDash(pageId)} link={pageId}/></SwiperSlide>
+const fontClasses = ['blog-cover-front-0', 'blog-cover-front-1', 'blog-cover-front-2', 'blog-cover-front-3'];
+const shuffledFontClasses = shuffleArray([...fontClasses]);
+
+const blogCards = blogsInHomePage.map((pageId, index) =>
+    <SwiperSlide key={pageId}>
+        <BlogCard title={extractBeforeLastDash(pageId)}
+                  link={pageId}
+                  fontClass={shuffledFontClasses[index % shuffledFontClasses.length]}/>
+    </SwiperSlide>
 )
 
 const Blogs = () => {
+
 
     return (
         <div id="blogs">
@@ -26,7 +35,7 @@ const Blogs = () => {
                     "--swiper-pagination-color": "#c595ea",
                     "--swiper-pagination-bullet-inactive-color": "#999999",
                     "--swiper-pagination-bullet-inactive-opacity": "0.3",
-                    "--swiper-pagination-bullet-size": "1em",
+                    "--swiper-pagination-bullet-size": "0.7em",
                     "--swiper-pagination-bullet-horizontal-gap": "0.5em"
                 }}
                 breakpoints={{

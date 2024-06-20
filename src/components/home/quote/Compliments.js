@@ -18,7 +18,7 @@ const Compliments = () => {
                     "--swiper-pagination-color": "#86d5ff",
                     "--swiper-pagination-bullet-inactive-color": "#999999",
                     "--swiper-pagination-bullet-inactive-opacity": "0.3",
-                    "--swiper-pagination-bullet-size": "1em",
+                    "--swiper-pagination-bullet-size": "0.7em",
                     "--swiper-pagination-bullet-horizontal-gap": "0.5em"
                 }}
             >

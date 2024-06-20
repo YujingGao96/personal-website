@@ -126,9 +126,12 @@ a:focus, span:focus, button:focus {
 }
 
 .quote-text {
-    font-family: 'The Girl Next Door', cursive;
+    font-family: "Playwrite AU QLD", cursive;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    line-height: 2em;
 }
-
 
 
 .swiper-container {
