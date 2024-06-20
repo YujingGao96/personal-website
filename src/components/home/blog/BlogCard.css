@@ -2,13 +2,13 @@
 
 @keyframes moveGradient {
     0% {
-        background-position: 0% 50%;
+        background-position: 0 50%;
     }
     50% {
         background-position: 100% 50%;
     }
     100% {
-        background-position: 0% 50%;
+        background-position: 0 50%;
     }
 }
 
@@ -27,4 +27,30 @@
 .rounded-top {
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem;
+}
+
+.glow-button {
+    transition: box-shadow 0.3s ease;
+}
+
+.glow-button:hover {
+    animation: glow 5s infinite;
+}
+
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 15px #ffb0b0;
+    }
+    25% {
+        box-shadow: 0 0 15px #ffe3b1;
+    }
+    50% {
+        box-shadow: 0 0 15px #ffff98;
+    }
+    75% {
+        box-shadow: 0 0 15px #a8ffa8;
+    }
+    100% {
+        box-shadow: 0 0 15px #ababff;
+    }
 }

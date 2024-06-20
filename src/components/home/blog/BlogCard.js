@@ -16,13 +16,13 @@ const BlogCard = ({title, link}) => {
 
     return (
         <div className="card dark-bg text-light rounded-all h-100 blur-background">
-            <div style={gradientStyle} className="gradient-bg d-flex align-items-center justify-content-center">
+            <a href={"blog/" + link} style={gradientStyle} className="gradient-bg d-flex align-items-center justify-content-center text-decoration-none text-light">
                 <h1 className="text-center fw-bold">{title}</h1>
-            </div>
+            </a>
             <div className="card-body">
 
-                <a href={"blog/" + link} className="btn btn-outline-light my-3 rounded-all d-block">
-                    Learn More &nbsp;
+                <a href={"blog/" + link} className="btn btn-outline-light m-3 py-2 rounded-all d-block glow-button">
+                    Read More &nbsp;
                     <FontAwesomeIcon icon={faChevronRight}/>
                 </a>
             </div>

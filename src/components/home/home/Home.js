@@ -7,7 +7,7 @@ import Intro from "../intro/Intro";
 import ParticleBG from "../background/ParticleBG";
 import NavBar from "../navbar/NavBar";
 import Projects from "../personalproject/Projects";
-import TimeLine from "../Timeline";
+import TimeLine from "../timeline/Timeline";
 import Compliments from "../Compliments";
 import Blogs from "../blog/Blogs";
 import BottomFrame from "../bottomframe/BottomFrame";
