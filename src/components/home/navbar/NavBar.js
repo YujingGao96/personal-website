@@ -44,7 +44,7 @@ const NavBar = () => {
         <div className="container sticky-top">
             <nav className="navbar navbar-expand-lg navbar-dark px-3" id="navbar-bg">
                 <div className="container-fluid d-flex justify-content-between flex-row-reverse">
-                    <a className="navbar-brand">
+                    <a className="navbar-brand" href="/">
                         <img src={trophyImg} alt="Logo" height="44px" />
                     </a>
 
@@ -64,7 +64,7 @@ const NavBar = () => {
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav ml-auto">
                             {renderNavItem('about', '#about', faUser, 'About')}
-                            {renderNavItem('experience', '#experience', faFileCode, 'Experience')}
+                            {renderNavItem('projects', '#projects', faFileCode, 'Projects')}
                             {renderNavItem('timeline', '#timeline', faStream, 'Timeline')}
                             {renderNavItem('compliments', '#compliments', faQuoteRight, 'Compliments')}
                             {renderNavItem('blogs', '#blogs', faBlog, 'Blogs')}

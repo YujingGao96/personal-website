@@ -24,16 +24,30 @@ const Compliments = () => {
             >
                 <SwiperSlide>
                     <SingleQuote
-                        text="I am beyond grateful for your dedication to this project.  It shows a lot of character that you have taken the time and effort to work to make it right, even though you no longer have a personal stake in this since you've already received your grade and graduated.  I would be very happy to help if you ever need a letter of recommendation, as I'm sure any employer would be pleased to know what kind of a person he is considering."
-                        authorName="Larry Cline,"
+                        text="I am beyond grateful for your dedication to this project. I would be happy to help if you ever need a letter of recommendation, as I'm sure any employer would be pleased to know what kind of a person he is considering."
+                        authorName="Larry Cline"
                         authorTitle="Manager of Midland Farmers Market"
                     />
                 </SwiperSlide>
                 <SwiperSlide>
                     <SingleQuote
-                        text="Yujing, I am so proud of you! Your hard work and determination to succeed inspire everyone! I look forward to seeing what you will accomplish in the future!"
-                        authorName="Rebecca Hagues,"
-                        authorTitle="ESOL Teacher of Shaw High School"
+                        text="Yujing, I am so incredibly proud of you! Your hard work and determination to succeed inspire everyone around you! I am genuinely excited and eager to see the amazing things you will accomplish in the future!"
+                        authorName="Rebecca Hagues"
+                        authorTitle="ESOL Teacher at Shaw High School"
+                    />
+                </SwiperSlide>
+                <SwiperSlide>
+                    <SingleQuote
+                        text="I want to express my heartfelt gratutude to you for generously offering your time and expertise to support our student, as it will undoubtedly have a significant impact on the professional development of our CS and IT students."
+                        authorName="Rania Hodhod"
+                        authorTitle="Assistant CS Professor at CSU"
+                    />
+                </SwiperSlide>
+                <SwiperSlide>
+                    <SingleQuote
+                        text="Your work demostrates a wonderful example of interdiscplinary work that we always aspire for. This speaks volumes about the calibre of our faculty and students. We won't miss an opportunity to brag about this achievement."
+                        authorName="Shamim Khan"
+                        authorTitle="Professor & Chair of CS Department"
                     />
                 </SwiperSlide>
             </Swiper>

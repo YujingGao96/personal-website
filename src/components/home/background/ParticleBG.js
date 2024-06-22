@@ -1,16 +1,22 @@
-import React, {useCallback} from "react";
-import Particles from "react-tsparticles";
+import React, {useEffect, useState} from "react";
+import Particles, {initParticlesEngine} from "@tsparticles/react";
+
 import {loadFull} from "tsparticles";
 
 const ParticleBG = () => {
-    const particlesInit = useCallback(async engine => {
-        await loadFull(engine);
+    const [init, setInit] = useState(false);
+
+    useEffect(() => {
+        initParticlesEngine(async (engine) => {
+            await loadFull(engine);
+        }).then(() => {
+            setInit(true);
+        });
     }, []);
 
     return (
-        <Particles
+        init && <Particles
             id="tsparticles"
-            init={particlesInit}
             options={{
                 fpsLimit: 30,
                 interactivity: {
@@ -32,9 +38,9 @@ const ParticleBG = () => {
                     number: {
                         density: {
                             enable: true,
-                            area: 350,
+                            area: 250,
                         },
-                        value: 50,
+                        value: 100,
                     },
                     opacity: {
                         value: .5,

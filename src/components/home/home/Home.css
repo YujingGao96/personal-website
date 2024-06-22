@@ -128,9 +128,8 @@ a:focus, span:focus, button:focus {
 .quote-text {
     font-family: "Playwrite AU QLD", cursive;
     font-optical-sizing: auto;
-    font-weight: 400;
     font-style: normal;
-    line-height: 2em;
+    line-height: 1.8em;
 }
 
 

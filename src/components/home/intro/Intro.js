@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
 import {darcula} from "react-syntax-highlighter/dist/cjs/styles/prism";
-import Zoom from "react-reveal/Zoom";
+import {Zoom} from "react-awesome-reveal";
 import {
     birthday,
     company,
@@ -10,13 +10,11 @@ import {
     getAge,
     jobTitle,
     linkedin,
-    name,
-    phoneNumber
+    name
 } from "../../../resolvers/profileResolver";
-import globalPaymentsIcon from "../../../images/gp.png";
-import emailIcon from "../../../images/email.png";
-import phoneIcon from "../../../images/phone.png";
-import linkedinIcon from "../../../images/linkedin.png";
+import globalPaymentsIcon from "./images/gp.png";
+import emailIcon from "./images/email.png";
+import linkedinIcon from "./images/linkedin.png";
 import {Terminal} from "react-window-ui/src";
 import Confetti from 'react-confetti';
 
@@ -73,32 +71,33 @@ const Intro = () => {
                             <div className="row p-2">
                                 <Confetti recycle={showConfetti}/>
                                 <div className="col-md-5 col-sm-12 p-3 text-center">
-                                    <img className="rounded-circle border border-light dark-shadow border-opacity-10 border-2"
-                                         height="auto" width="50%" src="/profile.jpg" alt="profile"
-                                         onMouseOver={_ => showConfettiFor1Sec()}
-                                         onClick={_ => showConfettiFor1Sec()}
-                                         onMouseLeave={_ => setShowConfetti(false)}
-                                         onMouseDown={e => e.preventDefault()}
-                                         onMouseUp={e => e.preventDefault()}
-                                         onContextMenu={e => e.preventDefault()}/>
+                                    <img
+                                        className="rounded-circle border border-light dark-shadow border-opacity-10 border-2"
+                                        height="auto" width="50%" src="/profile.jpg" alt="profile"
+                                        onMouseOver={_ => showConfettiFor1Sec()}
+                                        onClick={_ => showConfettiFor1Sec()}
+                                        onMouseLeave={_ => setShowConfetti(false)}
+                                        onMouseDown={e => e.preventDefault()}
+                                        onMouseUp={e => e.preventDefault()}
+                                        onContextMenu={e => e.preventDefault()}/>
                                     <h2 className="pt-4">{name}</h2>
                                     <h4 className="text-secondary pt-3">{jobTitle}</h4>
                                     <div className="mx-auto">
                                         <div className="text-start d-inline-block">
-                                            <a className="text-secondary pt-1 h6 text-decoration-none d-block" target="_blank" href="https://www.globalpayments.com/">
+                                            <a className="text-secondary pt-1 h6 text-decoration-none d-block"
+                                               target="_blank" rel="noreferrer" href="https://www.globalpayments.com/">
                                                 <span className="mx-3"><img src={globalPaymentsIcon}
                                                                             alt="Global Payments" height="23px"
                                                                             width="23px"/></span>{company}
                                             </a>
-                                            <a className="text-secondary pt-1 h6 text-decoration-none d-block" href="mailto:1@ygao.app">
+                                            <a className="text-secondary pt-1 h6 text-decoration-none d-block"
+                                               href="mailto:1@ygao.app">
                                                 <span className="mx-3"><img src={emailIcon} alt="Email" height="23px"
                                                                             width="23px"/></span>{email}
                                             </a>
-                                            <a className="text-secondary pt-1 h6 text-decoration-none d-block">
-                                                <span className="mx-3"><img src={phoneIcon} alt="Phone" height="23px" href={"tel:"+ phoneNumber}
-                                                                            width="23px"/></span>{phoneNumber}
-                                            </a>
-                                            <a className="text-secondary pt-1 h6 text-decoration-none d-block" target="_blank" href="https://www.linkedin.com/in/yujing-gao">
+                                            <a className="text-secondary pt-1 h6 text-decoration-none d-block"
+                                               target="_blank" rel="noreferrer"
+                                               href="https://www.linkedin.com/in/yujing-gao">
                                                 <span className="mx-3"><img src={linkedinIcon} alt="Linkedin"
                                                                             height="23px"
                                                                             width="23px"/></span>{linkedin}
