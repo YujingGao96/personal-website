@@ -37,7 +37,7 @@ const BlogCard = ({title, link, fontClass}) => {
                 style={gradientStyle}
                 className="gradient-bg d-flex align-items-center justify-content-center text-decoration-none text-light"
             >
-                <h3 ref={titleRef} className={`text-center m-3 blog-cover-front ${fontClass}`}>
+                <h3 ref={titleRef} className={`text-center m-3 ${fontClass}`}>
                     {title}
                 </h3>
             </Link>

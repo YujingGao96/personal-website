@@ -2,16 +2,21 @@ import React from "react";
 import Home from "./components/home/home/Home";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import BlogPage from "./components/blog/BlogPage";
-import {blogsInHomePage} from "./resolvers/blogPicker";
-
-const blogRoutes = blogsInHomePage.map(pageId => ({
-    path: `/blog/${pageId}`,
-    element: <BlogPage pageId={pageId}/>
-}));
+import ErrorPage from "./components/error/ErrorPage";
 
 const router = createBrowserRouter([
-    {path: "/", element: <Home/>},
-    ...blogRoutes
+    {
+        path: "/",
+        element: <Home/>
+    },
+    {
+        path: "/blog/:pageId",
+        element: <BlogPage/>
+    },
+    {
+        path: "/error/:errorCode",
+        element: <ErrorPage/>
+    }
 ]);
 
 const App = () => {
