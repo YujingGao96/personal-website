@@ -34,7 +34,7 @@ const NavBar = () => {
                 onClick={() => handleMenuClick(tab)}
             >
                 <FontAwesomeIcon icon={icon} size="lg" fixedWidth color={iconColor}/> &nbsp;
-                <span style={{textShadow: "0 0 5px #000"}}>{label}</span>
+                <span className="fw-bold" style={{textShadow: "0 0 5px #000"}}>{label}</span>
                 {currentTab === tab ? currentSelectJSX : null}
             </AnchorLink>
         </li>
