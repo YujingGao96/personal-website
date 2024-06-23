@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AnchorLink from 'react-anchor-link-smooth-scroll';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faFileCode, faStream, faQuoteRight, faBlog } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faFileCode, faStream, faQuoteRight, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import "./NavBar.css";
 import trophyImg from './trophy.png';
 
@@ -41,7 +41,7 @@ const NavBar = () => {
     );
 
     return (
-        <div className="container sticky-top">
+        <div className="container fixed-top">
             <nav className="navbar navbar-expand-lg navbar-dark px-3" id="navbar-bg">
                 <div className="container-fluid d-flex justify-content-between flex-row-reverse">
                     <a className="navbar-brand" href="/">
@@ -65,7 +65,7 @@ const NavBar = () => {
                         <ul className="navbar-nav ml-auto">
                             {renderNavItem('about', '#about', faUser, 'About', "#6c74ab")}
                             {renderNavItem('projects', '#projects', faFileCode, 'Projects', "#e4899a")}
-                            {renderNavItem('blogs', '#blogs', faBlog, 'Blogs', "#b593e1")}
+                            {renderNavItem('blogs', '#blogs', faPaperPlane, 'Blogs', "#b593e1")}
                             {renderNavItem('timeline', '#timeline', faStream, 'Timeline',"#f49f22")}
                             {renderNavItem('compliments', '#compliments', faQuoteRight, 'Compliments', "#1ad1ee")}
                         </ul>

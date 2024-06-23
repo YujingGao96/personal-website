@@ -18,7 +18,7 @@ const Home = () => {
         <>
             <ParticleBG/>
             <NavBar/>
-            <div className="container mt-5">
+            <div className="container" style={{marginTop: "10em"}}>
                 <section><Intro/></section>
                 <section><Projects/></section>
                 <section><Blogs/></section>
