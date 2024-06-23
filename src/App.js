@@ -7,16 +7,12 @@ import ErrorPage from "./components/error/ErrorPage";
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Home/>,
-        errorElement: <Navigate to="/error/404"/>
-    },
-    {
-        path: "/blog/:pageId",
-        element: <BlogPage/>
-    },
-    {
-        path: "/error/:errorCode",
-        element: <ErrorPage/>
+        errorElement: <Navigate to="/error/404"/>,
+        children: [
+            {index: true, element: <Home/>},
+            {path: "blog/:pageId", element: <BlogPage/>},
+            {path: "error/:errorCode", element: <ErrorPage/>}
+        ]
     }
 ]);
 

@@ -25,7 +25,7 @@ const NavBar = () => {
         setShowMenu(false); // Close the menu after clicking an item
     };
 
-    const renderNavItem = (tab, href, icon, label) => (
+    const renderNavItem = (tab, href, icon, label, iconColor) => (
         <li className={`px-2 nav-item ${currentTab === tab ? 'active' : ''}`}>
             <AnchorLink
                 offset="100"
@@ -33,8 +33,8 @@ const NavBar = () => {
                 href={href}
                 onClick={() => handleMenuClick(tab)}
             >
-                <FontAwesomeIcon icon={icon} size="lg" fixedWidth /> &nbsp;
-                {label}
+                <FontAwesomeIcon icon={icon} size="lg" fixedWidth color={iconColor}/> &nbsp;
+                <span style={{textShadow: "0 0 5px #000"}}>{label}</span>
                 {currentTab === tab ? currentSelectJSX : null}
             </AnchorLink>
         </li>
@@ -63,11 +63,11 @@ const NavBar = () => {
 
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav ml-auto">
-                            {renderNavItem('about', '#about', faUser, 'About')}
-                            {renderNavItem('projects', '#projects', faFileCode, 'Projects')}
-                            {renderNavItem('blogs', '#blogs', faBlog, 'Blogs')}
-                            {renderNavItem('timeline', '#timeline', faStream, 'Timeline')}
-                            {renderNavItem('compliments', '#compliments', faQuoteRight, 'Compliments')}
+                            {renderNavItem('about', '#about', faUser, 'About', "#6c74ab")}
+                            {renderNavItem('projects', '#projects', faFileCode, 'Projects', "#e4899a")}
+                            {renderNavItem('blogs', '#blogs', faBlog, 'Blogs', "#b593e1")}
+                            {renderNavItem('timeline', '#timeline', faStream, 'Timeline',"#f49f22")}
+                            {renderNavItem('compliments', '#compliments', faQuoteRight, 'Compliments', "#1ad1ee")}
                         </ul>
                     </div>
                 </div>
