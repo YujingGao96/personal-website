@@ -21,7 +21,7 @@ const BlogCard = ({title, link, fontClass}) => {
     useEffect(() => {
         const fitInstance = fitty(titleRef.current, {
             minSize: 12,
-            maxSize: 80,
+            maxSize: 70,
             multiLine: true
         });
 
