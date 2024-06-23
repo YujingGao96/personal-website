@@ -5,8 +5,8 @@ import {currentYear} from "../../../resolvers/profileResolver";
 const BottomFrame = () => {
     return (
         <>
-            <h6 className="text-center text-light mb-2 blog-cover-front-2 fw-lighter">Copyright &copy; Yujing Gao {currentYear}. All Rights Reserved</h6>
-            <h6 className="text-center text-light blog-cover-front-2 fw-lighter">Made with <span style={{color: "red"}}>♥</span> in Columbus, GA, USA</h6>
+            <p className="text-center text-secondary mb-2 ">Copyright &copy; Yujing Gao {currentYear}. All Rights Reserved</p>
+            <p className="text-center text-secondary mb-2">Made with <span style={{color: "#ff5353"}}>♥</span> in Columbus, GA, USA</p>
             <div id="bottom-frame"/>
         </>
     );
