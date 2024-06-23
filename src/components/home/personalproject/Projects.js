@@ -1,11 +1,9 @@
 import React from "react";
 import ProjectCard from "./ProjectCard";
-import {Zoom} from "react-awesome-reveal";
 
 const Projects = () => {
     const body = () => {
         return (
-            <Zoom>
                 <div className="row mt-5">
                     <ProjectCard
                         src="./ieee.jpeg"
@@ -26,10 +24,9 @@ const Projects = () => {
                         title="Master the Mainframe Competition"
                         addr="IBM"
                         date="Fall 2019"
-                        text="Participated in 2019 Master the Mainframe hosted by IBM and recognized as one of the 2019 Global Part 2 Winners and Part 3 Finishers. I have, thus, exposed to various mainframe programming languages like Mainframe Assembler, JCL, and COBOL etc."
+                        text="Participated in the 2019 Master the Mainframe competition hosted by IBM and was recognized as 2019 Global Part 2 Winners and Part 3 Finishers. Through this experience, I gained knowledge of various mainframe programming languages, including Mainframe Assembler, JCL, and COBOL."
                         link="https://www.youracclaim.com/users/yujing-gao.6c962a4d"/>
                 </div>
-            </Zoom>
         );
     };
 
