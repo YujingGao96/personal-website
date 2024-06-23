@@ -11,4 +11,5 @@ export const company = profile.company;
 export const email = profile.email;
 export const phoneNumber = profile.phoneNumber;
 export const linkedin = profile.linkedin;
+export const currentYear = new Date().getFullYear();
 

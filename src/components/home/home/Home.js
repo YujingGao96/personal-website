@@ -21,9 +21,9 @@ const Home = () => {
             <div className="container mt-5">
                 <section><Intro/></section>
                 <section><Projects/></section>
+                <section><Blogs/></section>
                 <section><TimeLine/></section>
                 <section><Compliments/></section>
-                <section><Blogs/></section>
             </div>
             <BottomFrame/>
         </>

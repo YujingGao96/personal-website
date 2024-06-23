@@ -65,9 +65,9 @@ const NavBar = () => {
                         <ul className="navbar-nav ml-auto">
                             {renderNavItem('about', '#about', faUser, 'About')}
                             {renderNavItem('projects', '#projects', faFileCode, 'Projects')}
+                            {renderNavItem('blogs', '#blogs', faBlog, 'Blogs')}
                             {renderNavItem('timeline', '#timeline', faStream, 'Timeline')}
                             {renderNavItem('compliments', '#compliments', faQuoteRight, 'Compliments')}
-                            {renderNavItem('blogs', '#blogs', faBlog, 'Blogs')}
                         </ul>
                     </div>
                 </div>
