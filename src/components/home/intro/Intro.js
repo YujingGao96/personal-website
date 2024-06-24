@@ -17,10 +17,12 @@ import emailIcon from "./images/email.png";
 import linkedinIcon from "./images/linkedin.png";
 import {Terminal} from "react-window-ui/src";
 import Confetti from 'react-confetti';
+import useWindowSize from 'react-use/lib/useWindowSize'
 
 const Intro = () => {
     const [ageState, setAgeState] = useState(getAge(birthday));
     const [showConfetti, setShowConfetti] = useState(false);
+    const { width, height } = useWindowSize();
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -69,7 +71,7 @@ const Intro = () => {
                                   topbarColor="rgba(85, 85, 85, 0.3)">
 
                             <div className="row p-2">
-                                <Confetti recycle={showConfetti}/>
+                                <Confetti recycle={showConfetti} gravity={0.3} width={width} height={height + 150}/>
                                 <div className="col-md-5 col-sm-12 p-3 text-center">
                                     <img
                                         className="rounded-circle border border-light dark-shadow border-opacity-10 border-2"
