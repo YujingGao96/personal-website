@@ -1,7 +1,7 @@
 import React from "react";
 import 'swiper/css';
-import {Swiper, SwiperSlide} from 'swiper/react';
-import {Pagination} from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination } from 'swiper/modules';
 import 'swiper/css/pagination';
 import SingleQuote from "./SingleQuote";
 
@@ -12,7 +12,7 @@ const Compliments = () => {
             <Swiper
                 modules={[Pagination]}
                 spaceBetween={30}
-                pagination={{clickable: true}}
+                pagination={{ clickable: true }}
                 className="py-5 px-3"
                 style={{
                     "--swiper-pagination-color": "#86d5ff",
@@ -21,10 +21,18 @@ const Compliments = () => {
                     "--swiper-pagination-bullet-size": "0.7em",
                     "--swiper-pagination-bullet-horizontal-gap": "0.5em"
                 }}
+                breakpoints={{
+                    640: {
+                        slidesPerView: 1,
+                    },
+                    768: {
+                        slidesPerView: 2,
+                    }
+                }}
             >
                 <SwiperSlide>
                     <SingleQuote
-                        text="I am beyond grateful for your dedication to this project. I would be happy to help if you ever need a letter of recommendation, as I'm sure any employer would be pleased to know what kind of a person he is considering."
+                        text="I am beyond grateful for your dedication to this project to make it right. I would be happy to help if you ever need a letter of recommendation, as I'm sure any employer would be pleased to know what kind of a person he is considering."
                         authorName="Larry Cline"
                         authorTitle="Manager of Midland Farmers Market"
                     />
@@ -38,14 +46,14 @@ const Compliments = () => {
                 </SwiperSlide>
                 <SwiperSlide>
                     <SingleQuote
-                        text="I want to express my heartfelt gratutude to you for generously offering your time and expertise to support our student, as it will undoubtedly have a significant impact on the professional development of our CS and IT students."
+                        text="I want to express my heartfelt gratitude to you for generously offering your time and expertise to support our student, as it will undoubtedly have a significant impact on the professional development of our CS and IT students."
                         authorName="Rania Hodhod"
                         authorTitle="Assistant CS Professor at CSU"
                     />
                 </SwiperSlide>
                 <SwiperSlide>
                     <SingleQuote
-                        text="Your work demostrates a wonderful example of interdiscplinary work that we always aspire for. This speaks volumes about the calibre of our faculty and students. We won't miss an opportunity to brag about this achievement."
+                        text="Your work demonstrates a wonderful example of interdisciplinary work that we always aspire for. This speaks volumes about the calibre of our faculty and students. We won't miss an opportunity to brag about this achievement."
                         authorName="Shamim Khan"
                         authorTitle="Professor & Chair of CS Department"
                     />
