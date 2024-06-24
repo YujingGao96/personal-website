@@ -22,7 +22,6 @@ body {
     padding: 0;
     height: auto;
     font-family: "Barlow", sans-serif;
-    overflow: clip;
 }
 
 .wrapper {
@@ -30,8 +29,8 @@ body {
     grid-template-columns: 1fr;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    overflow-x: hidden;
+    height: 90vh;
+    overflow: clip;
 }
 .wrapper .container {
     margin: 0 auto;
