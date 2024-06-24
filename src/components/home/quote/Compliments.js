@@ -32,14 +32,14 @@ const Compliments = () => {
             >
                 <SwiperSlide>
                     <SingleQuote
-                        text="I am beyond grateful for your dedication to this project to make it right. I would be happy to help if you ever need a letter of recommendation, as I'm sure any employer would be pleased to know what kind of a person he is considering."
+                        text="I am beyond grateful for your dedication to this project to make it right. I would be happy to help if you ever need a letter of recommendation, as I'm sure any employer would be pleased to know what kind of a person he's considering."
                         authorName="Larry Cline"
                         authorTitle="Manager of Midland Farmers Market"
                     />
                 </SwiperSlide>
                 <SwiperSlide>
                     <SingleQuote
-                        text="Yujing, I am so incredibly proud of you! Your hard work and determination to succeed inspire everyone around you! I am genuinely excited and eager to see the amazing things you will accomplish in the future!"
+                        text="Yujing, I am so incredibly proud of you! Your hard work and determination to succeed inspire everyone around you! I am genuinely excited and eager to see the amazing things you will accomplish in the future. Keep being awesome!"
                         authorName="Rebecca Hagues"
                         authorTitle="ESOL Teacher at Shaw High School"
                     />
