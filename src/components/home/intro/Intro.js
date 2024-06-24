@@ -82,8 +82,8 @@ const Intro = () => {
                                         onMouseDown={e => e.preventDefault()}
                                         onMouseUp={e => e.preventDefault()}
                                         onContextMenu={e => e.preventDefault()}/>
-                                    <h2 className="pt-4">{name}</h2>
-                                    <h4 className="text-secondary pt-3">{jobTitle}</h4>
+                                    <h2 className="mt-4">{name}</h2>
+                                    <h4 className="text-secondary my-3">{jobTitle}</h4>
                                     <div className="mx-auto">
                                         <div className="text-start d-inline-block">
                                             <a className="text-secondary pt-1 h6 text-decoration-none d-block"

@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faFileCode, faStream, faQuoteRight, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import "./NavBar.css";
 import trophyImg from './trophy.png';
+import {Link} from "react-router-dom";
 
 const NavBar = () => {
     const [currentTab, setCurrentTab] = useState('about');
@@ -44,9 +45,9 @@ const NavBar = () => {
         <div className="container fixed-top">
             <nav className="navbar navbar-expand-lg navbar-dark px-3" id="navbar-bg">
                 <div className="container-fluid d-flex justify-content-between flex-row-reverse">
-                    <a className="navbar-brand" href="/">
+                    <Link className="navbar-brand" to="/">
                         <img src={trophyImg} alt="Logo" height="44px" />
-                    </a>
+                    </Link>
 
                     <button
                         className={`navbar-toggler pr-2 hamburger hamburger--spring ${showMenu ? "is-active" : ''}`}
