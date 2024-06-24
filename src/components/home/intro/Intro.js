@@ -71,7 +71,7 @@ const Intro = () => {
                                   topbarColor="rgba(85, 85, 85, 0.3)">
 
                             <div className="row p-2">
-                                <Confetti recycle={showConfetti} gravity={0.3} width={width} height={height + 150}/>
+                                <Confetti recycle={showConfetti} gravity={0.3} width={width} height={height + 200}/>
                                 <div className="col-md-5 col-sm-12 p-3 text-center">
                                     <img
                                         className="rounded-circle border border-light dark-shadow border-opacity-10 border-2"
