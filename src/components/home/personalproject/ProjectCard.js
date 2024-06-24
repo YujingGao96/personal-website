@@ -6,7 +6,7 @@ import {Zoom} from "react-awesome-reveal";
 const ProjectCard = ({src, title, addr, date, text, link}) => {
     return (
         <div className="col-lg-4 col-sm-12 mb-5 blur-background">
-            <Zoom>
+            <Zoom triggerOnce>
                 <div className="card dark-bg text-light rounded-all">
                     <img src={src} className="card-img-top rounded-top" alt={src}/>
                     <div className="card-body">

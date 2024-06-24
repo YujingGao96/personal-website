@@ -12,8 +12,14 @@ const ErrorPage = () => {
     const error = resolveHttpError(errorCode);
 
     useEffect(() => {
-        const scene = document.getElementById('scene');
-        new Parallax(scene);
+        const isTouchDevice = () => {
+            return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        };
+
+        if(!isTouchDevice()){
+            const scene = document.getElementById('scene');
+            new Parallax(scene);
+        }
     }, []);
 
     return (

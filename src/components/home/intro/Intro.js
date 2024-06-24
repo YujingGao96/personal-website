@@ -59,7 +59,7 @@ const Intro = () => {
 
     const body = () => {
         return (
-            <Zoom>
+            <Zoom triggerOnce>
                 <div className="blur-background">
                     <div className="mt-5">
                         <Terminal style={{overflow: "hidden", marginTop: 0, borderRadius: "1.2rem 1.2rem 2rem 2rem"}}
