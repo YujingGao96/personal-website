@@ -2,6 +2,7 @@ import React from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faQuoteLeft} from "@fortawesome/free-solid-svg-icons/faQuoteLeft";
 import {Zoom} from "react-awesome-reveal";
+import "./SingleQuote.css";
 
 const SingleQuote = ({text, authorName, authorTitle}) => {
 
