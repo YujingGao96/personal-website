@@ -32,7 +32,7 @@ const Compliments = () => {
             >
                 <SwiperSlide>
                     <SingleQuote
-                        text="Thank you for guiding and mentoring our interns. With your coaching, they have accomplished great things. I am genuinely greatfuk for all your wisdom and advice you have shared with all team members to, including our interns."
+                        text="Thank you for guiding and mentoring our interns. With your coaching, they have accomplished great things. I am genuinely greatful for all your wisdom and advice that you have shared with all our team members, including our interns."
                         authorName="Lee Holmes"
                         authorTitle="Vice President at Global Payments"
                     />
