@@ -11,12 +11,14 @@ import TimeLine from "../timeline/Timeline";
 import Compliments from "../quote/Compliments";
 import Blogs from "../blog/Blogs";
 import BottomFrame from "../bottomframe/BottomFrame";
+import FluidCursor from "./FluidCursor";
 
 const Home = () => {
 
     return (
         <>
             <ParticleBG/>
+            <FluidCursor/>
             <NavBar/>
             <div className="container" style={{marginTop: "10em"}}>
                 <section><Intro/></section>
