@@ -3,7 +3,7 @@ import AnchorLink from 'react-anchor-link-smooth-scroll';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faFileCode, faStream, faQuoteRight, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import "./NavBar.css";
-import trophyImg from './trophy.png';
+import logo from './logo.png';
 import {Link} from "react-router-dom";
 
 const NavBar = () => {
@@ -46,7 +46,7 @@ const NavBar = () => {
             <nav className="navbar navbar-expand-lg navbar-dark px-3" id="navbar-bg">
                 <div className="container-fluid d-flex justify-content-between flex-row-reverse">
                     <Link className="navbar-brand" to="/">
-                        <img src={trophyImg} alt="Logo" height="44px" />
+                        <img src={logo} alt="Logo" height="40px" />
                     </Link>
 
                     <button
