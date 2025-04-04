@@ -46,7 +46,7 @@ const NavBar = () => {
             <nav className="navbar navbar-expand-lg navbar-dark px-3" id="navbar-bg">
                 <div className="container-fluid d-flex justify-content-between flex-row-reverse">
                     <Link className="navbar-brand" to="/">
-                        <img src={logo} alt="Logo" height="40px" />
+                        <img src={logo} alt="Logo" height="38px" />
                     </Link>
 
                     <button
