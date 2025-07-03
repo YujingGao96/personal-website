@@ -1,26 +1,25 @@
-import React, {useEffect, useState} from 'react';
-import {NotionRenderer} from "react-notion-x";
-import fetchData from "../../api/GetBlog";
-import "react-notion-x/src/styles.css";
-import './BlogPage.css';
-import {useParams, useNavigate} from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { NotionRenderer } from 'react-notion-x';
+import fetchData from '../../api/GetBlog';
+import { useRouter } from 'next/router';
 
 const BlogPage = () => {
-    const {pageId} = useParams();
-    const navigate = useNavigate();
+    const router = useRouter();
+    const {pageId} = router.query;
 
     const [recordMap, setRecordMap] = useState(null);
     useEffect(() => {
-        const fetchPage = async (pageId) => {
+        if (!pageId) return;
+        const fetchPage = async () => {
             try {
                 const data = await fetchData(pageId);
                 setRecordMap(data);
-            } catch (error) {
-                navigate('/error/500');
+            } catch {
+                router.push('/error/500');
             }
         };
-        fetchPage(pageId)
-    }, [pageId, navigate]);
+        fetchPage();
+    }, [pageId, router]);
 
     return (
         <div>

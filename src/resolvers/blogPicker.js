@@ -1,4 +1,4 @@
-import allBlogs from "../data/blogs.json";
+import allBlogs from '../data/blogs.js';
 
 // Number of blogs to display on the home page
 const numBlogsInHomePage = 4;

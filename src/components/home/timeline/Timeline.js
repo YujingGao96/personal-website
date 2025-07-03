@@ -1,7 +1,6 @@
 import React from "react";
 import {VerticalTimeline, VerticalTimelineElement} from 'react-vertical-timeline-component';
 import {faBaby} from "@fortawesome/free-solid-svg-icons";
-import 'react-vertical-timeline-component/style.min.css';
 import TimelineItem from './TimelineItem';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {timelineElements} from "../../../resolvers/timelineInfoResolver";
