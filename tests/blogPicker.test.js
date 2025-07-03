@@ -1,8 +1,7 @@
 import assert from 'assert/strict';
 import test from 'node:test';
 import { blogsInHomePage } from '../src/resolvers/blogPicker.js';
-import { readFileSync } from 'fs';
-const allBlogs = JSON.parse(readFileSync(new URL('../src/data/blogs.json', import.meta.url)));
+import allBlogs from '../src/data/blogs.js';
 
 test('blogsInHomePage picks valid ids', () => {
   assert.ok(blogsInHomePage.length <= 4);

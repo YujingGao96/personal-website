@@ -1,5 +1,4 @@
-import { readFileSync } from 'fs';
-const allBlogs = JSON.parse(readFileSync(new URL('../data/blogs.json', import.meta.url)));
+import allBlogs from '../data/blogs.js';
 
 // Number of blogs to display on the home page
 const numBlogsInHomePage = 4;
