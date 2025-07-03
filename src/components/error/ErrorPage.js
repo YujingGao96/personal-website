@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import './ErrorPage.css';
 import Parallax from 'parallax-js';
 import {useRouter} from 'next/router';
 import resolveHttpError from "../../resolvers/ErrorCodeResolver";

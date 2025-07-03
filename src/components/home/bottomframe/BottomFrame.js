@@ -1,5 +1,4 @@
 import React from "react";
-import "./BottomFrame.css";
 import {currentYear} from "../../../resolvers/profileResolver";
 
 const BottomFrame = () => {

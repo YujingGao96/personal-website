@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {NotionRenderer} from "react-notion-x";
 import fetchData from "../../api/GetBlog";
 import "react-notion-x/src/styles.css";
-import './BlogPage.css';
 import {useRouter} from 'next/router';
 
 const BlogPage = () => {

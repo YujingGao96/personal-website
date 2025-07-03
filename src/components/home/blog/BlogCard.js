@@ -3,7 +3,6 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
 import {generateRandomGradient} from '../../../util/ColorUtil';
 import fitty from 'fitty';
-import './BlogCard.css';
 import Link from 'next/link';
 
 const BlogCard = ({title, link, fontClass}) => {

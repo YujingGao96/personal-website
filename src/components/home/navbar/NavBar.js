@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import AnchorLink from 'react-anchor-link-smooth-scroll';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faFileCode, faStream, faQuoteRight, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import "./NavBar.css";
 import logo from './logo.png';
 import Link from 'next/link';
 
