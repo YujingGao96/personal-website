@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import {NotionRenderer} from "react-notion-x";
-import fetchData from "../../api/GetBlog";
-import {useRouter} from 'next/router';
+import React, { useEffect, useState } from 'react';
+import { NotionRenderer } from 'react-notion-x';
+import fetchData from '../../api/GetBlog';
+import { useRouter } from 'next/router';
 
 const BlogPage = () => {
     const router = useRouter();
@@ -9,15 +9,16 @@ const BlogPage = () => {
 
     const [recordMap, setRecordMap] = useState(null);
     useEffect(() => {
-        const fetchPage = async (pageId) => {
+        if (!pageId) return;
+        const fetchPage = async () => {
             try {
                 const data = await fetchData(pageId);
                 setRecordMap(data);
-            } catch (error) {
+            } catch {
                 router.push('/error/500');
             }
         };
-        fetchPage(pageId)
+        fetchPage();
     }, [pageId, router]);
 
     return (
