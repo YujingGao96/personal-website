@@ -15,7 +15,7 @@ import {
 import globalPaymentsIcon from "./images/gp.png";
 import emailIcon from "./images/email.png";
 import linkedinIcon from "./images/linkedin.png";
-import {Terminal} from "react-window-ui/src";
+import Terminal from "../../common/Terminal";
 import Confetti from 'react-confetti';
 import useWindowSize from 'react-use/lib/useWindowSize'
 
@@ -64,7 +64,7 @@ const Intro = () => {
             <Zoom triggerOnce>
                 <div className="blur-background">
                     <div className="mt-5">
-                        <Terminal style={{overflow: "hidden", marginTop: 0, borderRadius: "1.2rem 1.2rem 2rem 2rem"}}
+                        <Terminal style={{overflow: "hidden", marginTop: 0}}
                                   border="1px solid rgba(48, 47, 47, 0.41)"
                                   background="rgba(33, 33, 33, 0.3)"
                                   boxShadow="rgb(0 0 0 / 50%) 6px 4px 9px 3px"
