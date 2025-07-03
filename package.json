@@ -2,13 +2,11 @@
   "name": "y-gao",
   "version": "2.0.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^14.2.1",
-    "@testing-library/user-event": "^14.6.1",
     "@tsparticles/engine": "^3.8.1",
     "@tsparticles/react": "^3.0.0",
     "axios": "^1.8.3",
@@ -22,8 +20,7 @@
     "react-confetti": "^6.4.0",
     "react-dom": "^18.2.0",
     "react-notion-x": "^7.2.6",
-    "react-router-dom": "^6.22.3",
-    "react-scripts": "5.0.1",
+    "next": "^14.2.0",
     "react-syntax-highlighter": "^15.6.1",
     "react-use": "^17.6.0",
     "react-vertical-timeline-component": "^3.6.0",
@@ -38,10 +35,10 @@
     "@babel/plugin-proposal-private-property-in-object": "7.21.11"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "node --test"
   },
   "eslintConfig": {
     "extends": "react-app"

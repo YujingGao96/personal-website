@@ -3,11 +3,11 @@ import {NotionRenderer} from "react-notion-x";
 import fetchData from "../../api/GetBlog";
 import "react-notion-x/src/styles.css";
 import './BlogPage.css';
-import {useParams, useNavigate} from "react-router-dom";
+import {useRouter} from 'next/router';
 
 const BlogPage = () => {
-    const {pageId} = useParams();
-    const navigate = useNavigate();
+    const router = useRouter();
+    const {pageId} = router.query;
 
     const [recordMap, setRecordMap] = useState(null);
     useEffect(() => {
@@ -16,11 +16,11 @@ const BlogPage = () => {
                 const data = await fetchData(pageId);
                 setRecordMap(data);
             } catch (error) {
-                navigate('/error/500');
+                router.push('/error/500');
             }
         };
         fetchPage(pageId)
-    }, [pageId, navigate]);
+    }, [pageId, router]);
 
     return (
         <div>

@@ -1,14 +1,14 @@
 import React, {useEffect} from 'react';
 import './ErrorPage.css';
 import Parallax from 'parallax-js';
-import {useNavigate, useParams} from "react-router-dom";
+import {useRouter} from 'next/router';
 import resolveHttpError from "../../resolvers/ErrorCodeResolver";
 import {faHome} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const ErrorPage = () => {
-    const {errorCode} = useParams();
-    const navigate = useNavigate();
+    const router = useRouter();
+    const {errorCode} = router.query;
     const error = resolveHttpError(errorCode);
 
     useEffect(() => {
@@ -56,7 +56,7 @@ const ErrorPage = () => {
                     <div className="text">
                         <article>
                             <p>{error.briefDescription} - {error.detailDescription}</p>
-                            <button onClick={() => navigate("/")}> <FontAwesomeIcon icon={faHome}/> &nbsp; Back Home</button>
+                            <button onClick={() => router.push("/")}> <FontAwesomeIcon icon={faHome}/> &nbsp; Back Home</button>
                         </article>
                     </div>
                 </div>

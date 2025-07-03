@@ -4,7 +4,7 @@ import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
 import {generateRandomGradient} from '../../../util/ColorUtil';
 import fitty from 'fitty';
 import './BlogCard.css';
-import {Link} from 'react-router-dom';
+import Link from 'next/link';
 
 const BlogCard = ({title, link, fontClass}) => {
     const gradientStyle = {
@@ -33,7 +33,7 @@ const BlogCard = ({title, link, fontClass}) => {
     return (
         <div className="card dark-bg text-light rounded-all h-100 blur-background">
             <Link
-                to={"blog/" + link}
+                href={"/blog/" + link}
                 style={gradientStyle}
                 className="gradient-bg d-flex align-items-center justify-content-center text-decoration-none text-light"
             >
@@ -42,7 +42,7 @@ const BlogCard = ({title, link, fontClass}) => {
                 </h3>
             </Link>
             <div className="card-body">
-                <Link to={"blog/" + link} className="btn btn-outline-light m-3 py-2 rounded-all d-block glow-button">
+                <Link href={"/blog/" + link} className="btn btn-outline-light m-3 py-2 rounded-all d-block glow-button">
                     Read More &nbsp;
                     <FontAwesomeIcon icon={faChevronRight}/>
                 </Link>
