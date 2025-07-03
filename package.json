@@ -40,9 +40,6 @@
     "start": "next start",
     "test": "node --test"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": {
     "production": [
       ">0.2%",
