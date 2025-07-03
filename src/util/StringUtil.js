@@ -1,8 +1,13 @@
 export function extractBeforeLastDash(inputString) {
-    // Split the string by dashes
+    // Return the original string if no dash is present
+    if (!inputString.includes('-')) {
+        return inputString;
+    }
+
+    // Split the string by dashes and remove the last part
     const parts = inputString.split('-');
-    // Remove the last part
     parts.pop();
-    // Join the remaining parts back together with dashes
+
+    // Join the remaining parts with spaces
     return parts.join(' ');
 }
