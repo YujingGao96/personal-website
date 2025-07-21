@@ -61,8 +61,8 @@ const Intro = () => {
 
     const body = () => {
         return (
-            <Zoom triggerOnce>
-                <div className="blur-background">
+            <div className="blur-background">
+                <Zoom triggerOnce>
                     <div className="mt-5">
                         <Terminal style={{overflow: "hidden", marginTop: 0, borderRadius: "1.2rem 1.2rem 2rem 2rem"}}
                                   border="1px solid rgba(48, 47, 47, 0.41)"
@@ -122,8 +122,8 @@ const Intro = () => {
                             </div>
 
                         </Terminal></div>
-                </div>
-            </Zoom>
+                </Zoom>
+            </div>
         );
     };
 

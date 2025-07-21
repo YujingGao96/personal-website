@@ -72,11 +72,14 @@
 
 #navbar-bg {
     background: rgba(33, 33, 41, 0.45);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    backdrop-filter: saturate(180%) blur(20px);
-    box-shadow: 7px 3px 7px 4px rgb(0 0 0 / 50%);
+    -webkit-backdrop-filter: saturate(180%) blur(8px);
+    backdrop-filter: saturate(180%) blur(8px);
+    box-shadow:
+            7px 3px 7px 4px rgb(0 0 0 / 50%),
+            inset 0 1px 1px rgba(255, 255, 255, 0.3),
+            inset 0 -1px 1px rgba(0, 0, 0, 0.2);
     border-radius: 2rem;
-    top: 0.5em;
+    top: 0.7em;
 }
 
 @media (min-width: 992px) {
