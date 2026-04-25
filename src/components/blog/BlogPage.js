@@ -1,32 +1,30 @@
-import React, {useEffect, useState} from 'react';
+"use client";
+
+import React, {useEffect, useState} from "react";
 import {NotionRenderer} from "react-notion-x";
-import fetchData from "../../api/GetBlog";
-import "react-notion-x/src/styles.css";
-import './BlogPage.css';
-import {useParams, useNavigate} from "react-router-dom";
+import {useRouter} from "next/navigation";
+import BlogService from "../../services/BlogService";
 
-const BlogPage = () => {
-    const {pageId} = useParams();
-    const navigate = useNavigate();
-
+const BlogPage = ({pageId}) => {
+    const router = useRouter();
     const [recordMap, setRecordMap] = useState(null);
+
     useEffect(() => {
-        const fetchPage = async (pageId) => {
+        const fetchPage = async () => {
             try {
-                const data = await fetchData(pageId);
+                const data = await BlogService.getPage(pageId);
                 setRecordMap(data);
-            } catch (error) {
-                navigate('/error/500');
+            } catch {
+                router.push("/error/500");
             }
         };
-        fetchPage(pageId)
-    }, [pageId, navigate]);
+
+        fetchPage();
+    }, [pageId, router]);
 
     return (
         <div>
-            {recordMap == null ?
-            <div/> :
-            <NotionRenderer recordMap={recordMap} fullPage={true} darkMode/>}
+            {recordMap === null ? <div/> : <NotionRenderer recordMap={recordMap} fullPage darkMode/>}
         </div>
     );
 };

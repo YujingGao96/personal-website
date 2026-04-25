@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import Image from "next/image";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronRight} from "@fortawesome/free-solid-svg-icons/faChevronRight";
 import {Zoom} from "react-awesome-reveal";
@@ -8,7 +11,14 @@ const ProjectCard = ({src, title, addr, date, text, link}) => {
         <div className="col-lg-4 col-sm-12 mb-5 blur-background">
             <Zoom triggerOnce>
                 <div className="card dark-bg text-light rounded-all">
-                    <img src={src} className="card-img-top rounded-top" alt={src}/>
+                    <Image
+                        src={src}
+                        width={640}
+                        height={360}
+                        className="card-img-top rounded-top"
+                        alt={title}
+                        style={{width: "100%", height: "auto"}}
+                    />
                     <div className="card-body">
                         <h5 className="card-title">{title}</h5>
                         <p className="card-title h5 text-secondary">{addr}</p>

@@ -1,8 +1,6 @@
-// TimelineItem.js
 import React from "react";
 import { VerticalTimelineElement } from 'react-vertical-timeline-component';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import './TimeLineItem.css'
 
 const TimelineItem = ({ className, color, contentStyle, contentArrowStyle, date, iconStyle, icon, title, subtitle, description }) => {
     return (

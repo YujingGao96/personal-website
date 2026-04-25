@@ -1,2 +1,9 @@
 .idea
+.DS_Store
 /node_modules/
+/.next/
+/out/
+/build/
+.env*.local
+next-env.d.ts
+.vercel
