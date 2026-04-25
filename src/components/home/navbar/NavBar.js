@@ -1,35 +1,26 @@
-import React, { useState, useEffect } from "react";
-import AnchorLink from 'react-anchor-link-smooth-scroll';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faFileCode, faStream, faQuoteRight, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import "./NavBar.css";
-import logo from './logo.png';
-import {Link} from "react-router-dom";
+"use client";
+
+import React, {useState} from "react";
+import Image from "next/image";
+import Link from "next/link";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faUser, faFileCode, faStream, faQuoteRight, faPaperPlane} from "@fortawesome/free-solid-svg-icons";
+import logo from "./logo.png";
 
 const NavBar = () => {
     const [currentTab, setCurrentTab] = useState('about');
     const [showMenu, setShowMenu] = useState(false);
 
-    const currentSelectJSX = <span className="sr-only">(current)</span>;
-
-    useEffect(() => {
-        const navBarCollapse = document.getElementById('navbarNav');
-        if (showMenu) {
-            navBarCollapse.classList.add('show');
-        } else {
-            navBarCollapse.classList.remove('show');
-        }
-    }, [showMenu]);
+    const currentSelectJSX = <span className="visually-hidden">(current)</span>;
 
     const handleMenuClick = (tab) => {
         setCurrentTab(tab);
-        setShowMenu(false); // Close the menu after clicking an item
+        setShowMenu(false);
     };
 
     const renderNavItem = (tab, href, icon, label, iconColor) => (
         <li className={`px-2 nav-item ${currentTab === tab ? 'active' : ''}`}>
-            <AnchorLink
-                offset="100"
+            <a
                 className="nav-link"
                 href={href}
                 onClick={() => handleMenuClick(tab)}
@@ -37,7 +28,7 @@ const NavBar = () => {
                 <FontAwesomeIcon icon={icon} size="xl" fixedWidth color={iconColor} className="mx-1"/> &nbsp;
                 <span className="fw-medium" style={{textShadow: "0 0 5px #000", fontSize: "1.15em"}}>{label}</span>
                 {currentTab === tab ? currentSelectJSX : null}
-            </AnchorLink>
+            </a>
         </li>
     );
 
@@ -45,8 +36,8 @@ const NavBar = () => {
         <div className="container fixed-top">
             <nav className="navbar navbar-expand-lg navbar-dark px-3" id="navbar-bg">
                 <div className="container-fluid d-flex justify-content-between flex-row-reverse">
-                    <Link className="navbar-brand" to="/">
-                        <img src={logo} alt="Logo" height="38px" />
+                    <Link className="navbar-brand" href="/">
+                        <Image src={logo} alt="Logo" height={38} width={38} priority/>
                     </Link>
 
                     <button
@@ -62,7 +53,7 @@ const NavBar = () => {
                         </span>
                     </button>
 
-                    <div className="collapse navbar-collapse" id="navbarNav">
+                    <div className={`collapse navbar-collapse ${showMenu ? "show" : ""}`} id="navbarNav">
                         <ul className="navbar-nav ml-auto">
                             {renderNavItem('about', '#about', faUser, 'About', "#6c74ab")}
                             {renderNavItem('projects', '#projects', faFileCode, 'Projects', "#e4899a")}

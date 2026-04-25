@@ -1,8 +1,4 @@
 import React from "react";
-
-
-import './Home.css';
-
 import Intro from "../intro/Intro";
 import ParticleBG from "../background/ParticleBG";
 import NavBar from "../navbar/NavBar";

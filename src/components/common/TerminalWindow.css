@@ -1,0 +1,36 @@
+.terminal-window {
+    overflow: hidden;
+    margin-top: 0;
+    border: 1px solid rgba(48, 47, 47, 0.41);
+    border-radius: 1.2rem 1.2rem 2rem 2rem;
+    background: rgba(33, 33, 33, 0.3);
+    box-shadow: rgb(0 0 0 / 50%) 6px 4px 9px 3px;
+}
+
+.terminal-window-topbar {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    height: 2rem;
+    padding: 0 1rem;
+    background: rgba(85, 85, 85, 0.3);
+}
+
+.terminal-window-control {
+    display: inline-block;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+}
+
+.terminal-window-control-close {
+    background: #ff5f57;
+}
+
+.terminal-window-control-minimize {
+    background: #ffbd2e;
+}
+
+.terminal-window-control-expand {
+    background: #28c840;
+}

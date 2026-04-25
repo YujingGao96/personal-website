@@ -1,22 +1,19 @@
-import React from "react";
+"use client";
 
-import 'swiper/css';
+import React from "react";
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {Pagination} from 'swiper/modules';
-import 'swiper/css/pagination';
 import BlogCard from "./BlogCard";
 import {blogsInHomePage} from "../../../resolvers/blogPicker";
 import {extractBeforeLastDash} from "../../../util/StringUtil";
-import {shuffleArray} from "../../../util/ArrayUtil";
 
 const fontClasses = ['blog-cover-front-0', 'blog-cover-front-1', 'blog-cover-front-2', 'blog-cover-front-3'];
-const shuffledFontClasses = shuffleArray([...fontClasses]);
 
 const blogCards = blogsInHomePage.map((pageId, index) =>
     <SwiperSlide key={pageId}>
         <BlogCard title={extractBeforeLastDash(pageId)}
                   link={pageId}
-                  fontClass={shuffledFontClasses[index % shuffledFontClasses.length]}/>
+                  fontClass={fontClasses[index % fontClasses.length]}/>
     </SwiperSlide>
 )
 

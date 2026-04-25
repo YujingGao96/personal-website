@@ -1,33 +1,35 @@
-import React, {useEffect} from 'react';
-import './ErrorPage.css';
-import Parallax from 'parallax-js';
-import {useNavigate, useParams} from "react-router-dom";
+"use client";
+
+import React, {useEffect, useRef} from "react";
+import {useRouter} from "next/navigation";
+import Parallax from "parallax-js";
 import resolveHttpError from "../../resolvers/ErrorCodeResolver";
 import {faHome} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
-const ErrorPage = () => {
-    const {errorCode} = useParams();
-    const navigate = useNavigate();
+const ErrorPage = ({errorCode = "404"}) => {
+    const router = useRouter();
+    const sceneRef = useRef(null);
     const error = resolveHttpError(errorCode);
 
     useEffect(() => {
         const isTouchDevice = () => {
-            return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            return "ontouchstart" in window || navigator.maxTouchPoints > 0;
         };
 
-        if(!isTouchDevice()){
-            const scene = document.getElementById('scene');
-            new Parallax(scene);
+        if (isTouchDevice() || !sceneRef.current) {
+            return undefined;
         }
+
+        const parallax = new Parallax(sceneRef.current);
+        return () => parallax.destroy();
     }, []);
 
     return (
         <>
-            {/* Main Section */}
             <section className="wrapper">
                 <div className="container">
-                    <div id="scene" className="scene" data-hover-only="false">
+                    <div ref={sceneRef} id="scene" className="scene" data-hover-only="false">
                         <div className="circle" data-depth="1.2"></div>
                         <div className="one" data-depth="0.9">
                             <div className="content">
@@ -56,7 +58,9 @@ const ErrorPage = () => {
                     <div className="text">
                         <article>
                             <p>{error.briefDescription} - {error.detailDescription}</p>
-                            <button onClick={() => navigate("/")}> <FontAwesomeIcon icon={faHome}/> &nbsp; Back Home</button>
+                            <button onClick={() => router.push("/")}>
+                                <FontAwesomeIcon icon={faHome}/> &nbsp; Back Home
+                            </button>
                         </article>
                     </div>
                 </div>

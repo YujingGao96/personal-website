@@ -1,4 +1,8 @@
+"use client";
+
 import React, {useEffect, useState} from "react";
+import Image from "next/image";
+import dynamic from "next/dynamic";
 import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
 import {darcula} from "react-syntax-highlighter/dist/cjs/styles/prism";
 import {Zoom} from "react-awesome-reveal";
@@ -12,15 +16,16 @@ import {
     linkedin,
     name
 } from "../../../resolvers/profileResolver";
-import globalPaymentsIcon from "./images/gp.png";
+import fisIcon from "./images/fis.png";
 import emailIcon from "./images/email.png";
-import linkedinIcon from "./images/linkedin.png";
-import {Terminal} from "react-window-ui/src";
-import Confetti from 'react-confetti';
-import useWindowSize from 'react-use/lib/useWindowSize'
+import linkedinIcon from "./images/linkedin-glass.png";
+import TerminalWindow from "../../common/TerminalWindow";
+import useWindowSize from "react-use/lib/useWindowSize";
+
+const Confetti = dynamic(() => import("react-confetti"), {ssr: false});
 
 const Intro = () => {
-    const [ageState, setAgeState] = useState(getAge(birthday));
+    const [ageState, setAgeState] = useState("0.000000000");
     const [showConfetti, setShowConfetti] = useState(false);
     const { width, height } = useWindowSize();
 
@@ -64,45 +69,42 @@ const Intro = () => {
             <div className="blur-background">
                 <Zoom triggerOnce>
                     <div className="mt-5">
-                        <Terminal style={{overflow: "hidden", marginTop: 0, borderRadius: "1.2rem 1.2rem 2rem 2rem"}}
-                                  border="1px solid rgba(48, 47, 47, 0.41)"
-                                  background="rgba(33, 33, 33, 0.3)"
-                                  boxShadow="rgb(0 0 0 / 50%) 6px 4px 9px 3px"
-                                  topbarColor="rgba(85, 85, 85, 0.3)">
-
+                        <TerminalWindow>
                             <div className="row p-2">
                                 <Confetti recycle={showConfetti} gravity={0.3} width={width} height={height + 300}/>
                                 <div className="col-md-5 col-sm-12 p-3 text-center">
-                                    <img
+                                    <Image
                                         className="rounded-circle border border-light dark-shadow border-opacity-10 border-2"
-                                        height="auto" width="50%" src="/profile.jpg" alt="profile"
+                                        height={260} width={260} src="/profile.jpg" alt="profile"
+                                        style={{width: "50%", height: "auto"}}
                                         onMouseOver={_ => showConfettiFor1Sec()}
                                         onClick={_ => showConfettiFor1Sec()}
                                         onMouseLeave={_ => setShowConfetti(false)}
                                         onMouseDown={e => e.preventDefault()}
                                         onMouseUp={e => e.preventDefault()}
                                         onContextMenu={e => e.preventDefault()}/>
-                                    <h2 className="mt-4">{name}</h2>
+                                    <h2 className="intro-profile-name mt-4 fw-bold">{name}</h2>
                                     <h4 className="text-secondary my-3">{jobTitle}</h4>
                                     <div className="mx-auto">
                                         <div className="text-start d-inline-block">
                                             <a className="text-secondary pt-1 h6 text-decoration-none d-block"
-                                               target="_blank" rel="noreferrer" href="https://www.globalpayments.com/">
-                                                <span className="mx-3"><img src={globalPaymentsIcon}
-                                                                            alt="Global Payments" height="23px"
-                                                                            width="23px"/></span>{company}
+                                               target="_blank" rel="noreferrer" href="https://www.fisglobal.com/">
+                                                <span className="mx-3">
+                                                    <Image src={fisIcon} alt="FIS" height={23} width={23}/>
+                                                </span>{company}
                                             </a>
                                             <a className="text-secondary pt-1 h6 text-decoration-none d-block"
                                                href="mailto:1@ygao.app">
-                                                <span className="mx-3"><img src={emailIcon} alt="Email" height="23px"
-                                                                            width="23px"/></span>{email}
+                                                <span className="mx-3">
+                                                    <Image src={emailIcon} alt="Email" height={23} width={23}/>
+                                                </span>{email}
                                             </a>
                                             <a className="text-secondary pt-1 h6 text-decoration-none d-block"
                                                target="_blank" rel="noreferrer"
                                                href="https://www.linkedin.com/in/yujing-gao">
-                                                <span className="mx-3"><img src={linkedinIcon} alt="Linkedin"
-                                                                            height="23px"
-                                                                            width="23px"/></span>{linkedin}
+                                                <span className="mx-3">
+                                                    <Image src={linkedinIcon} alt="Linkedin" height={23} width={23}/>
+                                                </span>{linkedin}
                                             </a>
                                         </div>
                                     </div>
@@ -121,7 +123,7 @@ const Intro = () => {
                                 </div>
                             </div>
 
-                        </Terminal></div>
+                        </TerminalWindow></div>
                 </Zoom>
             </div>
         );

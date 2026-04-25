@@ -1,4 +1,4 @@
-import profile from "../data/profile";
+import profile from "../data/profile.json";
 
 export const name = profile.name;
 
@@ -12,4 +12,3 @@ export const email = profile.email;
 export const phoneNumber = profile.phoneNumber;
 export const linkedin = profile.linkedin;
 export const currentYear = new Date().getFullYear();
-

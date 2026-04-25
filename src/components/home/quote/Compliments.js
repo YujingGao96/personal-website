@@ -1,8 +1,8 @@
+"use client";
+
 import React from "react";
-import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
-import 'swiper/css/pagination';
 import SingleQuote from "./SingleQuote";
 
 const Compliments = () => {
