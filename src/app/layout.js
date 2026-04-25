@@ -1,4 +1,7 @@
+import {ClerkProvider} from "@clerk/nextjs";
 import "./globals.css";
+import NavBar from "../components/home/navbar/NavBar";
+import {hasClerkConfig} from "../lib/blog/config";
 
 export const metadata = {
     title: "Welcome to Yujing Gao's Website",
@@ -14,9 +17,14 @@ export const viewport = {
 };
 
 export default function RootLayout({children}) {
-    return (
-        <html lang="en">
-            <body>{children}</body>
+    const layout = (
+        <html lang="en" data-scroll-behavior="smooth">
+            <body>
+                <NavBar/>
+                {children}
+            </body>
         </html>
     );
+
+    return hasClerkConfig() ? <ClerkProvider>{layout}</ClerkProvider> : layout;
 }

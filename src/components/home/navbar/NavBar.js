@@ -1,15 +1,22 @@
 "use client";
 
 import React, {useState} from "react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
+import {usePathname} from "next/navigation";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUser, faFileCode, faStream, faQuoteRight, faPaperPlane} from "@fortawesome/free-solid-svg-icons";
 import logo from "./logo.png";
 
+const AuthButton = dynamic(() => import("./AuthButton"), {ssr: false});
+
 const NavBar = () => {
+    const pathname = usePathname();
     const [currentTab, setCurrentTab] = useState('about');
     const [showMenu, setShowMenu] = useState(false);
+    const isHomePage = pathname === "/";
+    const activeTab = pathname?.startsWith("/blog") || pathname?.startsWith("/admin/blog") ? "blogs" : currentTab;
 
     const currentSelectJSX = <span className="visually-hidden">(current)</span>;
 
@@ -19,7 +26,7 @@ const NavBar = () => {
     };
 
     const renderNavItem = (tab, href, icon, label, iconColor) => (
-        <li className={`px-2 nav-item ${currentTab === tab ? 'active' : ''}`}>
+        <li className={`px-2 nav-item ${activeTab === tab ? 'active' : ''}`} key={tab}>
             <a
                 className="nav-link"
                 href={href}
@@ -27,7 +34,7 @@ const NavBar = () => {
             >
                 <FontAwesomeIcon icon={icon} size="xl" fixedWidth color={iconColor} className="mx-1"/> &nbsp;
                 <span className="fw-medium" style={{textShadow: "0 0 5px #000", fontSize: "1.15em"}}>{label}</span>
-                {currentTab === tab ? currentSelectJSX : null}
+                {activeTab === tab ? currentSelectJSX : null}
             </a>
         </li>
     );
@@ -35,8 +42,9 @@ const NavBar = () => {
     return (
         <div className="container fixed-top">
             <nav className="navbar navbar-expand-lg navbar-dark px-3" id="navbar-bg">
-                <div className="container-fluid d-flex justify-content-between flex-row-reverse">
-                    <Link className="navbar-brand" href="/">
+                <div className="container-fluid">
+                    {/* Logo on the left */}
+                    <Link className="navbar-brand me-3" href="/">
                         <Image src={logo} alt="Logo" height={38} width={38} priority/>
                     </Link>
 
@@ -54,13 +62,17 @@ const NavBar = () => {
                     </button>
 
                     <div className={`collapse navbar-collapse ${showMenu ? "show" : ""}`} id="navbarNav">
-                        <ul className="navbar-nav ml-auto">
-                            {renderNavItem('about', '#about', faUser, 'About', "#6c74ab")}
-                            {renderNavItem('projects', '#projects', faFileCode, 'Projects', "#e4899a")}
-                            {renderNavItem('blogs', '#blogs', faPaperPlane, 'Blogs', "#b593e1")}
-                            {renderNavItem('timeline', '#timeline', faStream, 'Timeline',"#f49f22")}
-                            {renderNavItem('compliments', '#compliments', faQuoteRight, 'Compliments', "#1ad1ee")}
+                        <ul className="navbar-nav">
+                            {renderNavItem('about', isHomePage ? '#about' : '/#about', faUser, 'About', "#6c74ab")}
+                            {renderNavItem('projects', isHomePage ? '#projects' : '/#projects', faFileCode, 'Projects', "#e4899a")}
+                            {renderNavItem('blogs', isHomePage ? '#blogs' : '/blog', faPaperPlane, 'Blogs', "#b593e1")}
+                            {renderNavItem('timeline', isHomePage ? '#timeline' : '/#timeline', faStream, 'Timeline',"#f49f22")}
+                            {renderNavItem('compliments', isHomePage ? '#compliments' : '/#compliments', faQuoteRight, 'Compliments', "#1ad1ee")}
                         </ul>
+                        {/* Auth button pushed to the right */}
+                        <div className="ms-auto">
+                            <AuthButton/>
+                        </div>
                     </div>
                 </div>
             </nav>

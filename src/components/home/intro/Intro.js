@@ -18,7 +18,7 @@ import {
 } from "../../../resolvers/profileResolver";
 import fisIcon from "./images/fis.png";
 import emailIcon from "./images/email.png";
-import linkedinIcon from "./images/linkedin-glass.png";
+import linkedinIcon from "./images/linkedin.png";
 import TerminalWindow from "../../common/TerminalWindow";
 import useWindowSize from "react-use/lib/useWindowSize";
 

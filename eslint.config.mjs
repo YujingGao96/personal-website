@@ -7,6 +7,7 @@ export default defineConfig([
         ".next/**",
         "build/**",
         "out/**",
+        ".vercel/**",
         "node_modules/**",
     ]),
 ]);
