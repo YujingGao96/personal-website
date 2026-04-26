@@ -2,14 +2,14 @@
 @import "swiper/css";
 @import "swiper/css/pagination";
 @import "react-vertical-timeline-component/style.min.css";
-@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700;800;900&family=Barlow:wght@300;400;500;600;700;800;900&family=Black+Ops+One&family=Bungee+Shade&family=Dancing+Script:wght@400..700&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&family=Monoton&family=Onest:wght@100..900&family=Playfair+Display:wght@400;700&family=Press+Start+2P&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&family=Onest:wght@100..900&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 
 @import "../components/home/home/Home.css";
 @import "../components/home/navbar/NavBar.css";
 @import "../components/home/blog/BlogCard.css";
 @import "../components/blog/Blog.css";
 @import "../components/admin/AdminBlog.css";
-@import "../components/home/quote/SingleQuote.css";
+@import "../components/home/quote/Compliments.css";
 @import "../components/home/bottomframe/BottomFrame.css";
 @import "../components/home/timeline/TimeLineItem.css";
 @import "../components/common/TerminalWindow.css";

@@ -16,10 +16,11 @@ const Home = async () => {
             <FluidCursor/>
             <div className="container" style={{marginTop: "10em"}}>
                 <section><Intro/></section>
-                <section><Projects/></section>
                 <section><Blogs/></section>
-                <section><TimeLine/></section>
                 <section><Compliments/></section>
+                <section><TimeLine/></section>
+                <section><Projects/></section>
+
             </div>
             <BottomFrame/>
         </>
