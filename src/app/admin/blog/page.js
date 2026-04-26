@@ -2,6 +2,7 @@ import Link from "next/link";
 import {redirect} from "next/navigation";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
+import AdminPostDeleteButton from "../../../components/admin/AdminPostDeleteButton";
 import {getAdminAuth} from "../../../lib/blog/auth";
 import {getAllPosts} from "../../../lib/blog/blobStore";
 import {hasBlobConfig} from "../../../lib/blog/config";
@@ -38,8 +39,9 @@ export default async function AdminBlogRoute() {
             <div className="admin-blog-inner">
                 <header className="admin-blog-header">
                     <div>
+                        <p>CMS</p>
                         <h1>Blog Admin</h1>
-                        <p>Write Markdown posts, manage labels, and publish when ready.</p>
+                        <span>Write Markdown posts, manage labels, and publish when ready.</span>
                     </div>
                     <Link href="/admin/blog/new">
                         <FontAwesomeIcon icon={faPlus}/>
@@ -53,11 +55,14 @@ export default async function AdminBlogRoute() {
                 )}
                 <div className="admin-post-list">
                     {posts.map((post) => (
-                        <Link className="admin-post-row" href={`/admin/blog/${post.slug}`} key={post.slug}>
-                            <span>{post.status}</span>
-                            <h2>{post.title}</h2>
-                            <p>{post.summary}</p>
-                        </Link>
+                        <article className="admin-post-row" key={post.slug}>
+                            <Link className="admin-post-row-link" href={`/admin/blog/${post.slug}`}>
+                                <span>{post.status}</span>
+                                <h2>{post.title}</h2>
+                                <p>{post.summary}</p>
+                            </Link>
+                            <AdminPostDeleteButton slug={post.slug} title={post.title} status={post.status}/>
+                        </article>
                     ))}
                     {posts.length === 0 && (
                         <div className="admin-post-row">

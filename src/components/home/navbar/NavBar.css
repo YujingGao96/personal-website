@@ -8,7 +8,15 @@
     background-color: transparent;
     border: 0;
     margin: 0;
-    overflow: visible; }
+    overflow: visible;
+    box-shadow: none !important;
+    outline: none !important; }
+.hamburger:focus,
+.hamburger:focus-visible,
+.hamburger:active {
+    box-shadow: none !important;
+    outline: none !important;
+    border: 0 !important; }
 .hamburger:hover {
     opacity: 0.8; }
 .hamburger.is-active:hover {
@@ -83,6 +91,12 @@
 }
 
 @media (min-width: 992px) {
+    #navbar-bg .navbar-collapse > .ms-auto {
+        align-items: center;
+        display: flex;
+        margin-right: -0.35rem;
+    }
+
     #navbar-bg a:hover {
         transform: scale(1.1);
         transition: .2s ease-in;
@@ -111,6 +125,18 @@
     opacity: 0.85;
 }
 
+.nav-auth-avatar-frame {
+    align-items: center;
+    display: inline-flex;
+    flex-shrink: 0;
+    justify-content: center;
+    width: 38px;
+}
+
+.nav-auth-label {
+    display: none;
+}
+
 .nav-auth-initials {
     width: 30px;
     height: 30px;
@@ -124,13 +150,60 @@
     color: #fff;
 }
 
-.nav-auth-signin {
-    color: rgba(255, 255, 255, 0.85) !important;
-    transition: color 0.15s ease;
+/* Nav link brightness — override Bootstrap navbar-dark default (0.55) */
+#navbar-bg .nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
 }
 
-.nav-auth-signin:hover {
-    color: #fff !important;
+#navbar-bg .nav-link:hover,
+#navbar-bg .nav-link:focus {
+    color: #ffffff !important;
+}
+
+/* Shared nav row layout — fixed icon column + left-aligned text */
+.nav-row {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.nav-icon-col {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    flex-shrink: 0;
+}
+
+/* Logo glyph is visually left-of-center inside its image bounds —
+   nudge right so it lines up with the FA-icon centers below */
+.navbar-brand .nav-icon-col {
+    padding-left: 6px;
+}
+
+/* Sign-in nav item (matches other nav items in style) */
+.nav-auth-signin-item {
+    align-items: center;
+    background: rgba(255, 255, 255, 0.045);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.82);
+    cursor: pointer;
+    display: inline-flex;
+    height: 38px;
+    justify-content: center;
+    padding: 0;
+    transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+    width: 38px;
+}
+
+.nav-auth-signin-item:hover,
+.nav-auth-signin-item:focus {
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(181, 147, 225, 0.38);
+    box-shadow: 0 0 0 3px rgba(181, 147, 225, 0.12);
+    color: #fff;
+    outline: none;
 }
 
 /* Auth dropdown */
@@ -160,7 +233,9 @@
     z-index: -1;
 }
 
-.nav-auth-wrapper:hover .nav-auth-dropdown {
+.nav-auth-wrapper:hover .nav-auth-dropdown,
+.nav-auth-wrapper:focus-within .nav-auth-dropdown,
+.nav-auth-wrapper.is-open .nav-auth-dropdown {
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0);
@@ -190,34 +265,96 @@
     color: #fff;
 }
 
-/* Sign-in panel */
-.nav-signin-backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: 299;
-    background: rgba(0, 0, 0, 0.45);
-}
-
-.nav-signin-panel {
-    position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
-    z-index: 300;
+#navbar-bg .nav-auth-dropdown-item:hover,
+#navbar-bg .nav-auth-dropdown-item:focus {
+    transform: none;
 }
 
 @media (max-width: 991px) {
+    /* All rows share the same left edge in mobile menu */
+    #navbar-bg .navbar-brand,
+    #navbar-bg .navbar-nav .nav-item,
+    #navbar-bg .navbar-nav .nav-link {
+        padding-left: 0.25rem !important;
+        padding-right: 0 !important;
+        margin-left: 0 !important;
+    }
+
+    #navbar-bg .navbar-collapse > .ms-auto {
+        margin-left: 0 !important;
+        width: 100%;
+    }
+
+    #navbar-bg .navbar-nav .nav-link,
+    .nav-auth-avatar-btn {
+        align-items: center;
+        column-gap: 0;
+        display: grid !important;
+        grid-template-columns: 3.9rem minmax(0, 1fr);
+        width: 100%;
+    }
+
+    #navbar-bg .navbar-nav .nav-link .fw-medium,
+    .nav-auth-label {
+        justify-self: start;
+        text-align: left;
+    }
+
+    #navbar-bg .nav-icon-col,
+    .nav-auth-avatar-frame {
+        justify-content: center;
+        padding-left: 0;
+        width: 3.9rem;
+    }
+
     .nav-auth-wrapper {
-        padding: 8px 0;
+        align-items: stretch;
+        flex-direction: column;
+        padding: 0.35rem 0 0;
+        width: 100%;
+    }
+
+    .nav-auth-avatar-btn {
+        border-radius: 0;
+        justify-content: flex-start;
+        padding: 0.5rem 0.25rem;
+        width: 100%;
+    }
+
+    .nav-auth-label {
+        color: rgba(255, 255, 255, 0.9);
+        display: inline-flex;
+        font-size: 1.15em;
+        font-weight: 500;
+        text-shadow: 0 0 5px #000;
     }
 
     .nav-auth-dropdown {
         position: static;
-        opacity: 1;
-        pointer-events: auto;
+        max-height: 0;
+        min-width: 0;
+        opacity: 0;
+        overflow: hidden;
+        pointer-events: none;
         transform: none;
-        padding-top: 4px;
+        padding: 0 0 0 calc(0.25rem + 38px + 0.6rem);
         box-shadow: none;
         background: transparent;
+        transition: max-height 0.16s ease, opacity 0.16s ease;
+    }
+
+    .nav-auth-wrapper:hover .nav-auth-dropdown,
+    .nav-auth-wrapper:focus-within .nav-auth-dropdown {
+        max-height: 0;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .nav-auth-wrapper.is-open .nav-auth-dropdown {
+        max-height: 120px;
+        opacity: 1;
+        pointer-events: auto;
+        padding-top: 0.15rem;
     }
 
     .nav-auth-dropdown::before {
@@ -226,5 +363,13 @@
 
     .nav-auth-dropdown-item {
         background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        margin-top: 0.25rem;
+        max-width: 14rem;
+        padding: 0.6rem 0.75rem;
+    }
+
+    .nav-auth-signin-item {
+        margin-left: calc(0.25rem + (3.9rem - 38px) / 2);
     }
 }

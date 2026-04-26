@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 
@@ -63,6 +63,7 @@ export default function BlogIndexSearch({posts}) {
     const [query, setQuery] = useState("");
     const [activeLabel, setActiveLabel] = useState("");
     const [sortKey, setSortKey] = useState("newest");
+    const searchRef = useRef(null);
 
     const labels = useMemo(() => {
         return Array.from(new Set(posts.flatMap((post) => post.labels || []))).sort();
@@ -78,6 +79,23 @@ export default function BlogIndexSearch({posts}) {
 
     const isFiltered = query.trim() || activeLabel;
 
+    useEffect(() => {
+        const focusSearch = (event) => {
+            const activeElement = document.activeElement;
+            const isTyping = activeElement?.tagName === "INPUT"
+                || activeElement?.tagName === "TEXTAREA"
+                || activeElement?.isContentEditable;
+
+            if (event.key === "/" && !isTyping) {
+                event.preventDefault();
+                searchRef.current?.focus();
+            }
+        };
+
+        window.addEventListener("keydown", focusSearch);
+        return () => window.removeEventListener("keydown", focusSearch);
+    }, []);
+
     return (
         <div className="blog-index-panel">
             {/* Search */}
@@ -85,11 +103,13 @@ export default function BlogIndexSearch({posts}) {
                 <label className="blog-search-box">
                     <FontAwesomeIcon icon={faMagnifyingGlass}/>
                     <input
+                        ref={searchRef}
                         type="search"
                         value={query}
                         onChange={(event) => setQuery(event.target.value)}
-                        placeholder="Search posts by title, keyword, label..."
+                        placeholder="Search posts by title, summary, label..."
                     />
+                    {!query && <kbd className="blog-search-shortcut">/</kbd>}
                 </label>
             </div>
 

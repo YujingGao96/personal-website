@@ -28,11 +28,13 @@ const NavBar = () => {
     const renderNavItem = (tab, href, icon, label, iconColor) => (
         <li className={`px-2 nav-item ${activeTab === tab ? 'active' : ''}`} key={tab}>
             <a
-                className="nav-link"
+                className="nav-link nav-row"
                 href={href}
                 onClick={() => handleMenuClick(tab)}
             >
-                <FontAwesomeIcon icon={icon} size="xl" fixedWidth color={iconColor} className="mx-1"/> &nbsp;
+                <span className="nav-icon-col">
+                    <FontAwesomeIcon icon={icon} size="xl" fixedWidth color={iconColor}/>
+                </span>
                 <span className="fw-medium" style={{textShadow: "0 0 5px #000", fontSize: "1.15em"}}>{label}</span>
                 {activeTab === tab ? currentSelectJSX : null}
             </a>
@@ -44,8 +46,10 @@ const NavBar = () => {
             <nav className="navbar navbar-expand-lg navbar-dark px-3" id="navbar-bg">
                 <div className="container-fluid">
                     {/* Logo on the left */}
-                    <Link className="navbar-brand me-3" href="/">
-                        <Image src={logo} alt="Logo" height={38} width={38} priority/>
+                    <Link className="navbar-brand nav-row me-3" href="/">
+                        <span className="nav-icon-col">
+                            <Image src={logo} alt="Logo" height={38} width={38} priority/>
+                        </span>
                     </Link>
 
                     <button

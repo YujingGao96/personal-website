@@ -89,6 +89,17 @@
     outline: 0;
 }
 
+.blog-search-shortcut {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 5px;
+    color: rgba(255, 255, 255, 0.38);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 10px;
+    line-height: 1;
+    padding: 3px 7px;
+}
+
 .blog-search-box input::placeholder {
     color: rgba(255, 255, 255, 0.3);
 }
@@ -406,6 +417,16 @@
     display: block;
     margin: 0 auto 2.5rem;
     object-fit: cover;
+    width: 100%;
+}
+
+.generated-blog-cover-svg.blog-generated-cover {
+    aspect-ratio: 2 / 1;
+    border-radius: 14px;
+    display: block;
+    height: auto;
+    margin: 0 auto 2.5rem;
+    overflow: hidden;
     width: 100%;
 }
 

@@ -26,5 +26,124 @@ export default function RootLayout({children}) {
         </html>
     );
 
-    return hasClerkConfig() ? <ClerkProvider>{layout}</ClerkProvider> : layout;
+    const darkAppearance = {
+        variables: {
+            colorBackground: "#1a1a24",
+            colorInputBackground: "rgba(255,255,255,0.06)",
+            colorText: "#ffffff",
+            colorTextSecondary: "rgba(255,255,255,0.78)",
+            colorPrimary: "#7b6dd6",
+            colorInputText: "#ffffff",
+            colorTextOnPrimaryBackground: "#ffffff",
+            colorNeutral: "#ffffff",
+            colorShimmer: "rgba(255,255,255,0.08)",
+            colorDanger: "#e4899a",
+            colorSuccess: "#1ad1ee",
+            colorWarning: "#f49f22",
+            fontFamily: '"Onest", sans-serif',
+        },
+        elements: {
+            rootBox: {
+                fontFamily: '"Onest", sans-serif',
+            },
+            card: {
+                background: "rgba(10,10,16,0.55)",
+                backdropFilter: "saturate(180%) blur(20px)",
+                boxShadow:
+                    "0 20px 60px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.08)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: "1rem",
+            },
+            headerTitle: {
+                color: "#ffffff",
+                fontWeight: 600,
+            },
+            headerSubtitle: {
+                color: "rgba(255,255,255,0.85)",
+            },
+            socialButtonsBlockButton: {
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid rgba(255,255,255,0.15)",
+                color: "#ffffff",
+            },
+            socialButtonsBlockButton__hover: {
+                background: "rgba(255,255,255,0.12)",
+            },
+            socialButtonsBlockButtonText: {
+                color: "#ffffff",
+                fontWeight: 500,
+            },
+            socialButtonsProviderIcon: {
+                filter: "brightness(1.1)",
+            },
+            socialButtonsProviderIcon__github: {
+                filter: "invert(1) brightness(2)",
+            },
+            socialButtonsBlockButtonArrow: {
+                color: "rgba(255,255,255,0.85)",
+                background: "rgba(255,255,255,0.12)",
+                border: "1px solid rgba(255,255,255,0.18)",
+            },
+            dividerLine: {
+                background: "rgba(255,255,255,0.15)",
+            },
+            dividerText: {
+                color: "rgba(255,255,255,0.7)",
+            },
+            formFieldLabel: {
+                color: "#ffffff",
+                fontWeight: 500,
+            },
+            formFieldInput: {
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid rgba(255,255,255,0.18)",
+                color: "#ffffff",
+                "::placeholder": {
+                    color: "rgba(255,255,255,0.55)",
+                },
+            },
+            formFieldInput__focus: {
+                borderColor: "#b593e1",
+                boxShadow: "0 0 0 3px rgba(181,147,225,0.25)",
+            },
+            formFieldInputShowPasswordButton: {
+                color: "rgba(255,255,255,0.7)",
+            },
+            formButtonPrimary: {
+                background: "linear-gradient(135deg, #7b6dd6, #b593e1)",
+                color: "#ffffff",
+                fontWeight: 600,
+                textTransform: "none",
+                boxShadow: "0 4px 14px rgba(123,109,214,0.45)",
+            },
+            formButtonPrimary__hover: {
+                background: "linear-gradient(135deg, #8a7ce4, #c4a3f0)",
+            },
+            footer: {
+                background: "transparent",
+            },
+            footerActionText: {
+                color: "rgba(255,255,255,0.75)",
+            },
+            footerActionLink: {
+                color: "#b593e1",
+                fontWeight: 500,
+            },
+            footerActionLink__hover: {
+                color: "#d0b6ff",
+            },
+            identityPreviewText: {
+                color: "#ffffff",
+            },
+            identityPreviewEditButton: {
+                color: "#b593e1",
+            },
+            modalBackdrop: {
+                background: "rgba(0,0,0,0.65)",
+                backdropFilter: "blur(4px)",
+            },
+        },
+    };
+
+    return hasClerkConfig() ? <ClerkProvider appearance={darkAppearance}>{layout}</ClerkProvider> : layout;
 }

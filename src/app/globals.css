@@ -2,7 +2,7 @@
 @import "swiper/css";
 @import "swiper/css/pagination";
 @import "react-vertical-timeline-component/style.min.css";
-@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700;800;900&family=Barlow:wght@300;400;500;600;700;800;900&family=Black+Ops+One&family=Bungee+Shade&family=Dancing+Script:wght@400..700&family=Monoton&family=Onest:wght@100..900&family=Press+Start+2P&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700;800;900&family=Barlow:wght@300;400;500;600;700;800;900&family=Black+Ops+One&family=Bungee+Shade&family=Dancing+Script:wght@400..700&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&family=Monoton&family=Onest:wght@100..900&family=Playfair+Display:wght@400;700&family=Press+Start+2P&display=swap");
 
 @import "../components/home/home/Home.css";
 @import "../components/home/navbar/NavBar.css";
@@ -21,4 +21,78 @@ html {
 
 #about, #projects, #blogs, #timeline, #compliments {
     scroll-margin-top: 10em;
+}
+
+/* Clerk modal overrides */
+
+/* Placeholder text */
+.cl-formFieldInput::placeholder,
+.cl-formFieldInput::-webkit-input-placeholder {
+    color: rgba(255, 255, 255, 0.55) !important;
+    opacity: 1 !important;
+}
+
+/* GitHub icon — invert the dark monochrome logo to white.
+   Restrict to the actual icon (img/svg), not the surrounding button. */
+.cl-providerIcon__github,
+.cl-socialButtonsProviderIcon__github,
+img.cl-providerIcon[alt*="GitHub" i],
+img.cl-socialButtonsProviderIcon[alt*="GitHub" i] {
+    filter: invert(1) brightness(2) !important;
+}
+
+/* "Last used" badge — target only known badge classes, not all internal spans
+   (broad cl-internal selector wipes out provider-icon background-images) */
+.cl-socialButtonsBlockButtonArrow,
+.cl-socialButtonsLastUsedSubmitButton,
+[class*="lastUsed"],
+[class*="LastUsed"] {
+    color: rgba(255, 255, 255, 0.9) !important;
+    background-color: rgba(255, 255, 255, 0.12) !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Modal close button — guarantee visibility AND clickability */
+.cl-modalCloseButton,
+.cl-modal-closeButton,
+button[aria-label*="lose" i],
+button[aria-label*="ismiss" i] {
+    color: rgba(255, 255, 255, 0.85) !important;
+    background: transparent !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    z-index: 9999 !important;
+    opacity: 1 !important;
+}
+
+.cl-modalCloseButton:hover,
+.cl-modal-closeButton:hover {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.cl-modalCloseButton svg,
+.cl-modalCloseButton path {
+    fill: currentColor !important;
+    stroke: currentColor !important;
+}
+
+/* Make sure modal content layer doesn't trap clicks behind anything */
+.cl-modalContent,
+.cl-modalBackdrop {
+    pointer-events: auto !important;
+    z-index: 9998 !important;
+}
+
+/* Ensure the navbar doesn't sit above the modal */
+.cl-rootBox {
+    z-index: 9998 !important;
+}
+
+/* Hint/error/identity text contrast */
+.cl-formFieldHintText,
+.cl-formFieldErrorText,
+.cl-identityPreviewText,
+.cl-footerActionText {
+    color: rgba(255, 255, 255, 0.8) !important;
 }

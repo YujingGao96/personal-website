@@ -19,6 +19,7 @@ export async function DELETE(_request, {params}) {
         revalidatePath("/blog");
         revalidatePath(`/blog/${safeSlug}`);
         revalidatePath("/admin/blog");
+        revalidatePath(`/admin/blog/${safeSlug}`);
 
         return Response.json({deleted: true});
     } catch (error) {

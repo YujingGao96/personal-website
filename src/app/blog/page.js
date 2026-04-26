@@ -14,7 +14,7 @@ export default async function BlogIndexRoute() {
     return (
         <main className="blog-page-shell">
             <section className="blog-page-header">
-                <p>Writing</p>
+                <p>Random Thoughts</p>
                 <h1>Blog</h1>
                 <span>Notes on software, cloud systems, and the things I am learning.</span>
             </section>

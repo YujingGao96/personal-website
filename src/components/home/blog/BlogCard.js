@@ -1,42 +1,59 @@
 import React from "react";
 import Link from "next/link";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChevronRight} from "@fortawesome/free-solid-svg-icons";
-import {generateGradientFromText} from "../../../util/ColorUtil";
+import GeneratedBlogCover, {getBlogCoverPalette, getBlogLabelColor} from "../../blog/GeneratedBlogCover";
 
-const BlogCard = ({post, fontClass}) => {
-    const gradientStyle = {
-        backgroundImage: generateGradientFromText(post.title),
-        height: '200px',
-        borderTopLeftRadius: '1.2rem',
-        borderTopRightRadius: '1.2rem',
-        animation: 'moveGradient 7s ease infinite',
-        backgroundSize: '200% 200%',
-    };
+function formatDate(value) {
+    if (!value) {
+        return "Draft";
+    }
+
+    return new Date(value).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+    });
+}
+
+const BlogCard = ({post, isLatest = false}) => {
+    const primaryColor = getBlogCoverPalette(post)[0];
+    const labels = post.labels || [];
 
     return (
-        <div className="card dark-bg text-light rounded-all h-100 blur-background">
-            <Link
-                href={`/blog/${post.slug}`}
-                style={gradientStyle}
-                className="gradient-bg d-flex align-items-center justify-content-center text-decoration-none text-light"
-            >
-                <h3 className={`blog-card-title text-center m-3 ${fontClass}`}>
-                    {post.title}
-                </h3>
-            </Link>
-            <div className="card-body">
-                <p className="blog-card-summary">{post.summary}</p>
-                <div className="blog-card-meta">
-                    <span>{post.readingTime} min read</span>
-                    {post.viewCount > 0 && <span>{post.viewCount} views</span>}
+        <article className={`home-blog-card${isLatest ? " latest" : ""}`} style={{"--blog-accent": primaryColor}}>
+            <Link href={`/blog/${post.slug}`} className="home-blog-card-link">
+                <div className="home-blog-cover">
+                    <GeneratedBlogCover post={post} className="home-blog-cover-svg"/>
+                    <div className="home-blog-cover-fade"/>
+                    {isLatest && <span className="home-blog-latest-badge">Latest</span>}
+                    <h2>{post.title}</h2>
                 </div>
-                <Link href={`/blog/${post.slug}`} className="btn btn-outline-light m-3 py-2 rounded-all d-block glow-button">
-                    Read More &nbsp;
-                    <FontAwesomeIcon icon={faChevronRight}/>
-                </Link>
-            </div>
-        </div>
+                <div className="home-blog-card-body">
+                    {isLatest && <h2 className="home-blog-feature-title">{post.title}</h2>}
+                    {labels.length > 0 && (
+                        <div className="home-blog-labels">
+                            {labels.map((label) => (
+                                <span key={label} style={{"--label-color": getBlogLabelColor(label)}}>
+                                    {label}
+                                </span>
+                            ))}
+                        </div>
+                    )}
+                    <p>{post.summary}</p>
+                    <div className="home-blog-footer">
+                        <span>{formatDate(post.publishedAt || post.updatedAt)}</span>
+                        <span className="home-blog-dot"/>
+                        <span>{post.readingTime} min read</span>
+                        {post.viewCount > 0 && (
+                            <>
+                                <span className="home-blog-dot"/>
+                                <span>{post.viewCount} views</span>
+                            </>
+                        )}
+                        <span className="home-blog-arrow">→</span>
+                    </div>
+                </div>
+            </Link>
+        </article>
     );
 };
 
