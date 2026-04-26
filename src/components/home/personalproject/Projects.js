@@ -21,7 +21,7 @@ const Projects = () => {
                         link="https://menu-brown.vercel.app/"/>
                     <ProjectCard
                         src="/mtm.png"
-                        title="Master the Mainframe Competition"
+                        title="Master the Mainframe"
                         addr="IBM"
                         date="Fall 2019"
                         text="Participated in the 2019 Master the Mainframe competition hosted by IBM and was recognized as 2019 Global Part 2 Winners and Part 3 Finishers. Through this experience, I gained knowledge of various mainframe programming languages, including Mainframe Assembler, JCL, and COBOL."

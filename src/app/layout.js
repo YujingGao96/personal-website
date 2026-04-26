@@ -29,30 +29,40 @@ export default function RootLayout({children}) {
     const darkAppearance = {
         variables: {
             colorBackground: "#1a1a24",
+            colorForeground: "#ffffff",
             colorInputBackground: "rgba(255,255,255,0.06)",
+            colorInput: "rgba(255,255,255,0.06)",
             colorText: "#ffffff",
             colorTextSecondary: "rgba(255,255,255,0.78)",
+            colorMutedForeground: "rgba(255,255,255,0.82)",
             colorPrimary: "#7b6dd6",
+            colorPrimaryForeground: "#ffffff",
             colorInputText: "#ffffff",
+            colorInputForeground: "#ffffff",
             colorTextOnPrimaryBackground: "#ffffff",
             colorNeutral: "#ffffff",
             colorShimmer: "rgba(255,255,255,0.08)",
             colorDanger: "#e4899a",
             colorSuccess: "#1ad1ee",
             colorWarning: "#f49f22",
+            colorModalBackdrop: "rgba(0,0,0,0.42)",
             fontFamily: '"Onest", sans-serif',
         },
         elements: {
             rootBox: {
                 fontFamily: '"Onest", sans-serif',
+                width: "100%",
+                boxShadow:
+                    "7px 3px 7px 4px rgb(0 0 0 / 50%), inset 0 1px 1px rgba(255, 255, 255, 0.3), inset 0 -1px 1px rgba(0, 0, 0, 0.2)",
+                borderRadius: "2em",
+                background: "rgba(33, 33, 41, 0.45)",
+                backdropFilter: "saturate(180%) blur(8px)",
+            },
+            cardBox: {
+                width: "100%",
             },
             card: {
-                background: "rgba(10,10,16,0.55)",
-                backdropFilter: "saturate(180%) blur(20px)",
-                boxShadow:
-                    "0 20px 60px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.08)",
-                border: "1px solid rgba(255,255,255,0.1)",
-                borderRadius: "1rem",
+                background: "transparent"
             },
             headerTitle: {
                 color: "#ffffff",
@@ -77,12 +87,27 @@ export default function RootLayout({children}) {
                 filter: "brightness(1.1)",
             },
             socialButtonsProviderIcon__github: {
+                color: "#ffffff",
+                fill: "#ffffff",
                 filter: "invert(1) brightness(2)",
+                opacity: 1,
+            },
+            providerIcon__github: {
+                color: "#ffffff",
+                fill: "#ffffff",
+                filter: "invert(1) brightness(2)",
+                opacity: 1,
             },
             socialButtonsBlockButtonArrow: {
                 color: "rgba(255,255,255,0.85)",
                 background: "rgba(255,255,255,0.12)",
                 border: "1px solid rgba(255,255,255,0.18)",
+            },
+            lastAuthenticationStrategyBadge: {
+                color: "#f6f2ff",
+                background: "rgba(181,147,225,0.2)",
+                border: "1px solid rgba(208,182,255,0.55)",
+                boxShadow: "0 0 0 1px rgba(255,255,255,0.08)",
             },
             dividerLine: {
                 background: "rgba(255,255,255,0.15)",
@@ -137,10 +162,6 @@ export default function RootLayout({children}) {
             },
             identityPreviewEditButton: {
                 color: "#b593e1",
-            },
-            modalBackdrop: {
-                background: "rgba(0,0,0,0.65)",
-                backdropFilter: "blur(4px)",
             },
         },
     };

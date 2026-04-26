@@ -2,15 +2,17 @@
 
 import Link from "next/link";
 import {useEffect, useRef, useState} from "react";
+import {createPortal} from "react-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCircleUser, faRightToBracket, faUserShield} from "@fortawesome/free-solid-svg-icons";
-import {useAuth, useUser, SignOutButton, SignInButton} from "@clerk/nextjs";
+import {faCircleUser, faRightToBracket, faUserShield, faXmark} from "@fortawesome/free-solid-svg-icons";
+import {useAuth, useUser, SignOutButton, SignIn} from "@clerk/nextjs";
 
 export default function AuthButton() {
     const {isSignedIn, isLoaded} = useAuth();
     const {user} = useUser();
     const wrapperRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
+    const [signInFrame, setSignInFrame] = useState(null);
 
     useEffect(() => {
         const closeMenu = (event) => {
@@ -22,6 +24,71 @@ export default function AuthButton() {
         document.addEventListener("pointerdown", closeMenu);
         return () => document.removeEventListener("pointerdown", closeMenu);
     }, []);
+
+    useEffect(() => {
+        if (!signInFrame) return;
+
+        const handleKeyDown = (event) => {
+            if (event.key === "Escape") {
+                setSignInFrame(null);
+            }
+        };
+
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        document.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            document.body.style.overflow = previousOverflow;
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [signInFrame]);
+
+    const openSignIn = (event) => {
+        const rect = event.currentTarget.getBoundingClientRect();
+        const panelWidth = Math.min(560, window.innerWidth - 32);
+        const preferredLeft = rect.left + rect.width / 2 - panelWidth / 2;
+        const left = Math.min(Math.max(preferredLeft, 16), window.innerWidth - panelWidth - 16);
+        const top = Math.max(Math.min(rect.bottom + 12, window.innerHeight - 96), 16);
+
+        setSignInFrame({
+            left,
+            top,
+            originX: rect.left + rect.width / 2 - left,
+            originY: Math.max(rect.top + rect.height / 2 - top, 0),
+        });
+    };
+
+    const signInDialog = signInFrame && typeof document !== "undefined"
+        ? createPortal(
+            <div className="nav-auth-modal-layer">
+                <div className="nav-auth-modal-backdrop" onClick={() => setSignInFrame(null)} />
+                <section
+                    aria-label="Sign in"
+                    aria-modal="true"
+                    className="nav-auth-modal-panel"
+                    role="dialog"
+                    style={{
+                        "--auth-modal-left": `${signInFrame.left}px`,
+                        "--auth-modal-top": `${signInFrame.top}px`,
+                        "--auth-modal-origin-x": `${signInFrame.originX}px`,
+                        "--auth-modal-origin-y": `${signInFrame.originY}px`,
+                    }}
+                >
+                    <button
+                        aria-label="Close sign-in dialog"
+                        className="nav-auth-modal-close"
+                        onClick={() => setSignInFrame(null)}
+                        type="button"
+                    >
+                        <FontAwesomeIcon icon={faXmark}/>
+                    </button>
+                    <SignIn routing="hash"/>
+                </section>
+            </div>,
+            document.body
+        )
+        : null;
 
     if (!isLoaded) return null;
 
@@ -63,15 +130,17 @@ export default function AuthButton() {
                         </button>
                     </SignOutButton>
                 </div>
+                {signInDialog}
             </div>
         );
     }
 
     return (
-        <SignInButton mode="modal">
-            <button className="nav-auth-signin-item" type="button" aria-label="Sign in">
+        <>
+            <button className="nav-auth-signin-item" type="button" aria-label="Sign in" onClick={openSignIn}>
                 <FontAwesomeIcon icon={faCircleUser} size="xl"/>
             </button>
-        </SignInButton>
+            {signInDialog}
+        </>
     );
 }

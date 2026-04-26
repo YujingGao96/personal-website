@@ -35,58 +35,16 @@ html {
 /* GitHub icon — invert the dark monochrome logo to white.
    Restrict to the actual icon (img/svg), not the surrounding button. */
 .cl-providerIcon__github,
-.cl-socialButtonsProviderIcon__github,
-img.cl-providerIcon[alt*="GitHub" i],
-img.cl-socialButtonsProviderIcon[alt*="GitHub" i] {
+.cl-socialButtonsProviderIcon__github {
     filter: invert(1) brightness(2) !important;
 }
 
-/* "Last used" badge — target only known badge classes, not all internal spans
-   (broad cl-internal selector wipes out provider-icon background-images) */
-.cl-socialButtonsBlockButtonArrow,
-.cl-socialButtonsLastUsedSubmitButton,
-[class*="lastUsed"],
-[class*="LastUsed"] {
-    color: rgba(255, 255, 255, 0.9) !important;
-    background-color: rgba(255, 255, 255, 0.12) !important;
-    border-color: rgba(255, 255, 255, 0.25) !important;
-}
-
-/* Modal close button — guarantee visibility AND clickability */
-.cl-modalCloseButton,
-.cl-modal-closeButton,
-button[aria-label*="lose" i],
-button[aria-label*="ismiss" i] {
-    color: rgba(255, 255, 255, 0.85) !important;
-    background: transparent !important;
-    pointer-events: auto !important;
-    cursor: pointer !important;
-    z-index: 9999 !important;
+/* "Last used" badge */
+.cl-lastAuthenticationStrategyBadge {
+    color: #f6f2ff !important;
+    background-color: rgba(181, 147, 225, 0.2) !important;
+    border-color: rgba(208, 182, 255, 0.55) !important;
     opacity: 1 !important;
-}
-
-.cl-modalCloseButton:hover,
-.cl-modal-closeButton:hover {
-    color: #ffffff !important;
-    background: rgba(255, 255, 255, 0.1) !important;
-}
-
-.cl-modalCloseButton svg,
-.cl-modalCloseButton path {
-    fill: currentColor !important;
-    stroke: currentColor !important;
-}
-
-/* Make sure modal content layer doesn't trap clicks behind anything */
-.cl-modalContent,
-.cl-modalBackdrop {
-    pointer-events: auto !important;
-    z-index: 9998 !important;
-}
-
-/* Ensure the navbar doesn't sit above the modal */
-.cl-rootBox {
-    z-index: 9998 !important;
 }
 
 /* Hint/error/identity text contrast */
@@ -95,4 +53,22 @@ button[aria-label*="ismiss" i] {
 .cl-identityPreviewText,
 .cl-footerActionText {
     color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.cl-footer,
+.cl-footerItem,
+.cl-footerPages,
+.cl-footerPagesLink,
+.cl-logoBox {
+    color: #f8f5ff !important;
+    opacity: 1 !important;
+}
+
+.cl-footerPagesLink:hover {
+    color: #d0b6ff !important;
+}
+
+.cl-logoImage {
+    filter: brightness(2.4) contrast(1.08) !important;
+    opacity: 1 !important;
 }
