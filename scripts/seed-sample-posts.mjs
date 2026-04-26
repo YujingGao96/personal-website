@@ -11,11 +11,17 @@
  * Re-running is safe — existing slugs are overwritten.
  */
 
-import {put, list} from "@vercel/blob";
+import {del, get, list, put} from "@vercel/blob";
 import matter from "gray-matter";
 
 const BLOG_POSTS_PREFIX = "blog/posts/";
 const BLOG_INDEX_PATH = "blog/index.json";
+const REMOVED_SAMPLE_SLUGS = [
+    "s3",
+    "s3-more-than-storage",
+    "react-server-components-explained",
+    "lessons-side-project-two-years",
+];
 
 function getToken() {
     return (
@@ -39,7 +45,6 @@ const SAMPLE_POSTS = [
             slug: "kubernetes-networking-deep-dive",
             summary: "Understanding pod-to-pod communication, ingress controllers, and service mesh patterns in production clusters.",
             labels: ["Cloud", "DevOps", "Kubernetes"],
-            keywords: ["k8s", "networking", "ingress", "service mesh", "pods"],
             status: "published",
             publishedAt: "2026-04-18T10:00:00.000Z",
             updatedAt: "2026-04-18T10:00:00.000Z",
@@ -100,7 +105,6 @@ After running Kubernetes in production for three years, the networking layer is 
             slug: "building-type-safe-api-trpc",
             summary: "End-to-end type safety without code generation — a practical walkthrough of tRPC in a Next.js monorepo.",
             labels: ["TypeScript", "Backend", "API"],
-            keywords: ["trpc", "type safety", "next.js", "monorepo", "typescript"],
             status: "published",
             publishedAt: "2026-04-10T10:00:00.000Z",
             updatedAt: "2026-04-10T10:00:00.000Z",
@@ -184,7 +188,6 @@ After six months of using tRPC in production, I can't imagine going back to manu
             slug: "observability-distributed-systems",
             summary: "Traces, metrics, and logs — the three pillars and how to wire them together with OpenTelemetry.",
             labels: ["Cloud", "DevOps", "Monitoring"],
-            keywords: ["observability", "opentelemetry", "traces", "metrics", "distributed systems"],
             status: "published",
             publishedAt: "2026-03-28T10:00:00.000Z",
             updatedAt: "2026-03-28T10:00:00.000Z",
@@ -253,7 +256,6 @@ That shift in mindset is worth more than any tool.`,
             slug: "rust-borrow-checker-mental-model",
             summary: "Ownership and lifetimes demystified: once you see the invariants, the compiler becomes your best friend.",
             labels: ["Rust", "Systems"],
-            keywords: ["rust", "borrow checker", "ownership", "lifetimes", "memory safety"],
             status: "published",
             publishedAt: "2026-03-15T10:00:00.000Z",
             updatedAt: "2026-03-15T10:00:00.000Z",
@@ -333,7 +335,6 @@ The secret to Rust isn't learning to satisfy the borrow checker. It's learning t
             slug: "dynamodb-single-table-design",
             summary: "Access patterns first, schema second — a counterintuitive approach that scales to billions of items.",
             labels: ["AWS", "Database", "Cloud"],
-            keywords: ["dynamodb", "nosql", "single table", "access patterns", "aws"],
             status: "published",
             publishedAt: "2026-03-02T10:00:00.000Z",
             updatedAt: "2026-03-02T10:00:00.000Z",
@@ -401,226 +402,75 @@ The initial investment in access pattern analysis pays dividends for years. Take
     },
     {
         metadata: {
-            title: "React Server Components Explained",
-            slug: "react-server-components-explained",
-            summary: "What RSC actually means for the component model, data fetching, and bundle sizes — with concrete examples.",
-            labels: ["React", "Frontend", "TypeScript"],
-            keywords: ["react", "rsc", "server components", "next.js", "frontend"],
+            title: "Redis Caching Patterns That Hold Up",
+            slug: "redis-caching-patterns-that-hold-up",
+            summary: "Cache-aside, write-through, and invalidation patterns that stay predictable under real production traffic.",
+            labels: ["Backend", "Database", "Systems"],
             status: "published",
-            publishedAt: "2026-02-20T10:00:00.000Z",
-            updatedAt: "2026-02-20T10:00:00.000Z",
+            publishedAt: "2026-02-16T10:00:00.000Z",
+            updatedAt: "2026-02-16T10:00:00.000Z",
             coverImageUrl: "",
             readingTime: 7,
         },
-        content: `React Server Components changed my mental model of React more than hooks did. The core idea is deceptively simple: some components run only on the server and never ship JavaScript to the client. But the implications ripple through everything — data fetching, state management, bundle sizes, and how you architect an application.
+        content: `Caching is easy to add and hard to operate. The first version usually looks like a single Redis lookup before a database query. The production version needs clear ownership, expiration rules, invalidation paths, and a plan for when the cache is wrong.
 
-## The Mental Model
+## Cache-Aside Is the Default
 
-In the RSC world, components fall into two categories:
+Cache-aside is the pattern most teams should start with. The application checks Redis first, reads from the database on a miss, then writes the result back into Redis with a TTL.
 
-**Server Components** (the default in Next.js App Router) run only on the server. They can directly access databases, read files, call internal APIs. Their code is never sent to the browser. They cannot use state, effects, or browser APIs.
+\`\`\`typescript
+async function getUserProfile(userId: string) {
+  const key = \`user-profile:\${userId}\`;
+  const cached = await redis.get(key);
 
-**Client Components** (marked with \`"use client"\`) are the React you already know. They ship JavaScript to the browser and can use all of React's interactive features.
+  if (cached) {
+    return JSON.parse(cached);
+  }
 
-\`\`\`tsx
-// Server Component — no "use client" directive
-async function BlogPost({ slug }) {
-  const post = await db.post.findUnique({ where: { slug } });
+  const profile = await db.user.findUnique({ where: { id: userId } });
+  await redis.set(key, JSON.stringify(profile), { ex: 300 });
 
-  return (
-    <article>
-      <h1>{post.title}</h1>
-      <LikeButton postId={post.id} />  {/* Client Component */}
-      <MarkdownRenderer content={post.body} />
-    </article>
-  );
+  return profile;
 }
 \`\`\`
 
-The \`BlogPost\` component runs on the server. The \`LikeButton\` is a client component that handles interactivity. The markdown renderer could be either, depending on whether it needs browser APIs.
+This keeps the database as the source of truth and makes cache failures survivable. If Redis is unavailable, the application can still read from the database.
 
-## The Bundle Size Win
+## Choose TTLs From Product Behavior
 
-This is where RSC gets exciting. If your \`MarkdownRenderer\` uses a 50KB markdown parsing library, and it's a server component, that library is never shipped to the browser. The client only receives the rendered HTML.
+A TTL should reflect how stale the user experience can be, not a random round number. A user profile can often be five minutes stale. A feature flag should probably be seconds. A payment status should not rely on cache freshness at all.
 
-In a traditional React app, every dependency in every component ends up in the JavaScript bundle. With RSC, only client component dependencies are bundled. For content-heavy sites, this can reduce bundle sizes by 30-60%.
+Short TTLs reduce stale reads but increase database pressure. Long TTLs protect the database but make invalidation more important. Pick the trade-off explicitly.
 
-## Data Fetching Without Waterfalls
+## Invalidation Beats Cleverness
 
-Server components can be async, which means data fetching is just... function calls:
+The cleanest invalidation path is usually boring: when the source record changes, delete the cache key. Let the next read rebuild it.
 
-\`\`\`tsx
-async function Dashboard() {
-  const [user, stats, notifications] = await Promise.all([
-    getUser(),
-    getStats(),
-    getNotifications(),
-  ]);
+\`\`\`typescript
+async function updateUserProfile(userId: string, input: ProfileInput) {
+  const profile = await db.user.update({
+    where: { id: userId },
+    data: input,
+  });
 
-  return (
-    <div>
-      <UserHeader user={user} />
-      <StatsPanel stats={stats} />
-      <NotificationList notifications={notifications} />
-    </div>
-  );
+  await redis.del(\`user-profile:\${userId}\`);
+  return profile;
 }
 \`\`\`
 
-No \`useEffect\`. No loading states for initial data. No client-side waterfalls. The data is fetched on the server, in parallel, and the fully rendered HTML is sent to the client.
+Avoid trying to update every cached representation in place unless the cache shape is extremely simple. Deleting is easier to reason about and avoids partial cache drift.
 
-## The Composition Pattern
+## Prevent Stampedes
 
-The most powerful pattern is composing server and client components:
+When a popular key expires, hundreds of requests can miss at once and stampede the database. Add jitter to TTLs and use a short lock around expensive rebuilds.
 
-\`\`\`tsx
-// Server Component
-async function ProductPage({ id }) {
-  const product = await getProduct(id);
+For high-traffic keys, consider stale-while-revalidate: serve the slightly stale value, refresh it in the background, and keep the request path fast.
 
-  return (
-    <div>
-      <h1>{product.name}</h1>
-      <p>{product.description}</p>
-      {/* Pass server data to client component as props */}
-      <AddToCartButton
-        productId={product.id}
-        price={product.price}
-      />
-    </div>
-  );
-}
-\`\`\`
+## What I Watch in Production
 
-The server fetches the data, renders the static parts, and passes only the necessary props to the interactive client component. It's a clean separation of concerns.
+The metrics that matter are hit rate, Redis latency, database fallback rate, and cache rebuild duration. A high hit rate is not automatically good if the cache is serving stale or incorrectly scoped data.
 
-## What I Changed in My Architecture
-
-After adopting RSC, I restructured my applications around a simple principle: **push client boundaries as deep as possible.** Pages and layouts are server components. Only the interactive leaf nodes — buttons, forms, dropdowns — are client components.
-
-This gives you the best of both worlds: fast initial loads with server-rendered content, and rich interactivity where you need it.`,
-    },
-    {
-        metadata: {
-            title: "Lessons from Running a Side Project for 2 Years",
-            slug: "lessons-side-project-two-years",
-            summary: "What worked, what didn't, and what I'd tell myself on day one if I could go back.",
-            labels: ["Reflections", "Product"],
-            keywords: ["side project", "lessons", "product", "engineering", "reflections"],
-            status: "published",
-            publishedAt: "2026-02-05T10:00:00.000Z",
-            updatedAt: "2026-02-05T10:00:00.000Z",
-            coverImageUrl: "",
-            readingTime: 5,
-        },
-        content: `Two years ago, I launched a small developer tool as a side project. It started as a weekend hack to scratch my own itch and grew into something that a few thousand people use regularly. Here's what I learned.
-
-## Ship the Ugly Version
-
-My first instinct was to build a beautiful, polished product before showing it to anyone. I spent three months on the initial version — custom design system, comprehensive test suite, CI/CD pipeline, the works.
-
-Then I launched and realized nobody cared about my pixel-perfect buttons. They cared about whether the tool solved their problem. The lesson: get something functional in front of real users as fast as possible. Polish is a luxury you earn after validation.
-
-## Pick Boring Technology
-
-I initially built the backend in Rust because I was excited about the language. Six months later, I rewrote it in Node.js because I was spending more time fighting the build system than shipping features.
-
-For side projects, optimize for developer velocity above everything else. Use the language and framework you're fastest in. Save the exotic technology for learning projects where shipping speed doesn't matter.
-
-## Marketing Is the Hard Part
-
-Building the product took 20% of my total time. Getting people to find and use it took the other 80%. I tried:
-
-- **Writing blog posts** about the problem the tool solves — this was by far the most effective
-- **Posting on Hacker News** — hit the front page once, got a spike of traffic that mostly didn't convert
-- **Twitter/X threads** — modest, steady growth
-- **Product Hunt launch** — got some initial users but the long tail was minimal
-
-The takeaway: content marketing (blog posts, tutorials, documentation) compounds over time. Everything else is a one-time spike.
-
-## Revenue Is Clarifying
-
-I added a paid tier after year one, and it changed how I thought about every decision. When people pay you money, their feedback carries more weight. Feature requests from paying customers are almost always better than feature requests from free users, because paying customers have a real workflow they're trying to optimize.
-
-## What I'd Do Differently
-
-If I started over, I'd spend the first week building a landing page with a waitlist, write three blog posts about the problem, and only start coding once I had 100 email signups. Building first and marketing later is the classic engineer trap, and I fell right into it.
-
-The most important skill for a side project isn't technical ��� it's the discipline to ship something imperfect and iterate based on real feedback. The code doesn't matter if nobody uses it.`,
-    },
-    {
-        metadata: {
-            title: "S3: More Than Just a Storage Bucket",
-            slug: "s3-more-than-storage",
-            summary: "Exploring Amazon S3 storage patterns and best practices for modern cloud architecture.",
-            labels: ["Cloud", "AWS"],
-            keywords: ["s3", "aws", "storage", "cloud", "architecture"],
-            status: "published",
-            publishedAt: "2026-04-25T10:00:00.000Z",
-            updatedAt: "2026-04-25T10:00:00.000Z",
-            coverImageUrl: "",
-            readingTime: 6,
-        },
-        content: `Amazon S3 launched in 2006 as "simple storage service," but twenty years later it's anything but simple. It's the backbone of the modern internet — Netflix streams from it, Airbnb stores images on it, and half the startups in the world use it as their primary data lake. Here's what I've learned about using it well.
-
-## The Durability Promise
-
-S3 Standard offers 99.999999999% durability (eleven nines). To put that in perspective, if you store 10 million objects, you can statistically expect to lose one object every 10,000 years. This isn't marketing fluff — it's achieved through automatic replication across at least three Availability Zones.
-
-This durability guarantee is why S3 is the default choice for anything you can't afford to lose.
-
-## Storage Classes Matter
-
-Most teams use S3 Standard for everything, but the storage class tiers can save significant money:
-
-- **S3 Standard** — hot data, frequent access. This is the default.
-- **S3 Intelligent-Tiering** — automatically moves objects between tiers based on access patterns. Set it and forget it.
-- **S3 Glacier Instant Retrieval** — for archives you rarely access but need immediately when you do.
-- **S3 Glacier Deep Archive** — the cheapest option at $0.00099/GB/month, but retrieval takes 12-48 hours.
-
-For our production setup, we save about 40% on storage costs by using Intelligent-Tiering for user uploads and Glacier for compliance archives.
-
-## Key Naming and Performance
-
-S3 used to have a limitation where keys with sequential prefixes (like timestamps) could cause hot partitions. As of 2018, S3 automatically handles this, so you no longer need to add random prefixes to your keys.
-
-That said, the key naming convention still matters for organization:
-
-\`\`\`
-# Good: logical hierarchy
-s3://my-bucket/uploads/2026/04/user-123/photo.jpg
-
-# Bad: flat mess
-s3://my-bucket/photo-abc123.jpg
-\`\`\`
-
-## Pre-Signed URLs
-
-One of S3's most powerful features is pre-signed URLs. Instead of proxying file downloads through your server, you generate a temporary URL that grants direct access to the object:
-
-\`\`\`javascript
-const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
-const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
-
-const client = new S3Client({ region: "us-east-1" });
-
-const url = await getSignedUrl(client, new GetObjectCommand({
-  Bucket: "my-bucket",
-  Key: "uploads/photo.jpg",
-}), { expiresIn: 3600 });
-\`\`\`
-
-This offloads bandwidth from your servers to S3's global infrastructure. For file-heavy applications, this is a game changer.
-
-## Event-Driven Architectures
-
-S3 event notifications are the foundation of many serverless architectures. When a file lands in a bucket, you can trigger a Lambda function, send a message to SQS, or notify an SNS topic.
-
-We use this pattern for image processing: user uploads a photo to S3, which triggers a Lambda that generates thumbnails and stores them back in S3. The entire pipeline is serverless, scales to zero, and costs practically nothing at low volume.
-
-## The Bottom Line
-
-S3 is one of those services that seems simple but rewards deep understanding. Lifecycle policies, replication rules, access points, and Object Lock are all features that can save you significant time and money once you know they exist. Take an afternoon to read through the S3 documentation — you'll almost certainly find something useful you didn't know about.`,
+Treat Redis as a performance layer, not as a place to hide unclear data ownership. The system should still make sense when the cache is empty.`,
     },
 ];
 
@@ -634,8 +484,26 @@ async function writeBlob(path, body, contentType = "text/plain; charset=utf-8") 
     });
 }
 
+async function readBlob(path) {
+    const result = await get(path, {
+        access: "private",
+        useCache: false,
+        token,
+    });
+
+    if (!result || result.statusCode !== 200) {
+        return "";
+    }
+
+    return new Response(result.stream).text();
+}
+
 async function run() {
     console.log(`Seeding ${SAMPLE_POSTS.length} sample posts...`);
+
+    for (const slug of REMOVED_SAMPLE_SLUGS) {
+        await del(`${BLOG_POSTS_PREFIX}${slug}.md`, {token}).catch(() => undefined);
+    }
 
     for (const post of SAMPLE_POSTS) {
         const markdown = matter.stringify(post.content.trim() + "\n", post.metadata);
@@ -652,8 +520,10 @@ async function run() {
     for (const blob of listResult.blobs) {
         if (!blob.pathname.endsWith(".md")) continue;
 
-        const response = await fetch(blob.downloadUrl);
-        const source = await response.text();
+        const source = await readBlob(blob.pathname);
+
+        if (!source) continue;
+
         const parsed = matter(source);
         const slug = blob.pathname.replace(BLOG_POSTS_PREFIX, "").replace(/\.md$/, "");
 
