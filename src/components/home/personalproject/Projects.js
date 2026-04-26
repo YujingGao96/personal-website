@@ -13,7 +13,7 @@ const Projects = () => {
                         text="Published paper on 2019 IEEE SoutheastCon entitled Multi-Factor Stateful Authentication using NFC and Mobile Phones. The project implemented a Windows Authentication System using technologies like AES Encryption, pGina, and Android Host-based Card Emulation."
                         link="https://ieeexplore.ieee.org/abstract/document/9020559"/>
                     <ProjectCard
-                        src="/restaurant.png"
+                        src="/restaurant.webp"
                         title="China Cafe Restaurant"
                         addr="Columbus, Georgia"
                         date="Summer 2020"

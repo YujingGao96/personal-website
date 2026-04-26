@@ -3,12 +3,12 @@ const fluidCursor = () => {
     resizeCanvas();
     let config = {
         SIM_RESOLUTION: 128,
-        DYE_RESOLUTION: 1440,
+        DYE_RESOLUTION: 720,
         CAPTURE_RESOLUTION: 512,
         DENSITY_DISSIPATION: 3.5,
         VELOCITY_DISSIPATION: 2,
         PRESSURE: 0.1,
-        PRESSURE_ITERATIONS: 20,
+        PRESSURE_ITERATIONS: 8,
         CURL: 3,
         SPLAT_RADIUS: 0.2,
         SPLAT_FORCE: 6000,
@@ -32,6 +32,7 @@ const fluidCursor = () => {
     }
     const pointers = [];
     pointers.push(new pointerPrototype());
+    pointers[0].color = generateColor();
     const { gl, ext } = getWebGLContext(canvas);
     if (!ext.supportLinearFiltering) {
         config.DYE_RESOLUTION = 256;
@@ -824,14 +825,33 @@ const fluidCursor = () => {
     initFramebuffers();
     let lastUpdateTime = Date.now();
     let colorUpdateTimer = 0.0;
+    let rafId = null;
+    let lastActivityTime = Date.now();
+    const IDLE_TIMEOUT_MS = 3000;
+
     function update() {
+        if (Date.now() - lastActivityTime > IDLE_TIMEOUT_MS) {
+            rafId = null;
+            return;
+        }
         const dt = calcDeltaTime();
         if (resizeCanvas()) initFramebuffers();
         updateColors(dt);
         applyInputs();
         step(dt);
         render(null);
-        requestAnimationFrame(update);
+        rafId = requestAnimationFrame(update);
+    }
+
+    function startLoop() {
+        if (rafId !== null) return;
+        lastUpdateTime = Date.now();
+        rafId = requestAnimationFrame(update);
+    }
+
+    function onActivity() {
+        lastActivityTime = Date.now();
+        startLoop();
     }
     function calcDeltaTime() {
         let now = Date.now();
@@ -1024,44 +1044,22 @@ const fluidCursor = () => {
         if (aspectRatio > 1) radius *= aspectRatio;
         return radius;
     }
-    window.addEventListener('mousedown', (e) => {
+    function onMouseDown(e) {
         let pointer = pointers[0];
         let posX = scaleByPixelRatio(e.clientX);
         let posY = scaleByPixelRatio(e.clientY);
         updatePointerDownData(pointer, -1, posX, posY);
         clickSplat(pointer);
-    });
-    document.body.addEventListener('mousemove', function handleFirstMouseMove(e) {
+        onActivity();
+    }
+    function onMouseMove(e) {
         let pointer = pointers[0];
         let posX = scaleByPixelRatio(e.clientX);
         let posY = scaleByPixelRatio(e.clientY);
-        let color = generateColor();
-        update();
-        updatePointerMoveData(pointer, posX, posY, color);
-        document.body.removeEventListener('mousemove', handleFirstMouseMove);
-    });
-    window.addEventListener('mousemove', (e) => {
-        let pointer = pointers[0];
-        let posX = scaleByPixelRatio(e.clientX);
-        let posY = scaleByPixelRatio(e.clientY);
-        let color = pointer.color;
-        updatePointerMoveData(pointer, posX, posY, color);
-    });
-    document.body.addEventListener(
-        'touchstart',
-        function handleFirstTouchStart(e) {
-            const touches = e.targetTouches;
-            let pointer = pointers[0];
-            for (let i = 0; i < touches.length; i++) {
-                let posX = scaleByPixelRatio(touches[i].clientX);
-                let posY = scaleByPixelRatio(touches[i].clientY);
-                update();
-                updatePointerDownData(pointer, touches[i].identifier, posX, posY);
-            }
-            document.body.removeEventListener('touchstart', handleFirstTouchStart);
-        }
-    );
-    window.addEventListener('touchstart', (e) => {
+        updatePointerMoveData(pointer, posX, posY, pointer.color);
+        onActivity();
+    }
+    function onTouchStart(e) {
         const touches = e.targetTouches;
         let pointer = pointers[0];
         for (let i = 0; i < touches.length; i++) {
@@ -1069,27 +1067,46 @@ const fluidCursor = () => {
             let posY = scaleByPixelRatio(touches[i].clientY);
             updatePointerDownData(pointer, touches[i].identifier, posX, posY);
         }
-    });
-    window.addEventListener(
-        'touchmove',
-        (e) => {
-            const touches = e.targetTouches;
-            let pointer = pointers[0];
-            for (let i = 0; i < touches.length; i++) {
-                let posX = scaleByPixelRatio(touches[i].clientX);
-                let posY = scaleByPixelRatio(touches[i].clientY);
-                updatePointerMoveData(pointer, posX, posY, pointer.color);
-            }
-        },
-        false
-    );
-    window.addEventListener('touchend', (e) => {
+        onActivity();
+    }
+    function onTouchMove(e) {
+        const touches = e.targetTouches;
+        let pointer = pointers[0];
+        for (let i = 0; i < touches.length; i++) {
+            let posX = scaleByPixelRatio(touches[i].clientX);
+            let posY = scaleByPixelRatio(touches[i].clientY);
+            updatePointerMoveData(pointer, posX, posY, pointer.color);
+        }
+        onActivity();
+    }
+    function onTouchEnd(e) {
         const touches = e.changedTouches;
         let pointer = pointers[0];
         for (let i = 0; i < touches.length; i++) {
             updatePointerUpData(pointer);
         }
-    });
+    }
+    window.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('touchstart', onTouchStart);
+    window.addEventListener('touchmove', onTouchMove, false);
+    window.addEventListener('touchend', onTouchEnd);
+
+    function destroy() {
+        if (rafId !== null) {
+            cancelAnimationFrame(rafId);
+            rafId = null;
+        }
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        gl.clearColor(0, 0, 0, 0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        window.removeEventListener('mousedown', onMouseDown);
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('touchstart', onTouchStart);
+        window.removeEventListener('touchmove', onTouchMove, false);
+        window.removeEventListener('touchend', onTouchEnd);
+    }
+    return { destroy };
     function updatePointerDownData(pointer, id, posX, posY) {
         pointer.id = id;
         pointer.down = true;

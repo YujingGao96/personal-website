@@ -2,55 +2,23 @@ body {
     font-family: "Onest", sans-serif !important;
     font-optical-sizing: auto;
     font-style: normal;
-    background: linear-gradient(270deg,
-    #121212,
-    #1e0404,
-    #13031e,
-    #010c00,
-    #1e1001,
-    #121212
-    );
-    background-size: 300% 100%;
-    -webkit-animation: AnimationName 15s linear infinite;
-    -moz-animation: AnimationName 15s linear infinite;
-    animation: AnimationName 15s linear infinite;
+    background: linear-gradient(135deg, #121212 0%, #1e0404 20%, #13031e 45%, #010c00 65%, #1e1001 85%, #121212 100%);
 }
 
-
-@-webkit-keyframes AnimationName {
-    0% {
-        background-position: 0 80%
-    }
-    50% {
-        background-position: 100% 10%
-    }
-    100% {
-        background-position: 0 80%
-    }
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(270deg, transparent, rgba(30,4,4,0.25), rgba(19,3,30,0.2), transparent);
+    transform: translateX(-100%);
+    animation: gradientSlide 15s linear infinite;
+    pointer-events: none;
+    z-index: -1;
 }
 
-@-moz-keyframes AnimationName {
-    0% {
-        background-position: 0 80%
-    }
-    50% {
-        background-position: 100% 10%
-    }
-    100% {
-        background-position: 0 80%
-    }
-}
-
-@keyframes AnimationName {
-    0% {
-        background-position: 0 80%
-    }
-    50% {
-        background-position: 100% 10%
-    }
-    100% {
-        background-position: 0 80%
-    }
+@keyframes gradientSlide {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
 }
 
 section {

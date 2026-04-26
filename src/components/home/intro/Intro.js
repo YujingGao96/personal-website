@@ -3,8 +3,10 @@
 import React, {useEffect, useState} from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
-import {darcula} from "react-syntax-highlighter/dist/cjs/styles/prism";
+import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/prism-light";
+import java from "react-syntax-highlighter/dist/esm/languages/prism/java";
+import darcula from "react-syntax-highlighter/dist/esm/styles/prism/darcula";
+SyntaxHighlighter.registerLanguage("java", java);
 import {Zoom} from "react-awesome-reveal";
 import {
     birthday,
@@ -32,7 +34,7 @@ const Intro = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             setAgeState(getAge(birthday))
-        }, 100);
+        }, 500);
         return () => clearInterval(interval);
     }, []);
 
@@ -76,6 +78,7 @@ const Intro = () => {
                                     <Image
                                         className="rounded-circle border border-light dark-shadow border-opacity-10 border-2"
                                         height={260} width={260} src="/profile.jpg" alt="profile"
+                                        priority
                                         style={{width: "50%", height: "auto"}}
                                         onMouseOver={_ => showConfettiFor1Sec()}
                                         onClick={_ => showConfettiFor1Sec()}
@@ -112,6 +115,7 @@ const Intro = () => {
                                 <div className="col-md-7 col-sm-12">
                                     <SyntaxHighlighter language="java"
                                                        style={darcula}
+                                                       useInlineStyles={true}
                                                        customStyle={{
                                                            background: "transparent",
                                                            backdropFilter: "sepia()",

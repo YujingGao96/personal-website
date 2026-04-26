@@ -3,14 +3,14 @@
 import React, {useEffect, useState} from "react";
 import Particles, {initParticlesEngine} from "@tsparticles/react";
 
-import {loadFull} from "tsparticles";
+import {loadSlim} from "@tsparticles/slim";
 
 const ParticleBG = () => {
     const [init, setInit] = useState(false);
 
     useEffect(() => {
         initParticlesEngine(async (engine) => {
-            await loadFull(engine);
+            await loadSlim(engine);
         }).then(() => {
             setInit(true);
         });
@@ -21,6 +21,8 @@ const ParticleBG = () => {
             id="tsparticles"
             options={{
                 fpsLimit: 30,
+                pauseOnBlur: true,
+                pauseOnOutsideViewport: true,
                 interactivity: {
                     events: {
                         resize: true,
@@ -40,9 +42,9 @@ const ParticleBG = () => {
                     number: {
                         density: {
                             enable: true,
-                            area: 250,
+                            area: 800,
                         },
-                        value: 100,
+                        value: 50,
                     },
                     opacity: {
                         value: .5,
