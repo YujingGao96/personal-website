@@ -3,6 +3,7 @@ import Link from "next/link";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRight} from "@fortawesome/free-solid-svg-icons";
 import BlogCard from "./BlogCard";
+import SectionHeader from "../../common/SectionHeader";
 import {getAllPosts} from "../../../lib/blog/blobStore";
 import {rankPostsByPopularity} from "../../../lib/blog/popularity";
 
@@ -17,9 +18,7 @@ const Blogs = async () => {
 
     return (
         <div id="blogs">
-            <div className="blog-home-heading">
-                <h1 className="text-center gradient-text-5 fw-bold">Popular Posts</h1>
-            </div>
+            <SectionHeader eyebrow="Writing" title="Popular Posts" gradient="gradient-text-5"/>
             {popularPosts.length > 0 ? (
                 <div className="blog-card-grid py-5 px-3">
                     {popularPosts.map((post) => (

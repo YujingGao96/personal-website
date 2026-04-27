@@ -68,9 +68,9 @@ const NavBar = () => {
                     <div className={`collapse navbar-collapse ${showMenu ? "show" : ""}`} id="navbarNav">
                         <ul className="navbar-nav">
                             {renderNavItem('about', isHomePage ? '#about' : '/#about', faUser, 'About', "#6c74ab")}
-                            {renderNavItem('projects', isHomePage ? '#projects' : '/#projects', faFileCode, 'Projects', "#e4899a")}
                             {renderNavItem('blogs', isHomePage ? '#blogs' : '/blog', faPaperPlane, 'Blogs', "#b593e1")}
                             {renderNavItem('timeline', isHomePage ? '#timeline' : '/#timeline', faStream, 'Timeline',"#f49f22")}
+                            {renderNavItem('projects', isHomePage ? '#projects' : '/#projects', faFileCode, 'Projects', "#e4899a")}
                             {renderNavItem('compliments', isHomePage ? '#compliments' : '/#compliments', faQuoteRight, 'Compliments', "#1ad1ee")}
                         </ul>
                         {/* Auth button pushed to the right */}

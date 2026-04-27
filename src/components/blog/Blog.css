@@ -201,7 +201,7 @@
     animation: fadeUp 0.4s ease both;
     background: rgba(255, 255, 255, 0.025);
     border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 14px;
+    border-radius: var(--card-radius);
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
     position: relative;
     overflow: hidden;
@@ -413,7 +413,7 @@
 
 .blog-cover-image {
     aspect-ratio: 16 / 9;
-    border-radius: 14px;
+    border-radius: var(--card-radius);
     display: block;
     margin: 0 auto 2.5rem;
     object-fit: cover;
@@ -422,7 +422,7 @@
 
 .generated-blog-cover-svg.blog-generated-cover {
     aspect-ratio: 2 / 1;
-    border-radius: 14px;
+    border-radius: var(--card-radius);
     display: block;
     height: auto;
     margin: 0 auto 2.5rem;
@@ -483,7 +483,7 @@
 }
 
 .blog-article-body img {
-    border-radius: 14px;
+    border-radius: var(--card-radius);
     display: block;
     height: auto;
     margin: 2rem auto;

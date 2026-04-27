@@ -1,7 +1,6 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import "swiper/css";
 @import "swiper/css/pagination";
-@import "react-vertical-timeline-component/style.min.css";
 @import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&family=Onest:wght@100..900&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 
 @import "../components/home/home/Home.css";
@@ -9,9 +8,11 @@
 @import "../components/home/blog/BlogCard.css";
 @import "../components/blog/Blog.css";
 @import "../components/admin/AdminBlog.css";
+@import "../components/common/SectionHeader.css";
 @import "../components/home/quote/Compliments.css";
+@import "../components/home/personalproject/ProjectCard.css";
 @import "../components/home/bottomframe/BottomFrame.css";
-@import "../components/home/timeline/TimeLineItem.css";
+@import "../components/home/timeline/Timeline.css";
 @import "../components/common/TerminalWindow.css";
 @import "../components/error/ErrorPage.css";
 

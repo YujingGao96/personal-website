@@ -1,0 +1,57 @@
+.section-header {
+    animation: section-header-fade-up 0.5s ease both;
+    display: flex;
+    justify-content: left;
+    margin: 0 auto;
+    padding: 0 20px 20px;
+    width: 100%;
+}
+
+.section-header-copy {
+    max-width: 100%;
+    text-align: left;
+    width: fit-content;
+}
+
+.section-header-eyebrow {
+    font-family: "DM Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    line-height: 1.2;
+    margin: 0 0 10px;
+    text-transform: uppercase;
+}
+
+.section-header-title {
+    font-family: "Playfair Display", serif;
+    font-size: 72px;
+    font-weight: 400;
+    line-height: 1;
+    margin: 0;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    text-shadow: 0 0 80px oklch(0.55 0.15 200 / 0.45);
+}
+
+@keyframes section-header-fade-up {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 680px) {
+    .section-header {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .section-header-title {
+        font-size: 48px;
+        line-height: 1.05;
+    }
+}
+
+@media (min-width: 681px) and (max-width: 991px) {
+    .section-header-title {
+        font-size: 64px;
+    }
+}

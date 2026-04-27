@@ -1,4 +1,8 @@
-import GeneratedSigil, {getSigilColor} from "../../common/GeneratedSigil";
+"use client";
+
+import {useCallback, useEffect, useRef, useState} from "react";
+import GeneratedSigil from "../../common/GeneratedSigil";
+import SectionHeader from "../../common/SectionHeader";
 import {hashText} from "../../../util/GenArtUtil";
 import "./Compliments.css";
 
@@ -36,38 +40,53 @@ const COMPLIMENTS = [
 ];
 
 const TWO_ROW_THRESHOLD = 6;
+const LOOP_COPIES = 3;
+const AUTO_RESUME_DELAY = 5000;
 
 function getSigilHue(name) {
     return hashText(name) % 360;
 }
 
+function ClientSigil({name, size}) {
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        const frame = window.requestAnimationFrame(() => setMounted(true));
+        return () => window.cancelAnimationFrame(frame);
+    }, []);
+
+    if (!mounted) {
+        return <div className="compliment-sigil-placeholder" style={{width: size, height: size}} aria-hidden="true"/>;
+    }
+
+    return <GeneratedSigil name={name} size={size}/>;
+}
+
 function ComplimentCard({name, title, company, quote}) {
     const hue = getSigilHue(name);
     const c = `oklch(0.65 0.16 ${hue})`;
+    const c2 = `oklch(0.66 0.2 ${(hue + 70) % 360})`;
+    const c3 = `oklch(0.74 0.18 ${(hue + 150) % 360})`;
 
     return (
         <div
             className="compliment-card"
-            style={{"--c": c}}
+            style={{"--c": c, "--c2": c2, "--c3": c3}}
         >
-            {/* Top band */}
             <div
                 className="compliment-card-header"
-                style={{background: `linear-gradient(135deg, rgba(14,14,24,0) 0%, oklch(0.65 0.16 ${hue} / 0.04) 100%)`}}
+                style={{
+                    background: `
+                        radial-gradient(circle at 16% 18%, ${c}26 0, transparent 34%),
+                        radial-gradient(circle at 90% 0%, ${c2}1f 0, transparent 40%),
+                        linear-gradient(135deg, rgba(14,14,24,0.18) 0%, ${c}0f 52%, ${c2}12 100%)
+                    `
+                }}
             >
-                {/* Subtle diagonal texture lines */}
-                <svg
-                    style={{position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.06}}
-                    viewBox="0 0 340 100"
-                    preserveAspectRatio="none"
-                    aria-hidden="true"
-                >
-                    {Array.from({length: 8}, (_, i) => (
-                        <line key={i} x1={i * 50} y1="0" x2={i * 50 - 30} y2="100" stroke="white" strokeWidth="0.8"/>
-                    ))}
-                </svg>
+                <div className="compliment-card-pattern" aria-hidden="true"/>
+                <div className="compliment-card-shine" aria-hidden="true"/>
 
-                <GeneratedSigil name={name} size={72}/>
+                <ClientSigil name={name} size={72}/>
 
                 <div style={{flex: 1, minWidth: 0}}>
                     <div className="compliment-author-name">{name}</div>
@@ -76,7 +95,6 @@ function ComplimentCard({name, title, company, quote}) {
                 </div>
             </div>
 
-            {/* Quote body */}
             <div className="compliment-quote-body">
                 <div
                     className="compliment-quote-mark"
@@ -87,8 +105,138 @@ function ComplimentCard({name, title, company, quote}) {
                 <p className="compliment-quote-text">{quote}</p>
                 <div
                     className="compliment-quote-accent"
-                    style={{background: `linear-gradient(to right, oklch(0.65 0.16 ${hue} / 0.25), transparent)`}}
+                    style={{background: `linear-gradient(to right, ${c}, ${c2}, transparent)`}}
                 />
+            </div>
+        </div>
+    );
+}
+
+function MarqueeRow({items, reverse = false, speed = 42}) {
+    const scrollerRef = useRef(null);
+    const rafRef = useRef(null);
+    const lastInteractionRef = useRef(-AUTO_RESUME_DELAY);
+    const scrollPositionRef = useRef(0);
+
+    const getSegmentWidth = useCallback((scroller) => scroller.scrollWidth / LOOP_COPIES, []);
+
+    const resetLoopPosition = useCallback((scroller) => {
+        const segmentWidth = getSegmentWidth(scroller);
+        if (!segmentWidth) return;
+
+        if (scroller.scrollLeft < segmentWidth * 0.5) {
+            scroller.scrollLeft += segmentWidth;
+        } else if (scroller.scrollLeft > segmentWidth * 1.5) {
+            scroller.scrollLeft -= segmentWidth;
+        }
+    }, [getSegmentWidth]);
+
+    const updateCardDepth = useCallback(() => {
+        const scroller = scrollerRef.current;
+        if (!scroller) return;
+
+        const scrollerRect = scroller.getBoundingClientRect();
+        const centerX = scrollerRect.left + scrollerRect.width / 2;
+        const maxDistance = scrollerRect.width * 0.58;
+        const cards = scroller.querySelectorAll(".compliment-card");
+
+        cards.forEach((card) => {
+            const rect = card.getBoundingClientRect();
+            const cardCenterX = rect.left + rect.width / 2;
+            const offset = Math.max(-1, Math.min(1, (cardCenterX - centerX) / maxDistance));
+            const distance = Math.abs(offset);
+            const translateZ = -distance * 280;
+            const rotateY = offset * -34;
+            const scale = 1 - distance * 0.18;
+            const translateY = distance * 14;
+
+            card.style.transform = `translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale}) translateY(${translateY}px)`;
+            card.style.opacity = `${1 - distance * 0.28}`;
+            card.style.zIndex = `${Math.round((1 - distance) * 100)}`;
+        });
+    }, []);
+
+    const pauseForUserScroll = useCallback(() => {
+        lastInteractionRef.current = window.performance.now();
+    }, []);
+
+    const handleScroll = useCallback(() => {
+        const scroller = scrollerRef.current;
+        if (!scroller) return;
+
+        resetLoopPosition(scroller);
+        scrollPositionRef.current = scroller.scrollLeft;
+        updateCardDepth();
+    }, [resetLoopPosition, updateCardDepth]);
+
+    useEffect(() => {
+        const scroller = scrollerRef.current;
+        if (!scroller) return undefined;
+
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const centerScroller = () => {
+            scrollPositionRef.current = getSegmentWidth(scroller);
+            scroller.scrollLeft = scrollPositionRef.current;
+            updateCardDepth();
+        };
+
+        let lastTimestamp = 0;
+        const animate = (timestamp) => {
+            if (!lastTimestamp) lastTimestamp = timestamp;
+            const delta = timestamp - lastTimestamp;
+            lastTimestamp = timestamp;
+
+            if (!reducedMotion && timestamp - lastInteractionRef.current >= AUTO_RESUME_DELAY) {
+                const segmentWidth = getSegmentWidth(scroller);
+                const pixelsPerMillisecond = segmentWidth / (speed * 1000);
+                scrollPositionRef.current += (reverse ? -1 : 1) * pixelsPerMillisecond * delta;
+
+                if (scrollPositionRef.current < segmentWidth * 0.5) {
+                    scrollPositionRef.current += segmentWidth;
+                } else if (scrollPositionRef.current > segmentWidth * 1.5) {
+                    scrollPositionRef.current -= segmentWidth;
+                }
+
+                scroller.scrollLeft = scrollPositionRef.current;
+                updateCardDepth();
+            }
+
+            rafRef.current = window.requestAnimationFrame(animate);
+        };
+
+        window.requestAnimationFrame(centerScroller);
+        rafRef.current = window.requestAnimationFrame(animate);
+        window.addEventListener("resize", centerScroller);
+
+        return () => {
+            window.cancelAnimationFrame(rafRef.current);
+            window.removeEventListener("resize", centerScroller);
+        };
+    }, [getSegmentWidth, resetLoopPosition, reverse, speed, updateCardDepth]);
+
+    return (
+        <div className="marquee-row">
+            <div
+                className="marquee-scroller"
+                ref={scrollerRef}
+                onScroll={handleScroll}
+                onWheel={pauseForUserScroll}
+                onPointerDown={pauseForUserScroll}
+                onTouchStart={pauseForUserScroll}
+                onKeyDown={pauseForUserScroll}
+                tabIndex="0"
+                role="region"
+                aria-label="Scrollable compliments"
+            >
+                <div className="track">
+                    {Array.from({length: LOOP_COPIES}, (_, group) => (
+                        <div className="marquee-group" key={group} aria-hidden={group !== 1}>
+                            {items.map((compliment) => (
+                                <ComplimentCard key={`${group}-${compliment.name}`} {...compliment}/>
+                            ))}
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );
@@ -101,35 +249,11 @@ const Compliments = () => {
 
     return (
         <div id="compliments">
-            {/* Section header */}
-            <div className="compliments-header">
-                <div className="compliments-eyebrow">KIND WORDS</div>
-                <div className="compliments-title-row">
-                    <h1 className="compliments-title">Compliments</h1>
-                    <p className="compliments-subtitle">
-                        Praise and recommendations collected from colleagues, managers, and collaborators over the years.
-                    </p>
-                </div>
-            </div>
+            <SectionHeader eyebrow="Kind Words" title="Compliments" gradient="gradient-text-4"/>
 
-            {/* Marquee */}
             <div className="compliments-marquee-outer">
-                <div className="marquee-row">
-                    <div className="track track-left">
-                        {[...row1, ...row1].map((c, i) => (
-                            <ComplimentCard key={`r1-${i}`} {...c}/>
-                        ))}
-                    </div>
-                </div>
-                {twoRows && (
-                    <div className="marquee-row">
-                        <div className="track track-right">
-                            {[...row2, ...row2].map((c, i) => (
-                                <ComplimentCard key={`r2-${i}`} {...c}/>
-                            ))}
-                        </div>
-                    </div>
-                )}
+                <MarqueeRow items={row1} speed={44}/>
+                {twoRows && <MarqueeRow items={row2} reverse speed={54}/>}
             </div>
         </div>
     );

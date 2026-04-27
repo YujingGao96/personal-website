@@ -21,6 +21,7 @@ import {
 import fisIcon from "./images/fis.png";
 import emailIcon from "./images/email.png";
 import linkedinIcon from "./images/linkedin.png";
+import SectionHeader from "../../common/SectionHeader";
 import TerminalWindow from "../../common/TerminalWindow";
 import useWindowSize from "react-use/lib/useWindowSize";
 
@@ -135,7 +136,7 @@ const Intro = () => {
 
     return (
         <div id="about">
-            <h1 className="text-center gradient-text-1 fw-bold">About Me</h1>
+            <SectionHeader eyebrow="Profile" title="About Me" gradient="gradient-text-1"/>
             {body()}
         </div>
 

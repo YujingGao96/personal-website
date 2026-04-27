@@ -17,10 +17,9 @@ const Home = async () => {
             <div className="container" style={{marginTop: "10em"}}>
                 <section><Intro/></section>
                 <section><Blogs/></section>
-                <section><Compliments/></section>
                 <section><TimeLine/></section>
                 <section><Projects/></section>
-
+                <section><Compliments/></section>
             </div>
             <BottomFrame/>
         </>

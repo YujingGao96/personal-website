@@ -1,4 +1,5 @@
 body {
+    --card-radius: 1.45rem;
     font-family: "Onest", sans-serif !important;
     font-optical-sizing: auto;
     font-style: normal;
@@ -49,7 +50,7 @@ a:focus, span:focus, button:focus {
 
 
 .dark-bg {
-    border-radius: 1.2rem;
+    border-radius: var(--card-radius);
     padding: 1px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     background-color: rgba(33, 33, 33, 0.3);
@@ -81,62 +82,44 @@ a:focus, span:focus, button:focus {
 }
 
 .rounded-all {
-    border-radius: 1.2em;
+    border-radius: var(--card-radius);
 }
 
 .rounded-top {
-    border-top-left-radius: 1.2rem !important;
-    border-top-right-radius: 1.2rem !important;
+    border-top-left-radius: var(--card-radius) !important;
+    border-top-right-radius: var(--card-radius) !important;
 }
 
-.gradient-text-1 {
-    background: #16BFFD; /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #CB3066, #16BFFD); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #CB3066, #16BFFD); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background-size: 100%;
-    background-repeat: repeat;
+.gradient-text-1,
+.gradient-text-2,
+.gradient-text-3,
+.gradient-text-4,
+.gradient-text-5 {
+    background: var(--gradient-text-bg);
     -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
     -webkit-text-fill-color: transparent;
 }
 
 .gradient-text-2 {
-    background: #EECDA3; /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #EF629F, #EECDA3); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #EF629F, #EECDA3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background-size: 100%;
-    background-repeat: repeat;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    --gradient-text-bg: linear-gradient(to right, #EF629F, #EECDA3);
 }
 
 .gradient-text-3 {
-    background: #FF8008; /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #FFC837, #FF8008); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #FFC837, #FF8008); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background-size: 100%;
-    background-repeat: repeat;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    --gradient-text-bg: linear-gradient(to right, #FFC837, #FF8008);
 }
 
 .gradient-text-4 {
-    background: #1FA2FF; /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #A6FFCB, #12D8FA, #1FA2FF); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #A6FFCB, #12D8FA, #1FA2FF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background-size: 100%;
-    background-repeat: repeat;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    --gradient-text-bg: linear-gradient(to right, #A6FFCB, #12D8FA, #1FA2FF);
 }
 
 .gradient-text-5 {
-    background: #ef32d9; /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #89fffd, #ef32d9); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #89fffd, #ef32d9); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background-size: 100%;
-    background-repeat: repeat;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    --gradient-text-bg: linear-gradient(to right, #89fffd, #ef32d9);
+}
+
+.gradient-text-1 {
+    --gradient-text-bg: linear-gradient(to right, #CB3066, #16BFFD);
 }
 
 .swiper-container {
@@ -165,4 +148,3 @@ canvas#fluid {
     pointer-events: none;
     opacity: 40%;
 }
-

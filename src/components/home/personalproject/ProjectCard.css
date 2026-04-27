@@ -1,0 +1,293 @@
+.projects-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 3rem;
+}
+
+.project-card-shell {
+    opacity: 0;
+    perspective: 1000px;
+    transform: translateY(32px);
+}
+
+.project-card-shell.is-visible {
+    animation: project-card-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.project-card {
+    --project-accent: #e8858a;
+    --project-accent-border: #a84c55;
+    background:
+        radial-gradient(circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%), color-mix(in srgb, var(--project-accent) 16%, transparent), transparent 55%),
+        rgba(14, 14, 24, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--card-radius);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    color: #f4f4fb;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+    overflow: hidden;
+    position: relative;
+    transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transform-style: preserve-3d;
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.4s ease,
+        transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+}
+
+.project-card::before {
+    background: radial-gradient(circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%), color-mix(in srgb, var(--project-accent) 34%, transparent), transparent 55%);
+    content: "";
+    inset: 0;
+    mix-blend-mode: screen;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    transition: opacity 0.3s ease;
+    z-index: 3;
+}
+
+.project-card:hover {
+    border-color: color-mix(in srgb, var(--project-accent-border) 70%, rgba(255, 255, 255, 0.16));
+    box-shadow:
+        0 28px 70px rgba(0, 0, 0, 0.6),
+        0 0 0 1px color-mix(in srgb, var(--project-accent-border) 32%, transparent),
+        0 0 60px color-mix(in srgb, var(--project-accent) 12%, transparent);
+    transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) scale(1.02);
+}
+
+.project-card:hover::before {
+    opacity: 0.18;
+}
+
+.project-cover {
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+    transform-style: preserve-3d;
+}
+
+.project-cover-svg {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.project-terrain-triangle {
+    opacity: 0.88;
+    transition: opacity 0.6s ease;
+}
+
+.project-card:hover .project-terrain-triangle {
+    opacity: 1;
+}
+
+.project-cover-horizon {
+    background: linear-gradient(to right, transparent, var(--project-accent), transparent);
+    height: 1px;
+    inset: 38% 0 auto;
+    opacity: 0.2;
+    position: absolute;
+    transition: opacity 0.5s ease;
+}
+
+.project-card:hover .project-cover-horizon {
+    opacity: 0.55;
+}
+
+.project-cover-atmosphere {
+    background: radial-gradient(ellipse 70% 60% at 50% 50%, color-mix(in srgb, var(--project-accent) 40%, transparent), transparent 70%);
+    inset: 0;
+    mix-blend-mode: screen;
+    opacity: 0.08;
+    position: absolute;
+    transition: opacity 0.5s ease;
+}
+
+.project-card:hover .project-cover-atmosphere {
+    opacity: 0.3;
+}
+
+.project-cover-fade {
+    background: linear-gradient(to bottom, transparent, rgba(14, 14, 24, 0.97));
+    inset: auto 0 0;
+    height: 60px;
+    position: absolute;
+}
+
+.project-cover-title {
+    align-items: flex-end;
+    background: linear-gradient(to top, rgba(14, 14, 24, 0.88), transparent 45%);
+    display: flex;
+    inset: 0;
+    padding: 1rem 1.25rem;
+    position: absolute;
+}
+
+.project-cover-title h3 {
+    color: #fff;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 1.38rem;
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 0;
+    overflow-wrap: anywhere;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+    transform: translateZ(20px);
+}
+
+.project-map-code {
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: 0.55rem;
+    color: var(--project-accent);
+    font-family: "DM Mono", "Onest", monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    opacity: 0.72;
+    padding: 0.18rem 0.44rem;
+    position: absolute;
+    right: 0.9rem;
+    top: 0.75rem;
+}
+
+.project-card-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 1rem 1.25rem 1.35rem;
+    position: relative;
+    z-index: 4;
+}
+
+.project-meta-row {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.project-location {
+    color: var(--project-accent);
+    font-size: 0.78rem;
+    font-weight: 500;
+}
+
+.project-date {
+    color: rgba(255, 255, 255, 0.34);
+    font-family: "DM Mono", "Onest", monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.05em;
+}
+
+.project-meta-dot {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    height: 3px;
+    width: 3px;
+}
+
+.project-card-body p {
+    color: rgba(255, 255, 255, 0.54);
+    flex: 1;
+    font-size: 0.82rem;
+    font-weight: 300;
+    line-height: 1.7;
+    margin: 0 0 1rem;
+    transition: color 0.3s ease;
+}
+
+.project-card:hover .project-card-body p {
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.32rem;
+    margin-bottom: 1rem;
+}
+
+.project-tags span {
+    background: color-mix(in srgb, var(--project-accent) 13%, transparent);
+    border: 1px solid color-mix(in srgb, var(--project-accent) 30%, transparent);
+    border-radius: 999px;
+    color: var(--project-accent);
+    font-family: "DM Mono", "Onest", monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.05em;
+    line-height: 1.5;
+    opacity: 0.7;
+    padding: 0.12rem 0.5rem;
+    transform: translateY(3px);
+    transition:
+        opacity 0.3s ease,
+        transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.project-card:hover .project-tags span {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.project-link {
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.85rem;
+    color: rgba(255, 255, 255, 0.46);
+    display: inline-flex;
+    font-family: "DM Mono", "Onest", monospace;
+    font-size: 0.76rem;
+    gap: 0.55rem;
+    justify-content: center;
+    letter-spacing: 0.08em;
+    padding: 0.68rem;
+    text-decoration: none;
+    transition:
+        background-color 0.28s ease,
+        border-color 0.28s ease,
+        color 0.28s ease;
+}
+
+.project-card:hover .project-link,
+.project-link:focus-visible {
+    background: color-mix(in srgb, var(--project-accent) 16%, transparent);
+    border-color: color-mix(in srgb, var(--project-accent) 48%, rgba(255, 255, 255, 0.1));
+    color: #fff;
+    outline: 0;
+}
+
+@keyframes project-card-rise {
+    from {
+        opacity: 0;
+        transform: translateY(32px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 991px) {
+    .projects-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 680px) {
+    .projects-grid {
+        grid-template-columns: 1fr;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    .project-cover {
+        height: 190px;
+    }
+}

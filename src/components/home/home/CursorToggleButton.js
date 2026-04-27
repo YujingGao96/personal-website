@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useSyncExternalStore } from 'react';
 import { TOGGLE_EVENT } from './FluidCursor';
 
 const STORAGE_KEY = 'fluid-cursor-enabled';
@@ -13,20 +13,28 @@ function getDefaultEnabled() {
     );
 }
 
+function subscribeDefaultEnabled() {
+    return () => {};
+}
+
+function getServerEnabled() {
+    return null;
+}
+
 const CursorToggleButton = () => {
-    const [enabled, setEnabled] = useState(false);
-    const [mounted, setMounted] = useState(false);
+    const defaultEnabled = useSyncExternalStore(
+        subscribeDefaultEnabled,
+        getDefaultEnabled,
+        getServerEnabled
+    );
+    const [selectedEnabled, setSelectedEnabled] = useState(null);
+    const enabled = selectedEnabled ?? defaultEnabled;
 
-    useEffect(() => {
-        setEnabled(getDefaultEnabled());
-        setMounted(true);
-    }, []);
-
-    if (!mounted) return null;
+    if (enabled === null) return null;
 
     function toggle() {
         const next = !enabled;
-        setEnabled(next);
+        setSelectedEnabled(next);
         localStorage.setItem(STORAGE_KEY, String(next));
         window.dispatchEvent(new CustomEvent(TOGGLE_EVENT, { detail: { enabled: next } }));
     }

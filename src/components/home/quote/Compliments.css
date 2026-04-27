@@ -1,49 +1,3 @@
-/* ── Section header ──────────────────────────────────────── */
-.compliments-header {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 24px 52px;
-    animation: compliments-fade-up 0.5s ease both;
-}
-
-.compliments-eyebrow {
-    font-family: "DM Mono", monospace;
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    color: oklch(0.7 0.14 190);
-    margin-bottom: 12px;
-    text-transform: uppercase;
-}
-
-.compliments-title-row {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 16px;
-}
-
-.compliments-title {
-    font-family: "Playfair Display", serif;
-    font-size: clamp(48px, 8vw, 80px);
-    font-weight: 400;
-    line-height: 1;
-    color: #fff;
-    text-shadow: 0 0 80px oklch(0.55 0.15 200 / 0.45);
-    margin: 0;
-}
-
-.compliments-subtitle {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.4);
-    font-weight: 300;
-    max-width: 340px;
-    line-height: 1.65;
-    padding-bottom: 6px;
-    margin: 0;
-    font-family: "DM Sans", sans-serif;
-}
-
 /* ── Marquee ────────────────────────────────────────────── */
 .compliments-marquee-outer {
     overflow: hidden;
@@ -51,44 +5,52 @@
     mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
 }
 
-.compliments-marquee-outer:hover .track {
-    animation-play-state: paused;
-}
-
 .marquee-row {
-    margin-bottom: 16px;
+    margin: calc(3em - 10px) 0;
+    overflow: visible;
 }
 
 .marquee-row:last-child {
     margin-bottom: 0;
 }
 
+.marquee-scroller {
+    cursor: grab;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding: 18px 0 34px;
+    perspective: 900px;
+    perspective-origin: 50% 45%;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    -ms-overflow-style: none;
+}
+
+.marquee-scroller:active {
+    cursor: grabbing;
+}
+
+.marquee-scroller:focus-visible {
+    outline: 1px solid rgba(255, 255, 255, 0.32);
+    outline-offset: 4px;
+}
+
+.marquee-scroller::-webkit-scrollbar {
+    display: none;
+}
+
 .track {
     display: flex;
-    will-change: transform;
+    width: max-content;
+    transform-style: preserve-3d;
 }
 
-.track-left {
-    animation: marquee-left 40s linear infinite;
-}
-
-.track-right {
-    animation: marquee-right 50s linear infinite;
-}
-
-@keyframes marquee-left {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-}
-
-@keyframes marquee-right {
-    from { transform: translateX(-50%); }
-    to   { transform: translateX(0); }
-}
-
-@keyframes compliments-fade-up {
-    from { opacity: 0; transform: translateY(18px); }
-    to   { opacity: 1; transform: translateY(0); }
+.marquee-group {
+    display: flex;
+    flex-shrink: 0;
+    gap: 18px;
+    padding-right: 18px;
+    transform-style: preserve-3d;
 }
 
 /* ── Sigil glow pulse ───────────────────────────────────── */
@@ -96,29 +58,59 @@
     animation: sigil-pulse 3s ease-in-out infinite;
 }
 
+.sigil-aura {
+    filter: drop-shadow(0 0 10px color-mix(in srgb, var(--c) 42%, transparent));
+}
+
+.sigil-spin-slow {
+    animation: sigil-spin 28s linear infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.sigil-spin-reverse {
+    animation: sigil-spin 36s linear infinite reverse;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
 @keyframes sigil-pulse {
     0%, 100% { opacity: 0.7; transform: scale(1); }
     50%       { opacity: 1;   transform: scale(1.04); }
 }
 
+@keyframes sigil-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
 /* ── Compliment card ────────────────────────────────────── */
 .compliment-card {
-    /* margin-right instead of flex gap ensures seamless -50% loop */
-    margin-right: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 color-mix(in srgb, var(--c3) 10%, transparent);
     flex-shrink: 0;
-    width: 340px;
-    border-radius: 18px;
+    width: 374px;
+    border-radius: var(--card-radius);
     overflow: hidden;
-    background: rgba(14, 14, 24, 0.92);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background:
+        radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--c2) 11%, transparent) 0, transparent 38%),
+        linear-gradient(145deg, rgba(14, 14, 24, 0.96), rgba(13, 12, 24, 0.88));
+    border: 1px solid color-mix(in srgb, var(--c) 18%, rgba(255, 255, 255, 0.07));
     cursor: default;
-    transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    backface-visibility: hidden;
+    transform-origin: center center;
+    transform-style: preserve-3d;
+    transition: border-color 0.3s, box-shadow 0.3s, filter 0.3s, opacity 0.2s;
+    will-change: transform, opacity;
 }
 
 .compliment-card:hover {
-    border-color: rgba(255, 255, 255, 0.18);
-    transform: translateY(-5px);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border-color: color-mix(in srgb, var(--c) 44%, rgba(255, 255, 255, 0.18));
+    filter: brightness(1.08);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px color-mix(in srgb, var(--c) 28%, transparent);
+}
+
+.compliment-sigil-placeholder {
+    flex-shrink: 0;
 }
 
 /* Card top band */
@@ -132,9 +124,28 @@
     overflow: hidden;
 }
 
+.compliment-card-pattern {
+    background-image:
+        linear-gradient(115deg, transparent 0 42%, rgba(255, 255, 255, 0.12) 42% 43%, transparent 43% 100%),
+        radial-gradient(circle, color-mix(in srgb, var(--c3) 48%, transparent) 0 1px, transparent 1.5px);
+    background-size: 52px 100%, 16px 16px;
+    inset: 0;
+    opacity: 0.22;
+    position: absolute;
+}
+
+.compliment-card-shine {
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--c3) 10%, transparent), transparent);
+    height: 1px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
 .compliment-author-name {
     font-family: "DM Sans", sans-serif;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 500;
     color: #fff;
     letter-spacing: -0.01em;
@@ -146,7 +157,7 @@
 
 .compliment-author-title {
     font-family: "DM Mono", monospace;
-    font-size: 11.5px;
+    font-size: 14px;
     letter-spacing: 0.04em;
     margin-bottom: 2px;
     white-space: nowrap;
@@ -156,13 +167,16 @@
 
 .compliment-author-company {
     font-family: "DM Mono", monospace;
-    font-size: 11px;
+    font-size: 12px;
     color: rgba(255, 255, 255, 0.3);
     letter-spacing: 0.04em;
 }
 
 /* Quote body */
 .compliment-quote-body {
+    background:
+        radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--c) 8%, transparent), transparent 42%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.01), transparent);
     padding: 18px 22px 22px;
     position: relative;
 }
@@ -181,19 +195,25 @@
 .compliment-quote-text {
     font-family: "Playfair Display", serif;
     font-style: italic;
-    font-size: 14px;
+    font-size: 18px;
     line-height: 1.75;
-    color: rgba(255, 255, 255, 0.78);
+    color: rgb(170 170 170);
     font-weight: 400;
     margin: 0;
 }
 
 .compliment-quote-accent {
-    height: 1px;
+    border-radius: 999px;
+    height: 2px;
     margin-top: 16px;
+    opacity: 0.5;
 }
 
 @media (max-width: 680px) {
-    .compliment-card { width: 280px; }
-    .compliments-title-row { flex-direction: column; align-items: flex-start; }
+    .compliment-card { width: 308px; }
+
+    .marquee-scroller {
+        perspective: 720px;
+        padding-bottom: 30px;
+    }
 }
