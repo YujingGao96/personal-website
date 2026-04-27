@@ -10,7 +10,7 @@ const COMPLIMENTS = [
     {
         name: "Lee Holmes",
         title: "Vice President",
-        company: "Global Payments",
+        company: "FIS",
         quote: "Thank you for guiding and mentoring our interns. With your coaching, they have accomplished great things. I am genuinely grateful for all your wisdom and advice that you have shared with all our team members, including our interns.",
     },
     {
@@ -151,7 +151,7 @@ function MarqueeRow({items, reverse = false, speed = 42}) {
             const translateY = distance * 14;
 
             card.style.transform = `translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale}) translateY(${translateY}px)`;
-            card.style.opacity = `${1 - distance * 0.28}`;
+            card.style.opacity = `${1 - distance * 0.12}`;
             card.style.zIndex = `${Math.round((1 - distance) * 100)}`;
         });
     }, []);

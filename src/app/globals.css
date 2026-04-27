@@ -76,65 +76,53 @@ html {
 
 
 /* ══════════════════════════════════════════════════════════
-   FROSTED GLASS — unified recipe applied to every card.
+   FROSTED GLASS — one recipe for the card/window surfaces.
 
-   Cross-browser tuning notes:
-   - blur(8px) only. Safari renders blur ~1.5× heavier than
-     Chrome for the same value, so we keep it small.
-   - No saturate(). Safari amplifies saturate() much more
-     than Chrome — biggest single source of divergence.
-   - background-color rgba 0.50 carries most of the visual
-     weight. The blur is the "texture", the color is the mass.
-     This way the result depends less on browser-specific
-     blur rendering and more on the (deterministic) color.
-   - isolation: isolate creates a stacking context WITHOUT
-     becoming a backdrop-root (unlike transform/filter), so
-     the backdrop-filter still reaches the page background
-     while sibling box-shadows can't bleed in.
+   Keep the glass mostly blur-driven instead of opacity-driven. Safari and
+   Chrome diverge most when blur, saturate(), transforms, and opaque background
+   shorthands are all mixed on the same element, so the shared recipe avoids
+   saturate() and uses a moderate tint plus a stronger blur.
    ══════════════════════════════════════════════════════════ */
 
-/* Cards that can use real frosted glass (no 3D transform on them) */
+:root {
+    --glass-bg: rgba(14, 14, 24, 0.38);
+    --glass-bg-strong: rgba(14, 14, 24, 0.58);
+    --glass-blur: 22px;
+    --glass-border: rgba(255, 255, 255, 0.13);
+    --glass-shadow: 0 18px 54px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
 .home-blog-card,
 .timeline-signal-card,
+.terminal-window,
+.dark-bg,
+.intro-code-panel,
+.astro-panel {
+    background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.006) 42%),
+        var(--glass-bg) !important;
+    border-color: var(--glass-border) !important;
+    box-shadow: var(--glass-shadow) !important;
+    backdrop-filter: blur(var(--glass-blur)) !important;
+    -webkit-backdrop-filter: blur(var(--glass-blur)) !important;
+    isolation: isolate;
+}
+
+/* These cards are transformed in 3D. Real backdrop-filter on transformed
+   layers is still inconsistent across Safari and Chrome, so they use the same
+   visual language with a stronger translucent tint and no backdrop root. */
+.project-card,
 .compliment-card {
-    background-color: rgba(14, 14, 24, 0.50) !important;
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
-    isolation: isolate;
-}
-
-/* Project card: has a 3D mouse-tilt transform that creates a 3D rendering
-   context — backdrop-filter inside that is broken cross-browser, so we
-   skip it and use a more opaque tint to read as "glass" via translucency. */
-.project-card {
-    background-color: rgba(14, 14, 24, 0.82) !important;
-    background-image: radial-gradient(
-        circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
-        color-mix(in srgb, var(--project-accent) 16%, transparent),
-        transparent 55%
-    ) !important;
-}
-
-.compliment-card {
-    background-image: radial-gradient(
-        circle at 100% 0%,
-        color-mix(in srgb, var(--c2) 11%, transparent) 0,
-        transparent 38%
-    ) !important;
-}
-
-.terminal-window {
-    background-color: rgba(10, 10, 18, 0.50) !important;
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
-    isolation: isolate;
-}
-
-.dark-bg {
-    background-color: rgba(28, 28, 36, 0.50) !important;
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
-    isolation: isolate;
+    background:
+        radial-gradient(
+            circle at var(--spotlight-x, 100%) var(--spotlight-y, 0%),
+            color-mix(in srgb, var(--project-accent, var(--c2)) 18%, transparent),
+            transparent 48%
+        ),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.01) 44%),
+        var(--glass-bg-strong) !important;
+    border-color: var(--glass-border) !important;
+    box-shadow: var(--glass-shadow) !important;
 }
 
 
