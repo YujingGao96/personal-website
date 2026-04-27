@@ -14,7 +14,7 @@ function getDefaultEnabled() {
 }
 
 const FluidCursor = () => {
-    const stateRef = useRef({ destroy: null, starting: null, mounted: true });
+    const stateRef = useRef({ destroy: null, starting: null, mounted: true, cancelQueuedStart: null });
 
     useEffect(() => {
         const state = stateRef.current;
@@ -37,14 +37,52 @@ const FluidCursor = () => {
             })();
         }
 
+        function clearQueuedStart() {
+            if (state.cancelQueuedStart) {
+                state.cancelQueuedStart();
+                state.cancelQueuedStart = null;
+            }
+        }
+
+        function queueStart() {
+            if (state.cancelQueuedStart || state.destroy || state.starting) return;
+
+            const events = ['pointermove', 'pointerdown'];
+            const run = () => {
+                clearQueuedStart();
+                start();
+            };
+
+            events.forEach((eventName) => {
+                window.addEventListener(eventName, run, {once: true, passive: true});
+            });
+
+            let idleId = null;
+            let timeoutId = null;
+            if ('requestIdleCallback' in window) {
+                idleId = window.requestIdleCallback(run, {timeout: 1800});
+            } else {
+                timeoutId = window.setTimeout(run, 900);
+            }
+
+            state.cancelQueuedStart = () => {
+                events.forEach((eventName) => {
+                    window.removeEventListener(eventName, run);
+                });
+                if (idleId !== null) window.cancelIdleCallback(idleId);
+                if (timeoutId !== null) window.clearTimeout(timeoutId);
+            };
+        }
+
         function stop() {
+            clearQueuedStart();
             if (state.destroy) {
                 state.destroy();
                 state.destroy = null;
             }
         }
 
-        if (getDefaultEnabled()) start();
+        if (getDefaultEnabled()) queueStart();
 
         function handleToggle(e) {
             if (e.detail?.enabled) start();
@@ -55,6 +93,7 @@ const FluidCursor = () => {
         return () => {
             state.mounted = false;
             window.removeEventListener(TOGGLE_EVENT, handleToggle);
+            clearQueuedStart();
             stop();
         };
     }, []);

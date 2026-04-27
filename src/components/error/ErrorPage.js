@@ -2,7 +2,6 @@
 
 import React, {useEffect, useRef} from "react";
 import {useRouter} from "next/navigation";
-import Parallax from "parallax-js";
 import resolveHttpError from "../../resolvers/ErrorCodeResolver";
 import {faHome} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -21,8 +20,33 @@ const ErrorPage = ({errorCode = "404"}) => {
             return undefined;
         }
 
-        const parallax = new Parallax(sceneRef.current);
-        return () => parallax.destroy();
+        const scene = sceneRef.current;
+        const layers = scene.querySelectorAll("[data-depth]");
+
+        function handlePointerMove(event) {
+            const rect = scene.getBoundingClientRect();
+            const x = (event.clientX - rect.left) / rect.width - 0.5;
+            const y = (event.clientY - rect.top) / rect.height - 0.5;
+
+            layers.forEach((layer) => {
+                const depth = Number(layer.dataset.depth || 0);
+                layer.style.transform = `translate3d(${x * depth * -28}px, ${y * depth * -28}px, 0)`;
+            });
+        }
+
+        function resetLayers() {
+            layers.forEach((layer) => {
+                layer.style.transform = "";
+            });
+        }
+
+        scene.addEventListener("pointermove", handlePointerMove, {passive: true});
+        scene.addEventListener("pointerleave", resetLayers);
+
+        return () => {
+            scene.removeEventListener("pointermove", handlePointerMove);
+            scene.removeEventListener("pointerleave", resetLayers);
+        };
     }, []);
 
     return (

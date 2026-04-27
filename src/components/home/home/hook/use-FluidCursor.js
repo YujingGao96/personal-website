@@ -1,17 +1,19 @@
 const fluidCursor = () => {
     const canvas = document.getElementById('fluid');
+    if (!canvas) return { destroy() {} };
+
     resizeCanvas();
     let config = {
-        SIM_RESOLUTION: 128,
-        DYE_RESOLUTION: 720,
+        SIM_RESOLUTION: 96,
+        DYE_RESOLUTION: 420,
         CAPTURE_RESOLUTION: 512,
-        DENSITY_DISSIPATION: 3.5,
-        VELOCITY_DISSIPATION: 2,
+        DENSITY_DISSIPATION: 4,
+        VELOCITY_DISSIPATION: 2.4,
         PRESSURE: 0.1,
-        PRESSURE_ITERATIONS: 8,
-        CURL: 3,
-        SPLAT_RADIUS: 0.2,
-        SPLAT_FORCE: 6000,
+        PRESSURE_ITERATIONS: 5,
+        CURL: 2.4,
+        SPLAT_RADIUS: 0.16,
+        SPLAT_FORCE: 4200,
         SHADING: true,
         COLOR_UPDATE_SPEED: 10,
         PAUSED: false,
@@ -33,7 +35,9 @@ const fluidCursor = () => {
     const pointers = [];
     pointers.push(new pointerPrototype());
     pointers[0].color = generateColor();
-    const { gl, ext } = getWebGLContext(canvas);
+    const context = getWebGLContext(canvas);
+    if (!context.gl) return { destroy() {} };
+    const { gl, ext } = context;
     if (!ext.supportLinearFiltering) {
         config.DYE_RESOLUTION = 256;
         config.SHADING = false;
@@ -52,6 +56,9 @@ const fluidCursor = () => {
             gl =
                 canvas.getContext('webgl', params) ||
                 canvas.getContext('experimental-webgl', params);
+        if (!gl) {
+            return { gl: null, ext: null };
+        }
         let halfFloat;
         let supportLinearFiltering;
         if (isWebGL2) {
@@ -1198,7 +1205,7 @@ const fluidCursor = () => {
         else return { width: min, height: max };
     }
     function scaleByPixelRatio(input) {
-        const pixelRatio = window.devicePixelRatio || 1;
+        const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
         return Math.floor(input * pixelRatio);
     }
     function hashCode(s) {

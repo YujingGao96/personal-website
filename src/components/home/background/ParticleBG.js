@@ -1,64 +1,38 @@
-"use client";
+const SNOW_PARTICLES = Array.from({length: 72}, (_, index) => {
+    const seed = index + 1;
+    const size = 1.2 + (seed % 5) * 0.45;
+    const left = (seed * 37) % 100;
+    const delay = -((seed * 1.9) % 54).toFixed(2);
+    const duration = 44 + (seed % 9) * 4;
+    const wind = ((seed % 7) - 3) * 2.2;
+    const opacity = 0.28 + (seed % 6) * 0.08;
 
-import React, {useEffect, useState} from "react";
-import Particles, {initParticlesEngine} from "@tsparticles/react";
-
-import {loadSlim} from "@tsparticles/slim";
+    return {size, left, delay, duration, wind, opacity};
+});
 
 const ParticleBG = () => {
-    const [init, setInit] = useState(false);
-
-    useEffect(() => {
-        initParticlesEngine(async (engine) => {
-            await loadSlim(engine);
-        }).then(() => {
-            setInit(true);
-        });
-    }, []);
-
     return (
-        init && <Particles
-            id="tsparticles"
-            options={{
-                fpsLimit: 30,
-                pauseOnBlur: true,
-                pauseOnOutsideViewport: true,
-                interactivity: {
-                    events: {
-                        resize: true,
-                    },
-                },
-                particles: {
-                    move: {
-                        direction: "bottom",
-                        enable: true,
-                        outModes: {
-                            default: "out",
-                        },
-                        random: false,
-                        speed: 1,
-                        straight: false,
-                    },
-                    number: {
-                        density: {
-                            enable: true,
-                            area: 800,
-                        },
-                        value: 50,
-                    },
-                    opacity: {
-                        value: .5,
-                    },
-                    shape: {
-                        type: "circle",
-                    },
-                    size: {
-                        value: {min: 1, max: 4},
-                    },
-                },
-                detectRetina: true,
-            }}
-        />
+        <div className="particle-bg" aria-hidden="true">
+            <div className="particle-ambient particle-ambient-a" />
+            <div className="particle-ambient particle-ambient-b" />
+            <div className="particle-ambient particle-ambient-c" />
+            <div className="snow-field">
+                {SNOW_PARTICLES.map((particle, index) => (
+                    <span
+                        key={index}
+                        className="snow-particle"
+                        style={{
+                            "--snow-size": `${particle.size}px`,
+                            "--snow-left": `${particle.left}%`,
+                            "--snow-delay": `${particle.delay}s`,
+                            "--snow-duration": `${particle.duration}s`,
+                            "--snow-wind": `${particle.wind}px`,
+                            "--snow-opacity": particle.opacity,
+                        }}
+                    />
+                ))}
+            </div>
+        </div>
     );
 };
 

@@ -3,7 +3,7 @@ import Intro from "../intro/Intro";
 import ParticleBG from "../background/ParticleBG";
 import Projects from "../personalproject/Projects";
 import TimeLine from "../timeline/Timeline";
-import Compliments from "../quote/Compliments";
+import Compliments from "../compliment/Compliments";
 import Blogs from "../blog/Blogs";
 import BottomFrame from "../bottomframe/BottomFrame";
 import FluidCursor from "./FluidCursor";

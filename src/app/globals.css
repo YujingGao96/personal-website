@@ -1,6 +1,4 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
-@import "swiper/css";
-@import "swiper/css/pagination";
 @import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&family=Onest:wght@100..900&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 
 @import "../components/home/home/Home.css";
@@ -9,7 +7,7 @@
 @import "../components/blog/Blog.css";
 @import "../components/admin/AdminBlog.css";
 @import "../components/common/SectionHeader.css";
-@import "../components/home/quote/Compliments.css";
+@import "../components/home/compliment/Compliments.css";
 @import "../components/home/personalproject/ProjectCard.css";
 @import "../components/home/bottomframe/BottomFrame.css";
 @import "../components/home/timeline/Timeline.css";
@@ -86,26 +84,60 @@ html {
 
 :root {
     --glass-bg: rgba(14, 14, 24, 0.38);
-    --glass-bg-strong: rgba(14, 14, 24, 0.58);
-    --glass-blur: 22px;
-    --glass-border: rgba(255, 255, 255, 0.13);
-    --glass-shadow: 0 18px 54px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    --glass-bg-strong: rgba(14, 14, 24, 0.5);
+    --glass-blur: 12px;
+    --glass-border: rgba(255, 255, 255, 0.055);
+    --glass-top-light: rgba(255, 255, 255, 0.11);
+    --glass-side-light: rgba(255, 255, 255, 0.035);
+    --glass-bottom-shadow: rgba(0, 0, 0, 0.2);
+    --glass-shadow:
+        2px 8px 8px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 var(--glass-top-light),
+        inset 1px 0 0 var(--glass-side-light),
+        inset -1px 0 0 rgba(255, 255, 255, 0.02),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.48);
 }
 
 .home-blog-card,
+.blog-list-item,
 .timeline-signal-card,
 .terminal-window,
 .dark-bg,
 .intro-code-panel,
 .astro-panel {
+    position: relative;
     background:
-        linear-gradient(145deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.006) 42%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0.004) 38%),
         var(--glass-bg) !important;
     border-color: var(--glass-border) !important;
+    border-top-color: var(--glass-top-light) !important;
+    border-bottom-color: rgba(0, 0, 0, 0.48) !important;
     box-shadow: var(--glass-shadow) !important;
     backdrop-filter: blur(var(--glass-blur)) !important;
     -webkit-backdrop-filter: blur(var(--glass-blur)) !important;
     isolation: isolate;
+}
+
+.home-blog-card::after,
+.blog-list-item::after,
+.timeline-signal-card::after,
+.terminal-window::after,
+.dark-bg::after,
+.intro-code-panel::after,
+    .astro-panel::after,
+    .project-card::after,
+    .compliment-card::after {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.13) 22%, rgba(255, 255, 255, 0.045) 48%, transparent 86%);
+    border-radius: inherit inherit 0 0;
+    content: "";
+    height: 1px;
+    left: 14px;
+    opacity: 0.5;
+    pointer-events: none;
+    position: absolute;
+    right: 14px;
+    top: 0;
+    z-index: 4;
 }
 
 /* These cards are transformed in 3D. Real backdrop-filter on transformed
@@ -113,16 +145,38 @@ html {
    visual language with a stronger translucent tint and no backdrop root. */
 .project-card,
 .compliment-card {
+    position: relative;
     background:
         radial-gradient(
             circle at var(--spotlight-x, 100%) var(--spotlight-y, 0%),
-            color-mix(in srgb, var(--project-accent, var(--c2)) 18%, transparent),
+            color-mix(in srgb, var(--project-accent, var(--c2)) 10%, transparent),
             transparent 48%
         ),
-        linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.01) 44%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0.004) 40%),
         var(--glass-bg-strong) !important;
-    border-color: var(--glass-border) !important;
-    box-shadow: var(--glass-shadow) !important;
+    border-color: rgba(255, 255, 255, 0.055) !important;
+    border-top-color: rgba(255, 255, 255, 0.115) !important;
+    border-bottom-color: rgba(0, 0, 0, 0.5) !important;
+    box-shadow:
+        0 16px 32px rgba(0, 0, 0, 0.66),
+        0 4px 12px rgba(0, 0, 0, 0.52),
+        inset 0 1px 0 rgba(255, 255, 255, 0.09),
+        inset 1px 0 0 rgba(255, 255, 255, 0.03),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.5) !important;
+}
+
+.home-blog-card:hover,
+.blog-list-item:hover,
+.timeline-signal-card:hover,
+.project-card:hover,
+.compliment-card:hover {
+    border-top-color: rgba(255, 255, 255, 0.14) !important;
+    box-shadow:
+        0 18px 36px rgba(0, 0, 0, 0.7),
+        0 5px 14px rgba(0, 0, 0, 0.56),
+        0 0 0 1px color-mix(in srgb, var(--blog-accent, var(--timeline-accent, var(--project-accent-border, var(--c)))) 15%, transparent),
+        inset 0 1px 0 rgba(255, 255, 255, 0.105),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.52) !important;
 }
 
 
@@ -137,14 +191,22 @@ html {
    the whole window, making the code panel look glassy.   */
 .intro-mac-window {
     position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.075);
+    border-top-color: rgba(255, 255, 255, 0.25);
+    border-bottom-color: rgba(0, 0, 0, 0.42);
     border-radius: 1.2rem 1.2rem 2rem 2rem;
-    /* No backdrop-filter here — would create a containing block and cancel the
-       child code panel's backdrop-filter. Each panel does its own glass. */
-    box-shadow:
-        0 24px 64px rgba(0, 0, 0, 0.65),
-        0 4px 20px rgba(0, 0, 0, 0.45),
-        inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    animation: intro-window-in 0.62s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes intro-window-in {
+    from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.965);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 /* ── Left glass sidebar — elevated, higher z-index ───── */
@@ -206,6 +268,48 @@ html {
     border-radius: 0 1.2rem 2rem 0;
 }
 
+.intro-code-block {
+    background: transparent;
+    -webkit-backdrop-filter: drop-shadow(2px 4px 6px black);
+    backdrop-filter: drop-shadow(2px 4px 6px black);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 1rem;
+    color: #e8e8e8;
+    font-family: "DM Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.82rem;
+    line-height: 1.65;
+    margin: 0;
+    overflow-x: auto;
+    padding: 1em;
+    white-space: pre;
+}
+
+.intro-code-line {
+    display: block;
+    padding-left: calc(var(--indent) * 2ch);
+}
+
+.code-class {
+    color: #ffc66d;
+}
+
+.code-method {
+    color: #a9b7c6;
+}
+
+.code-string {
+    color: #6a8759;
+}
+
+.code-number,
+.code-constant {
+    color: #6897bb;
+}
+
+.code-keyword {
+    color: #cc7832;
+}
+
 /* Mobile — panels stack vertically */
 @media (max-width: 767px) {
     .astro-panel      { border-radius: 1.2rem 1.2rem 0 0; box-shadow: 0 6px 24px rgba(0,0,0,0.55); border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
@@ -242,6 +346,13 @@ html {
         radial-gradient(ellipse 70% 50% at 50% 45%, rgba(22, 80, 130, 0.18), transparent 70%),
         radial-gradient(ellipse 50% 40% at 30% 60%, rgba(80, 20, 100, 0.14), transparent 70%);
     pointer-events: none;
+}
+
+.orbital-system {
+    flex-shrink: 0;
+    height: 310px;
+    position: relative;
+    width: 310px;
 }
 
 .orbit-ring {
@@ -302,8 +413,8 @@ html {
     50%       { opacity: 1.0; transform: scale(1.02); }
 }
 
-/* Base — every planet is an absolutely positioned circle. JS sets
-   left/top/zIndex/opacity/filter each frame from the orbit phase. */
+/* Planet positions use the original ellipse math in Intro.js, capped and
+   viewport-paused so the visual stays correct without running offscreen. */
 .planet-dot {
     position: absolute;
     border-radius: 50%;
@@ -419,4 +530,13 @@ html {
         0 0 9px rgba(80, 120, 230, 0.60),
         0 0 20px rgba(60, 100, 210, 0.22),
         inset -2px -2px 4px rgba(0, 0, 0, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .intro-mac-window,
+    .star-bg,
+    .atmo-3 {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+    }
 }

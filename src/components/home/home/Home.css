@@ -3,7 +3,14 @@ body {
     font-family: "Onest", sans-serif !important;
     font-optical-sizing: auto;
     font-style: normal;
+    isolation: isolate;
+    position: relative;
     background: linear-gradient(135deg, #121212 0%, #1e0404 20%, #13031e 45%, #010c00 65%, #1e1001 85%, #121212 100%);
+}
+
+.particle-bg ~ :not(script):not(style) {
+    position: relative;
+    z-index: 1;
 }
 
 body::before {
@@ -15,6 +22,105 @@ body::before {
     animation: gradientSlide 15s linear infinite;
     pointer-events: none;
     z-index: -1;
+}
+
+.particle-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 18% 18%, rgba(22, 191, 253, 0.09), transparent 30%),
+        radial-gradient(circle at 82% 20%, rgba(181, 147, 225, 0.09), transparent 30%),
+        radial-gradient(circle at 50% 88%, rgba(244, 159, 34, 0.055), transparent 34%);
+}
+
+.particle-ambient {
+    position: absolute;
+    width: 56vmax;
+    height: 56vmax;
+    border-radius: 50%;
+    -webkit-filter: blur(36px);
+    filter: blur(36px);
+    opacity: 0.2;
+    transform: translate3d(0, 0, 0);
+    will-change: transform, opacity;
+}
+
+.particle-ambient-a {
+    left: -20vmax;
+    top: -18vmax;
+    background: radial-gradient(circle, rgba(22, 191, 253, 0.42), transparent 66%);
+    animation: ambient-drift-a 72s ease-in-out infinite;
+}
+
+.particle-ambient-b {
+    right: -22vmax;
+    top: 8vmax;
+    background: radial-gradient(circle, rgba(181, 147, 225, 0.38), transparent 66%);
+    animation: ambient-drift-b 84s ease-in-out infinite;
+}
+
+.particle-ambient-c {
+    left: 24vw;
+    bottom: -28vmax;
+    background: radial-gradient(circle, rgba(244, 159, 34, 0.24), transparent 68%);
+    animation: ambient-drift-c 96s ease-in-out infinite;
+}
+
+.snow-field {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.snow-particle {
+    animation: snow-fall var(--snow-duration) linear infinite;
+    animation-delay: var(--snow-delay);
+    background: rgba(236, 250, 255, 0.86);
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(236, 250, 255, 0.28);
+    height: var(--snow-size);
+    left: var(--snow-left);
+    opacity: 0;
+    position: absolute;
+    top: -10vh;
+    transform: translate3d(0, -10vh, 0);
+    width: var(--snow-size);
+    will-change: transform, opacity;
+}
+
+@keyframes ambient-drift-a {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.24; }
+    50% { transform: translate3d(3vw, 2vh, 0) scale(1.04); opacity: 0.28; }
+}
+
+@keyframes ambient-drift-b {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.22; }
+    50% { transform: translate3d(-3vw, 2vh, 0) scale(1.04); opacity: 0.26; }
+}
+
+@keyframes ambient-drift-c {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.2; }
+    50% { transform: translate3d(2vw, -3vh, 0) scale(1.04); opacity: 0.23; }
+}
+
+@keyframes snow-fall {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, -10vh, 0);
+    }
+    8% {
+        opacity: var(--snow-opacity);
+    }
+    92% {
+        opacity: var(--snow-opacity);
+    }
+    100% {
+        opacity: 0;
+        transform: translate3d(var(--snow-wind), 112vh, 0);
+    }
 }
 
 @keyframes gradientSlide {
@@ -122,22 +228,6 @@ a:focus, span:focus, button:focus {
     --gradient-text-bg: linear-gradient(to right, #CB3066, #16BFFD);
 }
 
-.swiper-container {
-    width: 480px;
-}
-
-@media screen and (min-width: 640px) {
-    .swiper-container {
-        width: 640px;
-    }
-}
-
-@media screen and (min-width: 768px) {
-    .swiper-container {
-        width: 768px;
-    }
-}
-
 canvas#fluid {
     position: fixed;
     top: 0;
@@ -147,4 +237,17 @@ canvas#fluid {
     z-index: 9999;
     pointer-events: none;
     opacity: 40%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body::before,
+    .particle-ambient,
+    .snow-particle {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+    }
+
+    .particle-bg {
+        opacity: 0.72;
+    }
 }
