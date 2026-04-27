@@ -63,7 +63,7 @@ function TimelineCard({entry, index}) {
 const TimeLine = () => {
     return (
         <div id="timeline" className="timeline-section">
-            <SectionHeader eyebrow="Life Journey" title="Timeline" gradient="gradient-text-3"/>
+            <SectionHeader eyebrow="Life Journey" title="Timeline" sectionId="timeline" />
             <div className="timeline-rail" aria-label="Career and education timeline">
                 {timelineElements.map((entry, index) => (
                     <div className="timeline-row" key={entry.id}>

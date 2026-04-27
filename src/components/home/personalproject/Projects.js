@@ -38,7 +38,7 @@ const PROJECTS = [
 const Projects = () => {
     return (
         <div id="projects">
-            <SectionHeader eyebrow="Selected Work" title="Personal Projects" gradient="gradient-text-2"/>
+            <SectionHeader eyebrow="Selected Work" title="Personal Projects" sectionId="projects" />
             <div className="projects-grid">
                 {PROJECTS.map((project, index) => (
                     <ProjectCard key={project.title} project={project} index={index}/>

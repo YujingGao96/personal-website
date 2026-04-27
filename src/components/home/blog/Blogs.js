@@ -18,7 +18,7 @@ const Blogs = async () => {
 
     return (
         <div id="blogs">
-            <SectionHeader eyebrow="Writing" title="Popular Posts" gradient="gradient-text-5"/>
+            <SectionHeader eyebrow="Writing" title="Popular Posts" sectionId="blogs" />
             {popularPosts.length > 0 ? (
                 <div className="blog-card-grid py-5 px-3">
                     {popularPosts.map((post) => (

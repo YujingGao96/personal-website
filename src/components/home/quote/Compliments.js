@@ -249,7 +249,7 @@ const Compliments = () => {
 
     return (
         <div id="compliments">
-            <SectionHeader eyebrow="Kind Words" title="Compliments" gradient="gradient-text-4"/>
+            <SectionHeader eyebrow="Kind Words" title="Compliments" sectionId="compliments" />
 
             <div className="compliments-marquee-outer">
                 <MarqueeRow items={row1} speed={44}/>

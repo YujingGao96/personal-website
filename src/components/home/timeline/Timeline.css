@@ -107,7 +107,9 @@
     background: rgba(13, 13, 25, 0.94);
     border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 12px 36px rgba(0, 0, 0, 0.38);
-    transform: translateY(0);
+    /* No initial transform — it would create a containing block / stacking
+       context that breaks backdrop-filter cross-browser. The :hover transform
+       still animates fine from the implicit none state. */
     transition:
         transform 0.28s ease,
         border-color 0.28s ease,

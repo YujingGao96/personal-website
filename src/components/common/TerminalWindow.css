@@ -1,10 +1,15 @@
 .terminal-window {
     overflow: hidden;
     margin-top: 0;
-    border: 1px solid rgba(48, 47, 47, 0.41);
+    border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 1.2rem 1.2rem 2rem 2rem;
-    background: rgba(33, 33, 33, 0.3);
-    box-shadow: rgb(0 0 0 / 50%) 6px 4px 9px 3px;
+    background: rgba(10, 10, 18, 0.50);
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.60),
+        0 4px 16px rgba(0, 0, 0, 0.40),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(14px) saturate(180%);
+    -webkit-backdrop-filter: blur(14px) saturate(180%);
 }
 
 .terminal-window-topbar {
@@ -13,13 +18,14 @@
     align-items: center;
     height: 2rem;
     padding: 0 1rem;
-    background: rgba(85, 85, 85, 0.3);
-    -webkit-backdrop-filter: saturate(180%) blur(8px);
-    backdrop-filter: saturate(180%) blur(8px);
+    /* Very transparent — let background particles show */
+    background: rgba(12, 12, 20, 0.18);
+    -webkit-backdrop-filter: saturate(200%) blur(24px);
+    backdrop-filter: saturate(200%) blur(24px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow:
-            7px 3px 7px 4px rgb(0 0 0 / 50%),
-            inset 0 1px 1px rgba(255, 255, 255, 0.3),
-            inset 0 -1px 1px rgba(0, 0, 0, 0.2);
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 1px 8px rgba(0, 0, 0, 0.30);
 }
 
 .terminal-window-control {
@@ -27,16 +33,26 @@
     width: 0.75rem;
     height: 0.75rem;
     border-radius: 50%;
+    flex-shrink: 0;
 }
 
 .terminal-window-control-close {
-    background: #ff5f57;
+    background: radial-gradient(circle at 38% 36%, #ff8b87, #ff5f57 55%, #d93c35);
+    box-shadow:
+        0 0 5px 1px rgba(255, 95, 87, 0.80),
+        0 0 14px rgba(255, 95, 87, 0.40);
 }
 
 .terminal-window-control-minimize {
-    background: #ffbd2e;
+    background: radial-gradient(circle at 38% 36%, #ffd27c, #ffbd2e 55%, #d99b1a);
+    box-shadow:
+        0 0 5px 1px rgba(255, 189, 46, 0.80),
+        0 0 14px rgba(255, 189, 46, 0.40);
 }
 
 .terminal-window-control-expand {
-    background: #28c840;
+    background: radial-gradient(circle at 38% 36%, #60dd78, #28c840 55%, #1a9e30);
+    box-shadow:
+        0 0 5px 1px rgba(40, 200, 64, 0.80),
+        0 0 14px rgba(40, 200, 64, 0.40);
 }
