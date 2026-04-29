@@ -15,6 +15,9 @@ export const metadata = {
         statusBarStyle: "black-translucent",
         title: "Yujing Gao",
     },
+    other: {
+        "apple-mobile-web-app-capable": "yes",
+    },
 };
 
 export const viewport = {
