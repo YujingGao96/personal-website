@@ -431,17 +431,20 @@ body {
 .intro-ide-toolbar {
     align-items: center;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 0.7rem;
-    justify-content: space-between;
+    justify-content: flex-start;
     min-height: 3.5rem;
+    overflow: hidden;
     padding: 0.55rem;
 }
 
 .intro-ide-action-group {
     display: flex;
-    flex-wrap: wrap;
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
     gap: 0.45rem;
+    min-width: 0;
 }
 
 .intro-ide-button,
@@ -497,7 +500,17 @@ body {
     background: rgba(189, 147, 249, 0.1);
     border-color: rgba(189, 147, 249, 0.22);
     cursor: default;
+    flex: 0 1 auto;
+    margin-left: auto;
+    min-width: 0;
     pointer-events: none;
+}
+
+.intro-ide-file-tab span {
+    display: inline-block;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .atom-material-icon {
@@ -606,181 +619,262 @@ body {
 }
 
 .intro-code-panel.is-run .intro-code-block {
-    animation: intro-code-run-away 0.95s ease both;
+    animation: intro-code-compile 0.95s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-@keyframes intro-code-run-away {
-    0% { opacity: 1; transform: translateX(0); }
-    12% { transform: translateX(-5px); }
-    24% { transform: translateX(5px); }
-    36% { transform: translateX(-4px); }
-    52% { opacity: 1; transform: translateX(4px); }
-    100% { opacity: 0; transform: translateX(18px) scale(0.985); visibility: hidden; }
+.intro-code-panel.is-debug .intro-code-block {
+    animation: intro-code-debug-focus 0.72s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.intro-debug-bug {
-    align-items: center;
-    animation: intro-bug-crawl 0.42s ease-in-out infinite;
-    background: rgba(40, 42, 54, 0.82);
-    border: 1px solid rgba(255, 121, 198, 0.38);
-    border-radius: 50%;
-    box-shadow:
-        0 12px 26px rgba(0, 0, 0, 0.44),
-        0 0 24px rgba(255, 121, 198, 0.18);
-    color: #ff79c6;
-    display: flex;
-    height: 3.1rem;
-    justify-content: center;
+@keyframes intro-code-compile {
+    0% { opacity: 1; filter: none; transform: translate3d(0, 0, 0) scale(1); }
+    38% { filter: saturate(1.3) brightness(1.08); transform: translate3d(0, -2px, 0) scale(0.998); }
+    100% { opacity: 0.46; filter: saturate(1.5) brightness(0.78) blur(0.35px); transform: translate3d(0, 0, 0) scale(0.986); }
+}
+
+@keyframes intro-code-debug-focus {
+    0% { opacity: 1; filter: none; transform: translate3d(0, 0, 0); }
+    100% { opacity: 0.58; filter: saturate(1.28) brightness(0.82); transform: translate3d(-0.25rem, 0, 0); }
+}
+
+.intro-action-art {
+    --art-a: #18ffff;
+    --art-b: #ff4fd8;
+    --art-c: #39ff88;
+    --art-d: #ffb703;
+    animation: intro-action-art-enter 0.64s cubic-bezier(0.22, 1, 0.36, 1) both;
+    border-radius: inherit;
+    inset: 0 0 2.6rem;
+    overflow: hidden;
     pointer-events: none;
     position: absolute;
-    right: 1.15rem;
-    top: 11.9rem;
-    width: 3.1rem;
-    z-index: 4;
+    z-index: 5;
 }
 
-.intro-debug-bug::before,
-.intro-debug-bug::after {
-    border-top: 2px solid rgba(255, 121, 198, 0.76);
+.intro-action-art::before,
+.intro-action-art::after {
     content: "";
-    height: 0.75rem;
-    position: absolute;
-    right: 2.55rem;
-    width: 2.2rem;
-}
-
-.intro-debug-bug::before {
-    top: 0.75rem;
-    transform: rotate(-18deg);
-}
-
-.intro-debug-bug::after {
-    top: 1.58rem;
-    transform: rotate(16deg);
-}
-
-@keyframes intro-bug-crawl {
-    0%, 100% { transform: translate(0, 0) rotate(-8deg); }
-    50% { transform: translate(-0.35rem, 0.14rem) rotate(9deg); }
-}
-
-.intro-debug-bubble {
-    background: rgba(8, 8, 14, 0.9);
-    border: 1px solid rgba(255, 184, 108, 0.25);
-    border-radius: 0.85rem;
-    bottom: calc(100% + 0.5rem);
-    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.42);
-    color: #ffb86c;
-    display: grid;
-    font-family: "DM Sans", system-ui, sans-serif;
-    font-size: 0.72rem;
-    font-weight: 700;
-    gap: 0.15rem;
-    line-height: 1.25;
-    padding: 0.55rem 0.65rem;
-    position: absolute;
-    right: -0.15rem;
-    width: max-content;
-}
-
-.intro-stick-person {
-    animation: stick-person-body 1.1s ease-in-out infinite;
-    height: 7.5rem;
-    left: 50%;
+    inset: 0;
     pointer-events: none;
     position: absolute;
-    top: 50%;
-    transform: translate(-50%, -42%);
-    width: 6.5rem;
-    z-index: 4;
+    z-index: 1;
 }
 
-.intro-stick-person span {
-    background: #f8f8f2;
-    border-radius: 999px;
-    box-shadow: 0 0 12px rgba(139, 233, 253, 0.28);
-    position: absolute;
+.intro-action-art::before {
+    background:
+        radial-gradient(circle at 52% 48%, color-mix(in srgb, var(--art-a) 30%, transparent), transparent 38%),
+        radial-gradient(circle at 28% 24%, color-mix(in srgb, var(--art-b) 22%, transparent), transparent 32%),
+        linear-gradient(180deg, rgba(5, 5, 17, 0.04), rgba(5, 5, 17, 0.46));
+    mix-blend-mode: screen;
 }
 
-.stick-head {
-    background: transparent !important;
-    border: 3px solid #f8f8f2;
-    border-radius: 50% !important;
-    height: 1.45rem;
-    left: 2.5rem;
-    top: 0.3rem;
-    width: 1.45rem;
+.intro-action-art::after {
+    background:
+        linear-gradient(90deg, transparent 49.5%, rgba(255, 255, 255, 0.13) 50%, transparent 50.5%),
+        linear-gradient(0deg, transparent 49.5%, rgba(255, 255, 255, 0.08) 50%, transparent 50.5%);
+    background-size: 3.4rem 3.4rem;
+    opacity: 0.18;
 }
 
-.stick-body {
-    height: 3.4rem;
-    left: 3.15rem;
-    top: 1.65rem;
-    transform: rotate(4deg);
-    width: 0.18rem;
+.intro-action-svg {
+    display: block;
+    height: 100%;
+    position: relative;
+    width: 100%;
+    z-index: 2;
 }
 
-.stick-arm {
-    height: 0.16rem;
-    top: 2.85rem;
-    transform-origin: left center;
-    width: 2.65rem;
+.intro-run-art {
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--art-a) 22%, transparent),
+        inset 0 -56px 72px rgba(0, 0, 0, 0.42);
 }
 
-.stick-arm-left {
-    left: 0.82rem;
-    transform: rotate(-22deg);
+.intro-run-beams {
+    animation: intro-run-beams 4.2s ease-in-out infinite;
+    transform-box: fill-box;
+    transform-origin: center;
 }
 
-.stick-arm-right {
-    animation: stick-person-punch 0.42s ease-in-out infinite;
-    left: 3.18rem;
-    transform: rotate(-8deg);
+.intro-run-grid {
+    animation: intro-run-grid-shift 7s linear infinite;
 }
 
-.stick-leg {
-    height: 0.16rem;
-    top: 4.95rem;
-    transform-origin: left center;
-    width: 2.1rem;
+.intro-run-portal {
+    animation: intro-run-portal-spin 8s linear infinite;
+    transform-box: fill-box;
+    transform-origin: center;
 }
 
-.stick-leg-left {
-    left: 1.55rem;
-    transform: rotate(124deg);
+.intro-run-avatar {
+    animation: intro-run-avatar-float 2.8s ease-in-out infinite;
+    transform-box: fill-box;
+    transform-origin: center;
 }
 
-.stick-leg-right {
-    left: 3.15rem;
-    transform: rotate(54deg);
+.intro-run-avatar-line {
+    animation: intro-run-line-charge 1.8s ease-in-out infinite;
 }
 
-.stick-impact {
-    animation: stick-impact-flash 0.42s ease-in-out infinite;
-    background: transparent !important;
-    border-right: 2px solid #ffb86c;
-    border-top: 2px solid #ffb86c;
-    box-shadow: none !important;
-    height: 1.1rem;
-    right: 0.35rem;
-    top: 2.25rem;
-    transform: rotate(45deg);
-    width: 1.1rem;
+.intro-run-particle {
+    animation: intro-run-particle var(--spark-duration, 3s) ease-in-out infinite;
+    animation-delay: var(--spark-delay, 0s);
+    transform-box: fill-box;
+    transform-origin: center;
 }
 
-@keyframes stick-person-body {
-    0%, 100% { transform: translate(-50%, -42%) rotate(-2deg); }
-    50% { transform: translate(-47%, -43%) rotate(4deg); }
+.intro-run-shard {
+    animation: intro-run-shard-float 3.2s ease-in-out infinite;
+    animation-delay: var(--shard-delay, 0s);
+    font-family: "DM Mono", ui-monospace, monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-shadow: 0 0 12px currentColor;
 }
 
-@keyframes stick-person-punch {
-    0%, 100% { transform: rotate(-8deg) scaleX(0.92); }
-    50% { transform: rotate(-2deg) scaleX(1.18); }
+.intro-debug-art {
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--art-b) 24%, transparent),
+        inset 0 -58px 72px rgba(0, 0, 0, 0.5);
 }
 
-@keyframes stick-impact-flash {
-    0%, 100% { opacity: 0.25; }
-    50% { opacity: 1; }
+.intro-debug-mesh {
+    animation: intro-debug-mesh-drift 6s ease-in-out infinite;
+}
+
+.intro-debug-node {
+    animation: intro-debug-node-pulse 2.2s ease-in-out infinite;
+    animation-delay: var(--node-delay, 0s);
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.intro-debug-trace {
+    animation: intro-debug-trace-flow 1.7s linear infinite;
+    stroke-dasharray: 8 14;
+}
+
+.intro-debug-lens {
+    animation: intro-debug-lens-breathe 2.4s ease-in-out infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.intro-debug-scan {
+    animation: intro-debug-scan 1.9s ease-in-out infinite;
+    stroke-dasharray: 42 240;
+}
+
+.intro-debug-specimen {
+    animation: intro-debug-specimen-hover 1.34s steps(2, end) infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.intro-debug-wing {
+    animation: intro-debug-wing-glint 1.8s ease-in-out infinite;
+}
+
+.intro-debug-packet {
+    animation: intro-debug-packet-drift 2.5s ease-in-out infinite;
+    animation-delay: var(--packet-delay, 0s);
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+@keyframes intro-action-art-enter {
+    0% { opacity: 0; transform: translate3d(0, 0.65rem, 0) scale(0.976); filter: blur(8px) saturate(0.8); }
+    62% { opacity: 1; }
+    100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0) saturate(1); }
+}
+
+@keyframes intro-run-beams {
+    0%, 100% { opacity: 0.76; transform: scale(0.98) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1.05) rotate(1.8deg); }
+}
+
+@keyframes intro-run-grid-shift {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-1.6rem, 1.1rem, 0); }
+}
+
+@keyframes intro-run-portal-spin {
+    0% { transform: rotate(0deg) scale(0.98); }
+    50% { transform: rotate(180deg) scale(1.04); }
+    100% { transform: rotate(360deg) scale(0.98); }
+}
+
+@keyframes intro-run-avatar-float {
+    0%, 100% { transform: translate3d(0, 0.2rem, 0) scale(1); }
+    50% { transform: translate3d(0, -0.45rem, 0) scale(1.015); }
+}
+
+@keyframes intro-run-line-charge {
+    0%, 100% { stroke-opacity: 0.42; }
+    50% { stroke-opacity: 0.88; }
+}
+
+@keyframes intro-run-particle {
+    0%, 100% { opacity: 0.16; transform: translate3d(0, 0.35rem, 0) scale(0.55); }
+    50% { opacity: 0.88; transform: translate3d(0, -1rem, 0) scale(1.16); }
+}
+
+@keyframes intro-run-shard-float {
+    0%, 100% { opacity: 0.24; transform: translate3d(0, 0.4rem, 0); }
+    50% { opacity: 0.8; transform: translate3d(0.3rem, -0.5rem, 0); }
+}
+
+@keyframes intro-debug-mesh-drift {
+    0%, 100% { transform: translate3d(-0.25rem, 0, 0); }
+    50% { transform: translate3d(0.35rem, -0.25rem, 0); }
+}
+
+@keyframes intro-debug-node-pulse {
+    0%, 100% { opacity: 0.28; transform: scale(0.78); }
+    50% { opacity: 0.88; transform: scale(1.2); }
+}
+
+@keyframes intro-debug-trace-flow {
+    0% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: -44; }
+}
+
+@keyframes intro-debug-lens-breathe {
+    0%, 100% { transform: scale(0.992); }
+    50% { transform: scale(1.015); }
+}
+
+@keyframes intro-debug-scan {
+    0% { stroke-dashoffset: 150; opacity: 0; }
+    22% { opacity: 0.9; }
+    100% { stroke-dashoffset: -140; opacity: 0; }
+}
+
+@keyframes intro-debug-specimen-hover {
+    0%, 100% { transform: translate3d(-0.12rem, 0, 0) rotate(-0.8deg); }
+    50% { transform: translate3d(0.12rem, -0.12rem, 0) rotate(0.8deg); }
+}
+
+@keyframes intro-debug-wing-glint {
+    0%, 100% { opacity: 0.16; }
+    50% { opacity: 0.34; }
+}
+
+@keyframes intro-debug-packet-drift {
+    0%, 100% { opacity: 0.18; transform: translate3d(-0.35rem, 0, 0) scaleX(0.82); }
+    50% { opacity: 0.72; transform: translate3d(0.45rem, -0.15rem, 0) scaleX(1.1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .intro-code-panel.is-run .intro-code-block,
+    .intro-code-panel.is-debug .intro-code-block,
+    .intro-action-art,
+    .intro-action-art * {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 1ms !important;
+    }
 }
 
 .intro-ide-console {
@@ -791,6 +885,8 @@ body {
     line-height: 1.4;
     min-height: 2.6rem;
     padding: 0.72rem 1rem;
+    position: relative;
+    z-index: 6;
 }
 
 .intro-code-panel.is-run .intro-ide-console {
@@ -804,10 +900,11 @@ body {
 .intro-git-bar {
     align-items: center;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 0.5rem;
     justify-content: space-between;
     min-height: 3.15rem;
+    overflow: visible;
     padding: 0.45rem;
 }
 
@@ -834,10 +931,20 @@ body {
     background: rgba(255, 184, 108, 0.09);
     border: 1px solid rgba(255, 184, 108, 0.18);
     color: #ffb86c;
+    flex: 0 0 auto;
     font-weight: 700;
 }
 
+.intro-git-delta-added {
+    color: #50fa7b;
+}
+
+.intro-git-delta-removed {
+    color: #ff5555;
+}
+
 .intro-git-status-text {
+    flex: 1 1 auto;
     margin-right: auto;
     min-width: 0;
     overflow: hidden;
@@ -848,9 +955,12 @@ body {
 .intro-git-action {
     background: rgba(139, 233, 253, 0.075);
     border-color: rgba(139, 233, 253, 0.18);
+    flex: 0 0 auto;
 }
 
 .intro-branch-menu {
+    flex: 0 0 auto;
+    min-width: 0;
     position: relative;
 }
 
@@ -871,14 +981,15 @@ body {
         inset 0 1px 0 rgba(255, 255, 255, 0.08);
     display: grid;
     gap: 0.35rem;
+    left: 0;
     min-width: 14rem;
     opacity: 0;
     padding: 0.45rem;
     pointer-events: none;
     position: absolute;
-    right: 0;
+    right: auto;
     transform: translateY(0.45rem) scale(0.96);
-    transform-origin: bottom right;
+    transform-origin: bottom left;
     transition: opacity 170ms ease, transform 170ms ease;
     z-index: 8;
 }
@@ -938,6 +1049,20 @@ body {
     .astro-panel {
         min-height: 36rem;
     }
+
+    .intro-ide-button span {
+        display: none;
+    }
+
+    .intro-ide-button {
+        justify-content: center;
+        min-width: 2.35rem;
+        padding: 0;
+    }
+
+    .intro-git-status-text {
+        max-width: none;
+    }
 }
 
 @media (max-width: 767px) {
@@ -957,19 +1082,21 @@ body {
     .intro-git-bar {
         justify-content: flex-start;
     }
-}
 
-@media (max-width: 520px) {
-    .intro-ide-button span {
+    .intro-git-action span,
+    .intro-git-branch-button span {
         display: none;
     }
 
-    .intro-ide-button {
+    .intro-git-action,
+    .intro-git-branch-button {
+        justify-content: center;
         min-width: 2.35rem;
         padding: 0;
-        justify-content: center;
     }
+}
 
+@media (max-width: 520px) {
     .intro-ide-file-tab,
     .intro-git-action,
     .intro-git-branch-button,
