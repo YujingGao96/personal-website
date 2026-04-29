@@ -5,7 +5,8 @@ body {
     font-style: normal;
     isolation: isolate;
     position: relative;
-    background: linear-gradient(135deg, #121212 0%, #1e0404 20%, #13031e 45%, #010c00 65%, #1e1001 85%, #121212 100%);
+    background-color: var(--site-bg-color);
+    background-image: var(--site-bg-gradient);
 }
 
 .particle-bg ~ :not(script):not(style) {
@@ -27,13 +28,18 @@ body::before {
 .particle-bg {
     position: fixed;
     inset: 0;
+    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
     z-index: 0;
     overflow: hidden;
     pointer-events: none;
+    background-color: var(--site-bg-color);
     background:
         radial-gradient(circle at 18% 18%, rgba(22, 191, 253, 0.09), transparent 30%),
         radial-gradient(circle at 82% 20%, rgba(181, 147, 225, 0.09), transparent 30%),
-        radial-gradient(circle at 50% 88%, rgba(244, 159, 34, 0.055), transparent 34%);
+        radial-gradient(circle at 50% 88%, rgba(244, 159, 34, 0.055), transparent 34%),
+        var(--site-bg-color);
 }
 
 .particle-ambient {
@@ -151,6 +157,7 @@ a:focus, span:focus, button:focus {
     z-index: -1;
     width: 100vw;
     height: 100vh;
+    height: 100dvh;
     background-size: contain;
 }
 
@@ -234,6 +241,7 @@ canvas#fluid {
     left: 0;
     width: 100vw;
     height: 100vh;
+    height: 100dvh;
     z-index: 9999;
     pointer-events: none;
     opacity: 40%;
