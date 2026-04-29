@@ -15,13 +15,13 @@
 @import "../components/error/ErrorPage.css";
 
 :root {
+    --browser-chrome-bleed: 10rem;
     --site-bg-color: #05050d;
     --site-bg-gradient: linear-gradient(135deg, #121212 0%, #1e0404 20%, #13031e 45%, #010c00 65%, #1e1001 85%, #121212 100%);
 }
 
 html {
     background: var(--site-bg-color);
-    color-scheme: dark;
     min-height: 100%;
     scroll-behavior: smooth;
 }
@@ -31,6 +31,7 @@ body {
     background-image: var(--site-bg-gradient);
     min-height: 100%;
     min-height: 100svh;
+    min-height: 100lvh;
 }
 
 #about, #projects, #blogs, #timeline, #compliments {

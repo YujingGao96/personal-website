@@ -17,7 +17,7 @@ body {
 body::before {
     content: "";
     position: fixed;
-    inset: 0;
+    inset: calc(var(--browser-chrome-bleed) * -1) 0;
     background: linear-gradient(270deg, transparent, rgba(30,4,4,0.25), rgba(19,3,30,0.2), transparent);
     transform: translateX(-100%);
     animation: gradientSlide 15s linear infinite;
@@ -27,10 +27,11 @@ body::before {
 
 .particle-bg {
     position: fixed;
-    inset: 0;
+    inset: calc(var(--browser-chrome-bleed) * -1) 0;
     min-height: 100vh;
     min-height: 100svh;
     min-height: 100dvh;
+    min-height: 100lvh;
     z-index: 0;
     overflow: hidden;
     pointer-events: none;
@@ -158,6 +159,7 @@ a:focus, span:focus, button:focus {
     width: 100vw;
     height: 100vh;
     height: 100dvh;
+    height: 100lvh;
     background-size: contain;
 }
 
@@ -237,11 +239,10 @@ a:focus, span:focus, button:focus {
 
 canvas#fluid {
     position: fixed;
-    top: 0;
+    top: calc(var(--browser-chrome-bleed) * -1);
     left: 0;
     width: 100vw;
-    height: 100vh;
-    height: 100dvh;
+    height: calc(100lvh + var(--browser-chrome-bleed) * 2);
     z-index: 9999;
     pointer-events: none;
     opacity: 40%;
