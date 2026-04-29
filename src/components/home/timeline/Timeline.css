@@ -107,13 +107,7 @@
     background: rgba(13, 13, 25, 0.94);
     border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 12px 36px rgba(0, 0, 0, 0.38);
-    /* No initial transform — it would create a containing block / stacking
-       context that breaks backdrop-filter cross-browser. The :hover transform
-       still animates fine from the implicit none state. */
-    transition:
-        transform 0.28s ease,
-        border-color 0.28s ease,
-        box-shadow 0.28s ease;
+    cursor: default;
     animation-duration: 0.7s;
     animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
     animation-fill-mode: both;
@@ -125,14 +119,6 @@
 
 .timeline-card-right {
     animation-name: timeline-slide-right;
-}
-
-.timeline-signal-card:hover {
-    transform: translateY(-5px);
-    border-color: color-mix(in srgb, var(--timeline-accent) 48%, rgba(255, 255, 255, 0.08));
-    box-shadow:
-        0 22px 62px rgba(0, 0, 0, 0.54),
-        0 0 0 1px color-mix(in srgb, var(--timeline-accent) 20%, transparent);
 }
 
 .timeline-art-wrap {

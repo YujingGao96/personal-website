@@ -261,7 +261,6 @@ body {
 
 .home-blog-card:hover,
 .blog-list-item:hover,
-.timeline-signal-card:hover,
 .project-card:hover,
 .compliment-card:hover {
     border-top-color: rgba(255, 255, 255, 0.14) !important;
@@ -288,9 +287,12 @@ body {
     --intro-panel-radius: 1.35rem;
 
     position: relative;
+    isolation: isolate;
     overflow: visible;
     padding: var(--intro-window-inset);
-    background: rgba(10, 10, 18, 0.34);
+    background:
+        radial-gradient(ellipse 72% 54% at 72% 0%, rgba(189, 147, 249, 0.055), transparent 58%),
+        rgba(10, 10, 18, 0.34);
     border: 1px solid rgba(255, 255, 255, 0.075);
     border-top-color: rgb(255 255 255 / 0.12);
     border-bottom-color: rgb(103 103 103 / 0.11);
@@ -301,9 +303,22 @@ body {
     animation: intro-window-in 0.62s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+.intro-mac-window::before {
+    background:
+        linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.12) 10%, rgba(255, 255, 255, 0.075) 46%, rgba(189, 147, 249, 0.09) 76%, transparent 100%) top / 100% 1px no-repeat,
+        linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 36%);
+    border-radius: inherit;
+    content: "";
+    inset: -1px;
+    pointer-events: none;
+    position: absolute;
+    z-index: 5;
+}
+
 .intro-astronomy-body {
     align-items: stretch;
     display: flex;
+    flex-wrap: nowrap;
     gap: var(--intro-window-inset);
     margin: 0;
 }
@@ -389,31 +404,501 @@ body {
     padding: 1.1rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    gap: var(--intro-window-inset);
+    justify-content: stretch;
     border: 1px solid rgba(255, 255, 255, 0.055);
     border-radius: var(--intro-panel-radius);
     min-height: 100%;
+    min-width: 0;
+}
+
+.intro-ide-toolbar,
+.intro-editor-shell,
+.intro-git-bar {
+    background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.006) 42%),
+        rgba(7, 8, 14, 0.52);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: var(--intro-panel-radius);
+    box-shadow:
+        0 14px 28px rgba(0, 0, 0, 0.34),
+        inset 0 1px 0 rgba(255, 255, 255, 0.09),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.45);
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur));
+}
+
+.intro-ide-toolbar {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    justify-content: space-between;
+    min-height: 3.5rem;
+    padding: 0.55rem;
+}
+
+.intro-ide-action-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+}
+
+.intro-ide-button,
+.intro-ide-file-tab,
+.intro-git-action,
+.intro-git-branch-button,
+.intro-branch-popover button {
+    align-items: center;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.055);
+    border-radius: 0.9rem;
+    color: rgba(248, 248, 242, 0.82);
+    cursor: pointer;
+    display: inline-flex;
+    font-family: "DM Sans", system-ui, sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    gap: 0.35rem;
+    min-height: 2.25rem;
+    padding: 0 0.75rem;
+    transition: background 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+    white-space: nowrap;
+}
+
+.intro-ide-button:hover,
+.intro-git-action:hover,
+.intro-git-branch-button:hover,
+.intro-branch-popover button:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(139, 233, 253, 0.24);
+    color: #f8f8f2;
+    transform: translateY(-1px);
+}
+
+.intro-ide-button.is-active,
+.intro-code-panel.is-run .intro-ide-button:nth-child(1),
+.intro-code-panel.is-debug .intro-ide-button:nth-child(2) {
+    background: rgba(80, 250, 123, 0.12);
+    border-color: rgba(80, 250, 123, 0.36);
+    color: #f8f8f2;
+}
+
+.intro-ide-button:disabled {
+    background: rgba(255, 255, 255, 0.018);
+    border-color: rgba(255, 255, 255, 0.035);
+    color: rgba(248, 248, 242, 0.32);
+    cursor: not-allowed;
+    filter: grayscale(1);
+    transform: none;
+}
+
+.intro-ide-file-tab {
+    background: rgba(189, 147, 249, 0.1);
+    border-color: rgba(189, 147, 249, 0.22);
+    cursor: default;
+    pointer-events: none;
+}
+
+.atom-material-icon {
+    flex: 0 0 auto;
+    height: 1.2rem;
+    width: 1.2rem;
+}
+
+.atom-material-icon-java {
+    height: 1.25rem;
+    width: 0.95rem;
+}
+
+.intro-editor-shell {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
 }
 
 .intro-code-block {
     background: transparent;
     -webkit-backdrop-filter: drop-shadow(2px 4px 6px black);
     backdrop-filter: drop-shadow(2px 4px 6px black);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 1rem;
+    border: 0;
+    border-radius: 0;
     color: #f8f8f2;
+    flex: 1 1 auto;
     font-family: "DM Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     font-size: 0.82rem;
     line-height: 1.65;
     margin: 0;
+    min-height: 0;
     overflow-x: auto;
-    padding: 1em;
+    padding: 1rem 1rem 0.75rem;
     white-space: pre;
 }
 
+.intro-code-block code {
+    display: block;
+    min-width: max-content;
+}
+
 .intro-code-line {
+    display: grid;
+    gap: 0.9rem;
+    grid-template-columns: 3.25ch minmax(0, max-content);
+    min-height: 1.65em;
+    position: relative;
+}
+
+.intro-code-line-number {
+    color: rgba(248, 248, 242, 0.28);
+    font-size: 0.76rem;
+    line-height: inherit;
+    text-align: right;
+    user-select: none;
+}
+
+.intro-code-line-source {
     display: block;
     padding-left: calc(var(--indent) * 2ch);
+}
+
+.intro-code-diff-sign {
+    display: inline-block;
+    font-weight: 700;
+    margin-right: 0.25rem;
+    width: 1ch;
+}
+
+.intro-code-line.is-removed .intro-code-line-source {
+    background: linear-gradient(90deg, rgba(255, 85, 85, 0.18), rgba(255, 85, 85, 0.05) 64%, transparent);
+    color: rgba(248, 248, 242, 0.72);
+}
+
+.intro-code-line.is-added .intro-code-line-source {
+    background: linear-gradient(90deg, rgba(80, 250, 123, 0.17), rgba(80, 250, 123, 0.045) 64%, transparent);
+}
+
+.intro-code-line.is-removed .intro-code-diff-sign {
+    color: #ff5555;
+}
+
+.intro-code-line.is-added .intro-code-diff-sign {
+    color: #50fa7b;
+}
+
+.intro-code-block.is-debug .intro-code-line.is-debug-target .intro-code-line-source {
+    background: linear-gradient(90deg, rgba(255, 184, 108, 0.18), rgba(255, 184, 108, 0.05) 64%, transparent);
+    border-radius: 0.4rem;
+}
+
+.intro-code-block.is-debug .intro-code-line.is-debug-target::after {
+    background: #ff5555;
+    border-radius: 999px;
+    box-shadow: 0 0 12px rgba(255, 85, 85, 0.68);
+    content: "";
+    height: 0.45rem;
+    left: 0.25rem;
+    position: absolute;
+    top: 0.62rem;
+    width: 0.45rem;
+}
+
+.intro-code-panel.is-run .intro-code-block {
+    animation: intro-code-run-away 0.95s ease both;
+}
+
+@keyframes intro-code-run-away {
+    0% { opacity: 1; transform: translateX(0); }
+    12% { transform: translateX(-5px); }
+    24% { transform: translateX(5px); }
+    36% { transform: translateX(-4px); }
+    52% { opacity: 1; transform: translateX(4px); }
+    100% { opacity: 0; transform: translateX(18px) scale(0.985); visibility: hidden; }
+}
+
+.intro-debug-bug {
+    align-items: center;
+    animation: intro-bug-crawl 0.42s ease-in-out infinite;
+    background: rgba(40, 42, 54, 0.82);
+    border: 1px solid rgba(255, 121, 198, 0.38);
+    border-radius: 50%;
+    box-shadow:
+        0 12px 26px rgba(0, 0, 0, 0.44),
+        0 0 24px rgba(255, 121, 198, 0.18);
+    color: #ff79c6;
+    display: flex;
+    height: 3.1rem;
+    justify-content: center;
+    pointer-events: none;
+    position: absolute;
+    right: 1.15rem;
+    top: 11.9rem;
+    width: 3.1rem;
+    z-index: 4;
+}
+
+.intro-debug-bug::before,
+.intro-debug-bug::after {
+    border-top: 2px solid rgba(255, 121, 198, 0.76);
+    content: "";
+    height: 0.75rem;
+    position: absolute;
+    right: 2.55rem;
+    width: 2.2rem;
+}
+
+.intro-debug-bug::before {
+    top: 0.75rem;
+    transform: rotate(-18deg);
+}
+
+.intro-debug-bug::after {
+    top: 1.58rem;
+    transform: rotate(16deg);
+}
+
+@keyframes intro-bug-crawl {
+    0%, 100% { transform: translate(0, 0) rotate(-8deg); }
+    50% { transform: translate(-0.35rem, 0.14rem) rotate(9deg); }
+}
+
+.intro-debug-bubble {
+    background: rgba(8, 8, 14, 0.9);
+    border: 1px solid rgba(255, 184, 108, 0.25);
+    border-radius: 0.85rem;
+    bottom: calc(100% + 0.5rem);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.42);
+    color: #ffb86c;
+    display: grid;
+    font-family: "DM Sans", system-ui, sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    gap: 0.15rem;
+    line-height: 1.25;
+    padding: 0.55rem 0.65rem;
+    position: absolute;
+    right: -0.15rem;
+    width: max-content;
+}
+
+.intro-stick-person {
+    animation: stick-person-body 1.1s ease-in-out infinite;
+    height: 7.5rem;
+    left: 50%;
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -42%);
+    width: 6.5rem;
+    z-index: 4;
+}
+
+.intro-stick-person span {
+    background: #f8f8f2;
+    border-radius: 999px;
+    box-shadow: 0 0 12px rgba(139, 233, 253, 0.28);
+    position: absolute;
+}
+
+.stick-head {
+    background: transparent !important;
+    border: 3px solid #f8f8f2;
+    border-radius: 50% !important;
+    height: 1.45rem;
+    left: 2.5rem;
+    top: 0.3rem;
+    width: 1.45rem;
+}
+
+.stick-body {
+    height: 3.4rem;
+    left: 3.15rem;
+    top: 1.65rem;
+    transform: rotate(4deg);
+    width: 0.18rem;
+}
+
+.stick-arm {
+    height: 0.16rem;
+    top: 2.85rem;
+    transform-origin: left center;
+    width: 2.65rem;
+}
+
+.stick-arm-left {
+    left: 0.82rem;
+    transform: rotate(-22deg);
+}
+
+.stick-arm-right {
+    animation: stick-person-punch 0.42s ease-in-out infinite;
+    left: 3.18rem;
+    transform: rotate(-8deg);
+}
+
+.stick-leg {
+    height: 0.16rem;
+    top: 4.95rem;
+    transform-origin: left center;
+    width: 2.1rem;
+}
+
+.stick-leg-left {
+    left: 1.55rem;
+    transform: rotate(124deg);
+}
+
+.stick-leg-right {
+    left: 3.15rem;
+    transform: rotate(54deg);
+}
+
+.stick-impact {
+    animation: stick-impact-flash 0.42s ease-in-out infinite;
+    background: transparent !important;
+    border-right: 2px solid #ffb86c;
+    border-top: 2px solid #ffb86c;
+    box-shadow: none !important;
+    height: 1.1rem;
+    right: 0.35rem;
+    top: 2.25rem;
+    transform: rotate(45deg);
+    width: 1.1rem;
+}
+
+@keyframes stick-person-body {
+    0%, 100% { transform: translate(-50%, -42%) rotate(-2deg); }
+    50% { transform: translate(-47%, -43%) rotate(4deg); }
+}
+
+@keyframes stick-person-punch {
+    0%, 100% { transform: rotate(-8deg) scaleX(0.92); }
+    50% { transform: rotate(-2deg) scaleX(1.18); }
+}
+
+@keyframes stick-impact-flash {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 1; }
+}
+
+.intro-ide-console {
+    border-top: 1px solid rgba(255, 255, 255, 0.055);
+    color: rgba(248, 248, 242, 0.68);
+    font-family: "DM Mono", ui-monospace, monospace;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    min-height: 2.6rem;
+    padding: 0.72rem 1rem;
+}
+
+.intro-code-panel.is-run .intro-ide-console {
+    color: #50fa7b;
+}
+
+.intro-code-panel.is-debug .intro-ide-console {
+    color: #ffb86c;
+}
+
+.intro-git-bar {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: space-between;
+    min-height: 3.15rem;
+    padding: 0.45rem;
+}
+
+.intro-git-delta,
+.intro-git-status-text,
+.intro-git-action,
+.intro-git-branch-button {
+    min-height: 2rem;
+    padding: 0 0.65rem;
+}
+
+.intro-git-delta,
+.intro-git-status-text {
+    align-items: center;
+    border-radius: 0.9rem;
+    color: rgba(248, 248, 242, 0.72);
+    display: inline-flex;
+    font-family: "DM Mono", ui-monospace, monospace;
+    font-size: 0.74rem;
+    gap: 0.28rem;
+}
+
+.intro-git-delta {
+    background: rgba(255, 184, 108, 0.09);
+    border: 1px solid rgba(255, 184, 108, 0.18);
+    color: #ffb86c;
+    font-weight: 700;
+}
+
+.intro-git-status-text {
+    margin-right: auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.intro-git-action {
+    background: rgba(139, 233, 253, 0.075);
+    border-color: rgba(139, 233, 253, 0.18);
+}
+
+.intro-branch-menu {
+    position: relative;
+}
+
+.intro-git-branch-button {
+    background: rgba(79, 195, 247, 0.08);
+    border-color: rgba(79, 195, 247, 0.2);
+}
+
+.intro-branch-popover {
+    background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.006) 42%),
+        rgba(8, 9, 16, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--intro-panel-radius);
+    bottom: calc(100% + 0.55rem);
+    box-shadow:
+        0 16px 36px rgba(0, 0, 0, 0.48),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    display: grid;
+    gap: 0.35rem;
+    min-width: 14rem;
+    opacity: 0;
+    padding: 0.45rem;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    transform: translateY(0.45rem) scale(0.96);
+    transform-origin: bottom right;
+    transition: opacity 170ms ease, transform 170ms ease;
+    z-index: 8;
+}
+
+.intro-branch-menu.is-open .intro-branch-popover {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+.intro-branch-popover button {
+    justify-content: flex-start;
+    min-height: 2.1rem;
+    width: 100%;
+}
+
+.intro-branch-popover button.is-current {
+    background: rgba(79, 195, 247, 0.14);
+    border-color: rgba(79, 195, 247, 0.32);
+    color: #f8f8f2;
 }
 
 .code-class {
@@ -437,8 +922,8 @@ body {
     color: #ff79c6;
 }
 
-/* Mobile — panels stack vertically */
-@media (max-width: 767px) {
+/* Medium and mobile — panels stack vertically without leaving half-width gaps. */
+@media (max-width: 1180px) {
     .intro-astronomy-body {
         flex-direction: column;
     }
@@ -446,9 +931,16 @@ body {
     .intro-astronomy-body > .astro-panel,
     .intro-astronomy-body > .intro-code-panel {
         flex: 0 0 auto;
+        max-width: none;
         width: 100%;
     }
 
+    .astro-panel {
+        min-height: 36rem;
+    }
+}
+
+@media (max-width: 767px) {
     .astro-panel {
         min-height: auto;
         box-shadow:
@@ -459,6 +951,30 @@ body {
 
     .intro-code-panel {
         min-height: auto;
+    }
+
+    .intro-ide-toolbar,
+    .intro-git-bar {
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 520px) {
+    .intro-ide-button span {
+        display: none;
+    }
+
+    .intro-ide-button {
+        min-width: 2.35rem;
+        padding: 0;
+        justify-content: center;
+    }
+
+    .intro-ide-file-tab,
+    .intro-git-action,
+    .intro-git-branch-button,
+    .intro-git-status-text {
+        font-size: 0.72rem;
     }
 }
 
