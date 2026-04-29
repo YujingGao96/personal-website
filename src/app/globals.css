@@ -41,6 +41,77 @@ body {
     min-height: 100lvh;
 }
 
+.page-top-progressive-blur {
+    height: calc(env(safe-area-inset-top, 0px) + 5.25rem);
+    inset: 0 0 auto;
+    overflow: hidden;
+    pointer-events: none;
+    position: fixed;
+    z-index: 1020;
+}
+
+.page-top-progressive-blur::after {
+    background: linear-gradient(
+        to bottom,
+        rgba(5, 5, 13, 0.76) 0%,
+        rgba(5, 5, 13, 0.54) 38%,
+        rgba(5, 5, 13, 0.18) 74%,
+        rgba(5, 5, 13, 0) 100%
+    );
+    content: "";
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+    z-index: 5;
+}
+
+.page-top-progressive-blur-layer {
+    background: rgba(5, 5, 13, 0.08);
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+    -webkit-backdrop-filter: saturate(145%) blur(var(--top-page-blur));
+    backdrop-filter: saturate(145%) blur(var(--top-page-blur));
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        #000 0%,
+        #000 var(--top-page-blur-solid),
+        transparent var(--top-page-blur-fade)
+    );
+    mask-image: linear-gradient(
+        to bottom,
+        #000 0%,
+        #000 var(--top-page-blur-solid),
+        transparent var(--top-page-blur-fade)
+    );
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+}
+
+.page-top-progressive-blur-layer:nth-child(1) {
+    --top-page-blur: 4px;
+    --top-page-blur-fade: 100%;
+    --top-page-blur-solid: 0%;
+}
+
+.page-top-progressive-blur-layer:nth-child(2) {
+    --top-page-blur: 10px;
+    --top-page-blur-fade: 82%;
+    --top-page-blur-solid: 0%;
+}
+
+.page-top-progressive-blur-layer:nth-child(3) {
+    --top-page-blur: 18px;
+    --top-page-blur-fade: 62%;
+    --top-page-blur-solid: 0%;
+}
+
+.page-top-progressive-blur-layer:nth-child(4) {
+    --top-page-blur: 30px;
+    --top-page-blur-fade: 42%;
+    --top-page-blur-solid: 0%;
+}
+
 #about, #projects, #blogs, #timeline, #compliments {
     scroll-margin-top: 10em;
 }
@@ -213,12 +284,40 @@ body {
    backdrop-filter here blurs the particle canvas behind
    the whole window, making the code panel look glassy.   */
 .intro-mac-window {
+    --intro-window-inset: clamp(0.85rem, 1.6vw, 1.1rem);
+    --intro-panel-radius: 1.35rem;
+
     position: relative;
+    overflow: visible;
+    padding: var(--intro-window-inset);
+    background: rgba(10, 10, 18, 0.34);
     border: 1px solid rgba(255, 255, 255, 0.075);
     border-top-color: rgba(255, 255, 255, 0.25);
     border-bottom-color: rgba(0, 0, 0, 0.42);
-    border-radius: 1.2rem 1.2rem 2rem 2rem;
+    border-radius: calc(var(--intro-panel-radius) + var(--intro-window-inset));
+    box-shadow:
+        0 24px 54px rgba(0, 0, 0, 0.44),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
     animation: intro-window-in 0.62s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.intro-astronomy-body {
+    align-items: stretch;
+    display: flex;
+    gap: var(--intro-window-inset);
+    margin: 0;
+}
+
+.intro-astronomy-body > .astro-panel {
+    flex: 0 0 clamp(20rem, 39%, 28rem);
+    max-width: none;
+    width: auto;
+}
+
+.intro-astronomy-body > .intro-code-panel {
+    flex: 1 1 0;
+    max-width: none;
+    width: auto;
 }
 
 @keyframes intro-window-in {
@@ -236,18 +335,22 @@ body {
 .astro-panel {
     position: relative;
     overflow: hidden;           /* clips star-bg and nebula */
-    z-index: 2;
-    background: rgba(4, 4, 14, 0.76);
-    border-right: 1px solid rgba(255, 255, 255, 0.07);
+    z-index: 3;
+    background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.006) 42%),
+        rgba(7, 9, 16, 0.58) !important;
+    border: 1px solid rgba(255, 255, 255, 0.085);
+    border-color: rgba(255, 255, 255, 0.085) !important;
     display: flex;
     flex-direction: column;
-    /* corners match the left side of the outer window */
-    border-radius: 1.2rem 0 0 2rem;
-    /* right-side shadow gives the "elevated panel" feel — kept light so
-       Safari doesn't pull it into the code panel's backdrop blur */
+    border-radius: var(--intro-panel-radius);
+    min-height: 100%;
     box-shadow:
-        4px 0 16px rgba(0, 0, 0, 0.40),
-        inset -1px 0 0 rgba(255, 255, 255, 0.04);
+        14px 0 28px rgba(0, 0, 0, 0.38),
+        0 16px 38px rgba(0, 0, 0, 0.38),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        inset 1px 0 0 rgba(255, 255, 255, 0.035),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.5) !important;
 }
 
 /* Traffic lights sit at the top of the sidebar */
@@ -255,7 +358,7 @@ body {
     display: flex;
     gap: 0.4rem;
     align-items: center;
-    padding: 0.65rem 1rem;
+    padding: 1rem 1.05rem 0.65rem;
     flex-shrink: 0;
     position: relative;
     z-index: 3;
@@ -287,17 +390,17 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* corners match the right side of the outer window */
-    border-radius: 0 1.2rem 2rem 0;
+    border: 1px solid rgba(255, 255, 255, 0.055);
+    border-radius: var(--intro-panel-radius);
+    min-height: 100%;
 }
 
 .intro-code-block {
-    background: #282a36;
-    border: 1px solid rgba(189, 147, 249, 0.22);
+    background: transparent;
+    -webkit-backdrop-filter: drop-shadow(2px 4px 6px black);
+    backdrop-filter: drop-shadow(2px 4px 6px black);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 1rem;
-    box-shadow:
-        0 18px 36px rgba(0, 0, 0, 0.38),
-        inset 0 1px 0 rgba(248, 248, 242, 0.06);
     color: #f8f8f2;
     font-family: "DM Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     font-size: 0.82rem;
@@ -336,8 +439,27 @@ body {
 
 /* Mobile — panels stack vertically */
 @media (max-width: 767px) {
-    .astro-panel      { border-radius: 1.2rem 1.2rem 0 0; box-shadow: 0 6px 24px rgba(0,0,0,0.55); border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
-    .intro-code-panel { border-radius: 0 0 2rem 2rem; }
+    .intro-astronomy-body {
+        flex-direction: column;
+    }
+
+    .intro-astronomy-body > .astro-panel,
+    .intro-astronomy-body > .intro-code-panel {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+
+    .astro-panel {
+        min-height: auto;
+        box-shadow:
+            0 14px 30px rgba(0, 0, 0, 0.42),
+            inset 0 1px 0 rgba(255, 255, 255, 0.12),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.5) !important;
+    }
+
+    .intro-code-panel {
+        min-height: auto;
+    }
 }
 
 /* ── Starfield — 3 prominent stars */
