@@ -10,10 +10,17 @@ export const metadata = {
         icon: "/favicon.ico",
     },
     manifest: "/manifest.json",
+    appleWebApp: {
+        capable: true,
+        statusBarStyle: "black-translucent",
+        title: "Yujing Gao",
+    },
 };
 
 export const viewport = {
-    themeColor: "#000000",
+    colorScheme: "dark",
+    themeColor: "#05050d",
+    viewportFit: "cover",
 };
 
 export default function RootLayout({children}) {
