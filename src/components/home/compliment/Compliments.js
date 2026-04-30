@@ -117,6 +117,7 @@ function MarqueeRow({items, reverse = false, speed = 42}) {
     const rafRef = useRef(null);
     const lastInteractionRef = useRef(-AUTO_RESUME_DELAY);
     const scrollPositionRef = useRef(0);
+    const cardsRef = useRef([]);
 
     const getSegmentWidth = useCallback((scroller) => scroller.scrollWidth / LOOP_COPIES, []);
 
@@ -131,28 +132,34 @@ function MarqueeRow({items, reverse = false, speed = 42}) {
         }
     }, [getSegmentWidth]);
 
+    const collectCards = useCallback(() => {
+        const scroller = scrollerRef.current;
+        if (!scroller) return;
+
+        cardsRef.current = Array.from(scroller.querySelectorAll(".compliment-card")).map((card) => ({
+            el: card,
+            center: card.offsetLeft + card.offsetWidth / 2,
+        }));
+    }, []);
+
     const updateCardDepth = useCallback(() => {
         const scroller = scrollerRef.current;
         if (!scroller) return;
 
-        const scrollerRect = scroller.getBoundingClientRect();
-        const centerX = scrollerRect.left + scrollerRect.width / 2;
-        const maxDistance = scrollerRect.width * 0.58;
-        const cards = scroller.querySelectorAll(".compliment-card");
+        const centerX = scroller.scrollLeft + scroller.clientWidth / 2;
+        const maxDistance = scroller.clientWidth * 0.58;
 
-        cards.forEach((card) => {
-            const rect = card.getBoundingClientRect();
-            const cardCenterX = rect.left + rect.width / 2;
-            const offset = Math.max(-1, Math.min(1, (cardCenterX - centerX) / maxDistance));
+        cardsRef.current.forEach(({el, center}) => {
+            const offset = Math.max(-1, Math.min(1, (center - centerX) / maxDistance));
             const distance = Math.abs(offset);
             const translateZ = -distance * 280;
             const rotateY = offset * -34;
             const scale = 1 - distance * 0.18;
             const translateY = distance * 14;
 
-            card.style.transform = `translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale}) translateY(${translateY}px)`;
-            card.style.opacity = `${1 - distance * 0.12}`;
-            card.style.zIndex = `${Math.round((1 - distance) * 100)}`;
+            el.style.transform = `translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale}) translateY(${translateY}px)`;
+            el.style.opacity = `${1 - distance * 0.12}`;
+            el.style.zIndex = `${Math.round((1 - distance) * 100)}`;
         });
     }, []);
 
@@ -175,6 +182,7 @@ function MarqueeRow({items, reverse = false, speed = 42}) {
 
         const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         const centerScroller = () => {
+            collectCards();
             scrollPositionRef.current = getSegmentWidth(scroller);
             scroller.scrollLeft = scrollPositionRef.current;
             updateCardDepth();
@@ -212,7 +220,7 @@ function MarqueeRow({items, reverse = false, speed = 42}) {
             window.cancelAnimationFrame(rafRef.current);
             window.removeEventListener("resize", centerScroller);
         };
-    }, [getSegmentWidth, resetLoopPosition, reverse, speed, updateCardDepth]);
+    }, [collectCards, getSegmentWidth, resetLoopPosition, reverse, speed, updateCardDepth]);
 
     return (
         <div className="marquee-row">
