@@ -25,6 +25,13 @@ const PLANETS = [
     { name: "uranus",  rx: 142, ry: 49, speed: 0.20, phase: 1.5,                 cls: "planet-uranus"  },
     { name: "neptune", rx: 142, ry: 49, speed: 0.16, phase: Math.PI + 1.5,       cls: "planet-neptune" },
 ];
+const ORBIT_CENTER_X = 155;
+const ORBIT_CENTER_Y = 155;
+const ORBIT_TILT_RATIO = 0.3;
+const ORBIT_TILT_ANGLE = Math.atan(ORBIT_TILT_RATIO);
+const ORBIT_TILT_COS = Math.cos(ORBIT_TILT_ANGLE);
+const ORBIT_TILT_SIN = Math.sin(ORBIT_TILT_ANGLE);
+const PROFILE_PHOTO_SIZE = 142;
 
 // SVG paths/colors are from AtomMaterialUI/iconGenerator's MIT-licensed Atom Material Icons.
 const ATOM_MATERIAL_ICONS = {
@@ -131,8 +138,6 @@ function OrbitalSystem({displayName}) {
 
     useEffect(() => {
         const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        const CX = 155;
-        const CY = 155;
 
         function updatePlanets(ts = 0) {
             const t = ts / 1000;
@@ -141,14 +146,16 @@ function OrbitalSystem({displayName}) {
                 if (!el) return;
 
                 const ang = t * planet.speed + planet.phase;
-                const x = CX + planet.rx * Math.cos(ang);
-                const y = CY + planet.ry * Math.sin(ang);
-                const sinAng = Math.sin(ang);
-                const depth = (sinAng + 1) / 2;
+                const orbitX = planet.rx * Math.cos(ang);
+                const orbitY = planet.ry * Math.sin(ang);
+                const tiltedX = orbitX * ORBIT_TILT_COS - orbitY * ORBIT_TILT_SIN;
+                const tiltedY = orbitX * ORBIT_TILT_SIN + orbitY * ORBIT_TILT_COS;
+                const maxTiltedY = Math.hypot(planet.rx * ORBIT_TILT_SIN, planet.ry * ORBIT_TILT_COS);
+                const depth = (tiltedY / maxTiltedY + 1) / 2;
 
-                el.style.left = `${x}px`;
-                el.style.top = `${y}px`;
-                el.style.zIndex = sinAng > 0 ? "4" : "1";
+                el.style.left = `${ORBIT_CENTER_X + tiltedX}px`;
+                el.style.top = `${ORBIT_CENTER_Y + tiltedY}px`;
+                el.style.zIndex = tiltedY > 0 ? "4" : "1";
                 el.style.opacity = String(0.35 + depth * 0.65);
                 el.style.filter = `brightness(${0.65 + depth * 0.35})`;
             });
@@ -186,7 +193,15 @@ function OrbitalSystem({displayName}) {
     }, []);
 
     return (
-        <div className="orbital-system" ref={containerRef}>
+        <div
+            className="orbital-system"
+            ref={containerRef}
+            style={{
+                "--orbit-center-x": `${ORBIT_CENTER_X}px`,
+                "--orbit-center-y": `${ORBIT_CENTER_Y}px`,
+                "--orbit-tilt": `${ORBIT_TILT_ANGLE}rad`,
+            }}
+        >
             {/* 4 tilted-ellipse orbit tracks */}
             <div className="orbit-ring orbit-ring-1" />
             <div className="orbit-ring orbit-ring-2" />
@@ -200,17 +215,17 @@ function OrbitalSystem({displayName}) {
                 onContextMenu={e => e.preventDefault()}
                 style={{
                     position: "absolute",
-                    top: "50%", left: "50%",
-                    width: 118, height: 118,
-                    marginLeft: -59, marginTop: -59,
+                    top: "var(--orbit-center-y)", left: "var(--orbit-center-x)",
+                    width: PROFILE_PHOTO_SIZE, height: PROFILE_PHOTO_SIZE,
+                    marginLeft: -PROFILE_PHOTO_SIZE / 2, marginTop: -PROFILE_PHOTO_SIZE / 2,
                     zIndex: 2,
                 }}
             >
                 <Image
                     src="/profile.jpg"
                     alt={displayName}
-                    width={118}
-                    height={118}
+                    width={PROFILE_PHOTO_SIZE}
+                    height={PROFILE_PHOTO_SIZE}
                     priority
                     style={{
                         borderRadius: "50%",
