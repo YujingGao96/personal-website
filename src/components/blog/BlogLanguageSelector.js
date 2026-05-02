@@ -1,5 +1,6 @@
 "use client";
 
+import {useState} from "react";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {BLOG_LANGUAGE_COOKIE, BLOG_LANGUAGE_COOKIE_MAX_AGE, BLOG_LANGUAGE_EVENT, BLOG_LANGUAGE_PARAM, BLOG_LANGUAGES, getBlogCopy, normalizeBlogLanguage} from "../../lib/blog/language";
 import {setClientCookie} from "../../lib/clientPreferenceCookie";
@@ -12,7 +13,9 @@ export default function BlogLanguageSelector({
     const pathname = usePathname();
     const router = useRouter();
     const searchParams = useSearchParams();
-    const language = normalizeBlogLanguage(searchParams.get(BLOG_LANGUAGE_PARAM) || initialLanguage);
+    const resolvedLanguage = normalizeBlogLanguage(searchParams.get(BLOG_LANGUAGE_PARAM) || initialLanguage);
+    const [selectedLanguage, setSelectedLanguage] = useState("");
+    const language = selectedLanguage || resolvedLanguage;
     const copy = getBlogCopy(language);
     const classes = [
         "blog-language-selector",
@@ -25,6 +28,7 @@ export default function BlogLanguageSelector({
         const params = new URLSearchParams(searchParams.toString());
 
         params.set(BLOG_LANGUAGE_PARAM, normalized);
+        setSelectedLanguage(normalized);
         setClientCookie(BLOG_LANGUAGE_COOKIE, normalized, BLOG_LANGUAGE_COOKIE_MAX_AGE);
         window.dispatchEvent(new CustomEvent(BLOG_LANGUAGE_EVENT, {detail: {language: normalized}}));
         router.replace(`${pathname}?${params.toString()}${window.location.hash}`, {scroll: false});

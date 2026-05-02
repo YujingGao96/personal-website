@@ -3,8 +3,8 @@
 import React, {useEffect, useRef, useState} from "react";
 import Image from "next/image";
 import {
-    birthday, company, email, gender,
-    getAge, linkedin, name,
+    birthday, company, email,
+    getAge, linkedin,
 } from "../../../resolvers/profileResolver";
 import {hashText, seededFloat, seededNumber, VIBRANT_COLORS} from "../../../util/GenArtUtil";
 import fisIcon      from "./images/fis.png";
@@ -123,7 +123,7 @@ function getConsoleMessage(copy, activity, gitState, branch) {
     return copy.consoleMessages.dirty;
 }
 
-function OrbitalSystem() {
+function OrbitalSystem({displayName}) {
     const planetRefs = useRef([]);
     const rafRef = useRef(null);
     const containerRef = useRef(null);
@@ -208,7 +208,7 @@ function OrbitalSystem() {
             >
                 <Image
                     src="/profile.jpg"
-                    alt="Yujing Gao"
+                    alt={displayName}
                     width={118}
                     height={118}
                     priority
@@ -240,12 +240,27 @@ function OrbitalSystem() {
 function CodeLine({indent = 0, lineNumber, variant, className = "", children}) {
     return (
         <span className={`intro-code-line ${variant ? `is-${variant}` : ""} ${className}`}>
-            <span className="intro-code-line-number">{lineNumber}</span>
+            <span className="intro-code-line-number">
+                <span className="intro-code-line-index">{lineNumber}</span>
+            </span>
             <span className="intro-code-line-source" style={{"--indent": indent}}>
-                {variant && <span className="intro-code-diff-sign">{variant === "removed" ? "-" : "+"}</span>}
                 {children}
             </span>
         </span>
+    );
+}
+
+function CodeString({children}) {
+    return <span className="code-string">&quot;{children}&quot;</span>;
+}
+
+function LocalDateExpression({date}) {
+    const [year, month, day] = date;
+
+    return (
+        <>
+            <span className="code-class">LocalDate</span>.<span className="code-method">of</span>(<span className="code-number">{year}</span>, <span className="code-number">{month}</span>, <span className="code-number">{day}</span>)
+        </>
     );
 }
 
@@ -560,9 +575,9 @@ function IntroCodeBlock({ageState, activity, gitState, showDiff, copy}) {
                 <CodeLine lineNumber={1}>
                     <span className="code-class">PersonBuilder</span>
                 </CodeLine>
-                <CodeLine lineNumber={2} indent={1}>.<span className="code-method">setName</span>(<span className="code-string">&quot;{name}&quot;</span>)</CodeLine>
+                <CodeLine lineNumber={2} indent={1}>.<span className="code-method">setName</span>(<span className="code-string">&quot;{copy.code.name}&quot;</span>)</CodeLine>
                 <CodeLine lineNumber={3} indent={1}>.<span className="code-method">setAge</span>(<span className="code-number">{ageState}</span>)</CodeLine>
-                <CodeLine lineNumber={4} indent={1}>.<span className="code-method">setGender</span>(<span className="code-class">Gender</span>.<span className="code-constant">{gender.toUpperCase()}</span>)</CodeLine>
+                <CodeLine lineNumber={4} indent={1}>.<span className="code-method">setGender</span>(<span className="code-class">Gender</span>.<span className="code-constant">{copy.code.gender}</span>)</CodeLine>
                 {showDiff ? (
                     <>
                         <CodeLine lineNumber={5} indent={1} variant="removed">.<span className="code-method">setJob</span>(<span className="code-string">&quot;{copy.code.previousJobTitle}&quot;</span>)</CodeLine>
@@ -571,23 +586,15 @@ function IntroCodeBlock({ageState, activity, gitState, showDiff, copy}) {
                 ) : (
                     <CodeLine lineNumber={5} indent={1}>.<span className="code-method">setJob</span>(<span className="code-string">&quot;{copy.code.currentJobTitle}&quot;</span>)</CodeLine>
                 )}
-                <CodeLine lineNumber={6} indent={1}>.<span className="code-method">isAppleFan</span>(<span className="code-keyword">true</span>)</CodeLine>
-                <CodeLine lineNumber={7} indent={1}>.<span className="code-method">addInterests</span>(</CodeLine>
-                <CodeLine lineNumber={8} indent={2} className="is-debug-target"><span className="code-class">List</span>.<span className="code-method">of</span>(<span className="code-string">&quot;{primaryInterest}&quot;</span>, <span className="code-string">&quot;{secondaryInterest}&quot;</span>)</CodeLine>
-                <CodeLine lineNumber={9} indent={1}>)</CodeLine>
-                <CodeLine lineNumber={10} indent={1}>.<span className="code-method">addEducation</span>(</CodeLine>
-                <CodeLine lineNumber={11} indent={2}><span className="code-keyword">new</span> <span className="code-class">Degree</span>(</CodeLine>
-                <CodeLine lineNumber={12} indent={3}><span className="code-string">&quot;{copy.code.bachelorDegree}&quot;</span>,</CodeLine>
-                <CodeLine lineNumber={13} indent={3}><span className="code-string">&quot;{copy.code.school}&quot;</span>,</CodeLine>
-                <CodeLine lineNumber={14} indent={3}><span className="code-string">&quot;{copy.code.bachelorDate}&quot;</span></CodeLine>
-                <CodeLine lineNumber={15} indent={2}>),</CodeLine>
-                <CodeLine lineNumber={16} indent={2}><span className="code-keyword">new</span> <span className="code-class">Degree</span>(</CodeLine>
-                <CodeLine lineNumber={17} indent={3}><span className="code-string">&quot;{copy.code.masterDegree}&quot;</span>,</CodeLine>
-                <CodeLine lineNumber={18} indent={3}><span className="code-string">&quot;{copy.code.school}&quot;</span>,</CodeLine>
-                <CodeLine lineNumber={19} indent={3}><span className="code-string">&quot;{copy.code.masterDate}&quot;</span></CodeLine>
-                <CodeLine lineNumber={20} indent={2}>)</CodeLine>
-                <CodeLine lineNumber={21} indent={1}>)</CodeLine>
-                <CodeLine lineNumber={22} indent={1} className="is-build-line">.<span className="code-method">build</span>();</CodeLine>
+                <CodeLine lineNumber={6} indent={1}>.<span className="code-method">addInterests</span>(</CodeLine>
+                <CodeLine lineNumber={7} indent={2} className="is-debug-target"><span className="code-class">List</span>.<span className="code-method">of</span>(<span className="code-string">&quot;{primaryInterest}&quot;</span>, <span className="code-string">&quot;{secondaryInterest}&quot;</span>)</CodeLine>
+                <CodeLine lineNumber={8} indent={1}>)</CodeLine>
+                <CodeLine lineNumber={9} indent={1}>.<span className="code-method">addEducation</span>(</CodeLine>
+                <CodeLine lineNumber={10} indent={2}><span className="code-keyword">new</span> <span className="code-class">Degree</span>(<CodeString>{copy.code.bachelorDegree}</CodeString>, <CodeString>{copy.code.school}</CodeString>, <LocalDateExpression date={copy.code.bachelorDate}/>),</CodeLine>
+                <CodeLine lineNumber={11} indent={2}><span className="code-keyword">new</span> <span className="code-class">Degree</span>(<CodeString>{copy.code.masterDegree}</CodeString>, <CodeString>{copy.code.school}</CodeString>, <LocalDateExpression date={copy.code.masterDate}/>),</CodeLine>
+                <CodeLine lineNumber={12} indent={2} variant={showDiff ? "added" : undefined}><span className="code-class">Degree</span>.<span className="code-method">inProgress</span>(<CodeString>{copy.code.omscsDegree}</CodeString>, <CodeString>{copy.code.omscsSchool}</CodeString>)</CodeLine>
+                <CodeLine lineNumber={13} indent={1}>)</CodeLine>
+                <CodeLine lineNumber={14} indent={1} className="is-build-line">.<span className="code-method">build</span>();</CodeLine>
             </code>
         </pre>
     );
@@ -610,7 +617,7 @@ const Intro = ({language = DEFAULT_BLOG_LANGUAGE}) => {
 
     const branch = BRANCHES[branchIndex];
     const consoleMessage = getConsoleMessage(copy, activity, gitState, branch);
-    const diffDelta = showDiff ? 2 : 0;
+    const diffDelta = showDiff ? 3 : 0;
 
     function handleIdeAction(actionId) {
         if (actionId === "reset") {
@@ -664,9 +671,9 @@ const Intro = ({language = DEFAULT_BLOG_LANGUAGE}) => {
                         <div className="astro-nebula" />
 
                         <div className="astro-panel-body">
-                            <OrbitalSystem />
+                            <OrbitalSystem displayName={copy.profileName} />
 
-                            <h2 className="intro-profile-name fw-bold mb-0">{name}</h2>
+                            <h2 className="intro-profile-name fw-bold mb-0">{copy.profileName}</h2>
                             <h4 className="text-secondary my-0">{copy.profileJobTitle}</h4>
 
                             <div className="text-start d-inline-block">
@@ -760,7 +767,7 @@ const Intro = ({language = DEFAULT_BLOG_LANGUAGE}) => {
 
                             <div className="intro-git-delta" aria-label={copy.changedLines(diffDelta)}>
                                 <span className="intro-git-delta-total">Δ {diffDelta}</span>
-                                <span className="intro-git-delta-added">+{showDiff ? 1 : 0}</span>
+                                <span className="intro-git-delta-added">+{showDiff ? 2 : 0}</span>
                                 <span className="intro-git-delta-removed">-{showDiff ? 1 : 0}</span>
                             </div>
 

@@ -48,7 +48,7 @@ export default async function BlogArticleRoute({params, searchParams}) {
                     <Link href={withBlogLanguage("/blog", language)} className="blog-back-link">
                         &larr; {copy.articleBack}
                     </Link>
-                    <BlogLanguageSelector initialLanguage={language} compact/>
+                    <BlogLanguageSelector key={language} initialLanguage={language} compact/>
                 </div>
 
                 <GeneratedBlogCover post={post.metadata} className="blog-generated-cover"/>

@@ -548,7 +548,7 @@ body {
     line-height: 1.65;
     margin: 0;
     min-height: 0;
-    overflow-x: auto;
+    overflow: auto;
     padding: 1rem 1rem 0.75rem;
     white-space: pre;
 }
@@ -568,22 +568,21 @@ body {
 
 .intro-code-line-number {
     color: rgba(248, 248, 242, 0.28);
+    display: block;
     font-size: 0.76rem;
     line-height: inherit;
-    text-align: right;
+    position: relative;
     user-select: none;
+}
+
+.intro-code-line-index {
+    display: block;
+    text-align: right;
 }
 
 .intro-code-line-source {
     display: block;
     padding-left: calc(var(--indent) * 2ch);
-}
-
-.intro-code-diff-sign {
-    display: inline-block;
-    font-weight: 700;
-    margin-right: 0.25rem;
-    width: 1ch;
 }
 
 .intro-code-line.is-removed .intro-code-line-source {
@@ -595,12 +594,29 @@ body {
     background: linear-gradient(90deg, rgba(80, 250, 123, 0.17), rgba(80, 250, 123, 0.045) 64%, transparent);
 }
 
-.intro-code-line.is-removed .intro-code-diff-sign {
-    color: #ff5555;
+.intro-code-line.is-removed .intro-code-line-number {
+    color: rgba(255, 85, 85, 0.92);
 }
 
-.intro-code-line.is-added .intro-code-diff-sign {
-    color: #50fa7b;
+.intro-code-line.is-added .intro-code-line-number {
+    color: rgba(80, 250, 123, 0.88);
+}
+
+.intro-code-line.is-removed .intro-code-line-number::before,
+.intro-code-line.is-added .intro-code-line-number::before {
+    border-radius: 999px;
+    content: "";
+    inset: 0.16em auto 0.16em 0.05rem;
+    position: absolute;
+    width: 3px;
+}
+
+.intro-code-line.is-removed .intro-code-line-number::before {
+    background: #ff5555;
+}
+
+.intro-code-line.is-added .intro-code-line-number::before {
+    background: #50fa7b;
 }
 
 .intro-code-block.is-debug .intro-code-line.is-debug-target .intro-code-line-source {

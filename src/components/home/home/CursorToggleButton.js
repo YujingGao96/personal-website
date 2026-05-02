@@ -74,21 +74,14 @@ const CursorToggleButton = ({language}) => {
 
     return (
         <button
+            type="button"
+            className={`cursor-toggle-button ${enabled ? 'enabled' : 'disabled'}`}
             onClick={toggle}
             aria-label={copy.toggleCursorFx}
-            style={{
-                background: 'rgba(255,255,255,0.06)',
-                border: '1px solid rgba(255,255,255,0.15)',
-                borderRadius: '2em',
-                color: enabled ? '#86d5ff' : 'rgba(255,255,255,0.4)',
-                cursor: 'pointer',
-                fontSize: '0.75rem',
-                letterSpacing: '0.05em',
-                padding: '0.35em 1em',
-                transition: 'color 0.2s, border-color 0.2s',
-            }}
+            aria-pressed={enabled}
         >
-            {enabled ? `✦ ${copy.cursorFxOn}` : `✦ ${copy.cursorFxOff}`}
+            <span className="cursor-toggle-icon" aria-hidden="true">✦</span>
+            <span className="cursor-toggle-label">{enabled ? copy.cursorFxOn : copy.cursorFxOff}</span>
         </button>
     );
 };
