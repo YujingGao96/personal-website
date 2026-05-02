@@ -543,6 +543,22 @@
     margin-bottom: 1.25rem;
 }
 
+.blog-article-body hr {
+    border: 0;
+    height: 1px;
+    margin: 2.75rem auto;
+    max-width: 72%;
+    background:
+        linear-gradient(
+            to right,
+            transparent,
+            rgba(104, 197, 195, 0.16),
+            rgba(181, 147, 225, 0.34),
+            rgba(104, 197, 195, 0.16),
+            transparent
+        );
+}
+
 .blog-article-body a {
     color: #68c5c3;
     text-decoration: underline;
@@ -595,11 +611,17 @@
 }
 
 .blog-article-body blockquote {
-    border-left: 2px solid rgba(104, 197, 195, 0.5);
-    color: rgba(255, 255, 255, 0.6);
+    background: rgba(104, 197, 195, 0.055);
+    border-left: 2px solid rgba(104, 197, 195, 0.62);
+    border-radius: 0 10px 10px 0;
+    color: rgba(255, 255, 255, 0.72);
     font-style: italic;
     margin: 1.5rem 0;
-    padding: 0.5rem 0 0.5rem 1.25rem;
+    padding: 0.8rem 1rem 0.8rem 1.25rem;
+}
+
+.blog-article-body blockquote p {
+    margin-bottom: 0;
 }
 
 .blog-article-body[lang="zh-Hans"] {

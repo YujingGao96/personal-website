@@ -2,6 +2,7 @@ export const DEFAULT_BLOG_LANGUAGE = "en";
 export const BLOG_LANGUAGE_COOKIE = "blog-language";
 export const BLOG_LANGUAGE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 export const BLOG_LANGUAGE_EVENT = "blog-language-change";
+export const BLOG_LANGUAGE_PARAM = "lang";
 
 export const BLOG_LANGUAGES = [
     {code: "en", label: "English", shortLabel: "EN", locale: "en-US"},
@@ -76,6 +77,13 @@ export function normalizeBlogLanguage(value) {
         : DEFAULT_BLOG_LANGUAGE;
 }
 
+export function getSupportedBlogLanguage(value) {
+    const normalized = String(value || "").trim().toLowerCase();
+    const aliased = LANGUAGE_ALIASES[normalized] || normalized;
+
+    return BLOG_LANGUAGES.some((language) => language.code === aliased) ? aliased : "";
+}
+
 export function getBlogLanguage(language) {
     const code = normalizeBlogLanguage(language);
     return BLOG_LANGUAGES.find((item) => item.code === code) || BLOG_LANGUAGES[0];
@@ -83,4 +91,15 @@ export function getBlogLanguage(language) {
 
 export function getBlogCopy(language) {
     return COPY[normalizeBlogLanguage(language)] || COPY[DEFAULT_BLOG_LANGUAGE];
+}
+
+export function withBlogLanguage(href, language) {
+    const [pathAndSearch, hash = ""] = String(href || "/").split("#");
+    const [path, search = ""] = pathAndSearch.split("?");
+    const params = new URLSearchParams(search);
+
+    params.set(BLOG_LANGUAGE_PARAM, normalizeBlogLanguage(language));
+
+    const query = params.toString();
+    return `${path}${query ? `?${query}` : ""}${hash ? `#${hash}` : ""}`;
 }

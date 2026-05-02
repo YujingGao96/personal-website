@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import GeneratedBlogCover, {getBlogCoverPalette, getBlogLabelColor} from "../../blog/GeneratedBlogCover";
-import {DEFAULT_BLOG_LANGUAGE, getBlogCopy, getBlogLanguage} from "../../../lib/blog/language";
+import {DEFAULT_BLOG_LANGUAGE, getBlogCopy, getBlogLanguage, withBlogLanguage} from "../../../lib/blog/language";
 
 function formatDate(value, language) {
     if (!value) {
@@ -22,7 +22,7 @@ const BlogCard = ({post, isLatest = false, language = DEFAULT_BLOG_LANGUAGE}) =>
 
     return (
         <article className={`home-blog-card${isLatest ? " latest" : ""}`} style={{"--blog-accent": primaryColor}}>
-            <Link href={`/blog/${post.slug}`} className="home-blog-card-link">
+            <Link href={withBlogLanguage(`/blog/${post.slug}`, language)} className="home-blog-card-link">
                 <div className="home-blog-cover">
                     <GeneratedBlogCover post={post} className="home-blog-cover-svg"/>
                     <div className="home-blog-cover-fade"/>

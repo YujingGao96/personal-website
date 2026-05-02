@@ -1,7 +1,7 @@
 import BlogIndexSearch from "../../components/blog/BlogIndexSearch";
 import {getAllPosts} from "../../lib/blog/blobStore";
 import {getBlogCopy} from "../../lib/blog/language";
-import {getBlogLanguageFromCookies} from "../../lib/blog/serverLanguage";
+import {resolveBlogLanguage} from "../../lib/blog/serverLanguage";
 
 export const metadata = {
     title: "Blog | Yujing Gao",
@@ -10,8 +10,8 @@ export const metadata = {
 
 export const revalidate = 3600;
 
-export default async function BlogIndexRoute() {
-    const language = await getBlogLanguageFromCookies();
+export default async function BlogIndexRoute({searchParams}) {
+    const language = await resolveBlogLanguage(searchParams);
     const copy = getBlogCopy(language);
     const posts = await getAllPosts({language});
 

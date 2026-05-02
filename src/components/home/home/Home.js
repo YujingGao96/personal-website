@@ -7,11 +7,9 @@ import Compliments from "../compliment/Compliments";
 import Blogs from "../blog/Blogs";
 import BottomFrame from "../bottomframe/BottomFrame";
 import FluidCursor from "./FluidCursor";
-import {getBlogLanguageFromCookies} from "../../../lib/blog/serverLanguage";
+import {DEFAULT_BLOG_LANGUAGE} from "../../../lib/blog/language";
 
-const Home = async () => {
-    const blogLanguage = await getBlogLanguageFromCookies();
-
+const Home = ({blogLanguage = DEFAULT_BLOG_LANGUAGE}) => {
     return (
         <>
             <ParticleBG/>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,6 +8,8 @@ import {usePathname} from "next/navigation";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUser, faFileCode, faStream, faQuoteRight, faPaperPlane} from "@fortawesome/free-solid-svg-icons";
 import logo from "./logo.png";
+import {BLOG_LANGUAGE_COOKIE, BLOG_LANGUAGE_EVENT, BLOG_LANGUAGE_PARAM, DEFAULT_BLOG_LANGUAGE, getSupportedBlogLanguage, normalizeBlogLanguage, withBlogLanguage} from "../../../lib/blog/language";
+import {getClientCookie} from "../../../lib/clientPreferenceCookie";
 
 const AuthButton = dynamic(() => import("./AuthButton"), {ssr: false});
 
@@ -15,10 +17,30 @@ const NavBar = () => {
     const pathname = usePathname();
     const [currentTab, setCurrentTab] = useState('about');
     const [showMenu, setShowMenu] = useState(false);
+    const [blogLanguage, setBlogLanguage] = useState(DEFAULT_BLOG_LANGUAGE);
     const isHomePage = pathname === "/";
     const activeTab = pathname?.startsWith("/blog") || pathname?.startsWith("/admin/blog") ? "blogs" : currentTab;
 
     const currentSelectJSX = <span className="visually-hidden">(current)</span>;
+
+    useEffect(() => {
+        const readLanguage = () => {
+            const params = new URLSearchParams(window.location.search);
+            const urlLanguage = getSupportedBlogLanguage(params.get(BLOG_LANGUAGE_PARAM));
+            setBlogLanguage(urlLanguage || normalizeBlogLanguage(getClientCookie(BLOG_LANGUAGE_COOKIE)));
+        };
+        const handleLanguageChange = (event) => {
+            setBlogLanguage(normalizeBlogLanguage(event.detail?.language));
+        };
+
+        readLanguage();
+        window.addEventListener("popstate", readLanguage);
+        window.addEventListener(BLOG_LANGUAGE_EVENT, handleLanguageChange);
+        return () => {
+            window.removeEventListener("popstate", readLanguage);
+            window.removeEventListener(BLOG_LANGUAGE_EVENT, handleLanguageChange);
+        };
+    }, []);
 
     const handleMenuClick = (tab) => {
         setCurrentTab(tab);
@@ -46,7 +68,7 @@ const NavBar = () => {
             <nav className="navbar navbar-expand-lg navbar-dark px-3" id="navbar-bg">
                 <div className="container-fluid">
                     {/* Logo on the left */}
-                    <Link className="navbar-brand nav-row me-3" href="/">
+                    <Link className="navbar-brand nav-row me-3" href={withBlogLanguage("/", blogLanguage)}>
                         <span className="nav-icon-col">
                             <Image src={logo} alt="Logo" height={38} width={38} priority/>
                         </span>
@@ -67,11 +89,11 @@ const NavBar = () => {
 
                     <div className={`collapse navbar-collapse ${showMenu ? "show" : ""}`} id="navbarNav">
                         <ul className="navbar-nav">
-                            {renderNavItem('about', isHomePage ? '#about' : '/#about', faUser, 'About', "#6c74ab")}
-                            {renderNavItem('blogs', isHomePage ? '#blogs' : '/blog', faPaperPlane, 'Blogs', "#b593e1")}
-                            {renderNavItem('timeline', isHomePage ? '#timeline' : '/#timeline', faStream, 'Timeline',"#f49f22")}
-                            {renderNavItem('projects', isHomePage ? '#projects' : '/#projects', faFileCode, 'Projects', "#e4899a")}
-                            {renderNavItem('compliments', isHomePage ? '#compliments' : '/#compliments', faQuoteRight, 'Compliments', "#1ad1ee")}
+                            {renderNavItem('about', isHomePage ? '#about' : withBlogLanguage('/#about', blogLanguage), faUser, 'About', "#6c74ab")}
+                            {renderNavItem('blogs', isHomePage ? '#blogs' : withBlogLanguage('/blog', blogLanguage), faPaperPlane, 'Blogs', "#b593e1")}
+                            {renderNavItem('timeline', isHomePage ? '#timeline' : withBlogLanguage('/#timeline', blogLanguage), faStream, 'Timeline',"#f49f22")}
+                            {renderNavItem('projects', isHomePage ? '#projects' : withBlogLanguage('/#projects', blogLanguage), faFileCode, 'Projects', "#e4899a")}
+                            {renderNavItem('compliments', isHomePage ? '#compliments' : withBlogLanguage('/#compliments', blogLanguage), faQuoteRight, 'Compliments', "#1ad1ee")}
                         </ul>
                         {/* Auth button pushed to the right */}
                         <div className="ms-auto">
