@@ -4,13 +4,15 @@ import React, {useEffect, useRef, useState} from "react";
 import Image from "next/image";
 import {
     birthday, company, email, gender,
-    getAge, jobTitle, linkedin, name,
+    getAge, linkedin, name,
 } from "../../../resolvers/profileResolver";
 import {hashText, seededFloat, seededNumber, VIBRANT_COLORS} from "../../../util/GenArtUtil";
 import fisIcon      from "./images/fis.png";
 import emailIcon    from "./images/email.png";
 import linkedinIcon from "./images/linkedin.png";
 import SectionHeader from "../../common/SectionHeader";
+import {DEFAULT_BLOG_LANGUAGE} from "../../../lib/blog/language";
+import {getHomeCopy} from "../../../lib/home/content";
 
 // Solar system planets — relative sizes and orbital parameters
 const PLANETS = [
@@ -71,9 +73,9 @@ const ATOM_MATERIAL_ICONS = {
 };
 
 const IDE_ACTIONS = [
-    { id: "run", label: "Run", icon: "run" },
-    { id: "debug", label: "Debug", icon: "debug" },
-    { id: "reset", label: "Reset", icon: "reset" },
+    { id: "run", icon: "run" },
+    { id: "debug", icon: "debug" },
+    { id: "reset", icon: "reset" },
 ];
 
 const BRANCHES = ["main", "develop", "feature/build-person"];
@@ -112,13 +114,13 @@ function AtomMaterialIcon({name: iconName}) {
     );
 }
 
-function getConsoleMessage(activity, gitState, branch) {
-    if (activity === "run") return "Run complete: ProfileBuilder emitted a procedural avatar from the code graph.";
-    if (activity === "debug") return "Debugger isolated a logic artifact near addInterests(); inspecting the signal.";
-    if (activity === "branch") return `Checked out ${branch}. Editor chrome updated.`;
-    if (gitState === "committed") return `Committed ${COMMIT_HASH}: build person profile.`;
-    if (gitState === "pushed") return `Commit ${COMMIT_HASH} successfully pushed into remote origin/${branch}.`;
-    return "Working tree changed: setJob upgraded from II to Senior.";
+function getConsoleMessage(copy, activity, gitState, branch) {
+    if (activity === "run") return copy.consoleMessages.run;
+    if (activity === "debug") return copy.consoleMessages.debug;
+    if (activity === "branch") return copy.consoleMessages.branch(branch);
+    if (gitState === "committed") return copy.consoleMessages.committed;
+    if (gitState === "pushed") return copy.consoleMessages.pushed(branch);
+    return copy.consoleMessages.dirty;
 }
 
 function OrbitalSystem() {
@@ -549,9 +551,11 @@ function IntroActionEffect({activity, seed}) {
     return null;
 }
 
-function IntroCodeBlock({ageState, activity, gitState, showDiff}) {
+function IntroCodeBlock({ageState, activity, gitState, showDiff, copy}) {
+    const [primaryInterest, secondaryInterest] = copy.code.interests;
+
     return (
-        <pre className={`intro-code-block is-${activity} is-git-${gitState}`} aria-label="Profile builder code">
+        <pre className={`intro-code-block is-${activity} is-git-${gitState}`} aria-label={copy.profileBuilderCode}>
             <code>
                 <CodeLine lineNumber={1}>
                     <span className="code-class">PersonBuilder</span>
@@ -561,26 +565,26 @@ function IntroCodeBlock({ageState, activity, gitState, showDiff}) {
                 <CodeLine lineNumber={4} indent={1}>.<span className="code-method">setGender</span>(<span className="code-class">Gender</span>.<span className="code-constant">{gender.toUpperCase()}</span>)</CodeLine>
                 {showDiff ? (
                     <>
-                        <CodeLine lineNumber={5} indent={1} variant="removed">.<span className="code-method">setJob</span>(<span className="code-string">&quot;Software Engineer II&quot;</span>)</CodeLine>
-                        <CodeLine lineNumber={5} indent={1} variant="added">.<span className="code-method">setJob</span>(<span className="code-string">&quot;{jobTitle}&quot;</span>)</CodeLine>
+                        <CodeLine lineNumber={5} indent={1} variant="removed">.<span className="code-method">setJob</span>(<span className="code-string">&quot;{copy.code.previousJobTitle}&quot;</span>)</CodeLine>
+                        <CodeLine lineNumber={5} indent={1} variant="added">.<span className="code-method">setJob</span>(<span className="code-string">&quot;{copy.code.currentJobTitle}&quot;</span>)</CodeLine>
                     </>
                 ) : (
-                    <CodeLine lineNumber={5} indent={1}>.<span className="code-method">setJob</span>(<span className="code-string">&quot;{jobTitle}&quot;</span>)</CodeLine>
+                    <CodeLine lineNumber={5} indent={1}>.<span className="code-method">setJob</span>(<span className="code-string">&quot;{copy.code.currentJobTitle}&quot;</span>)</CodeLine>
                 )}
                 <CodeLine lineNumber={6} indent={1}>.<span className="code-method">isAppleFan</span>(<span className="code-keyword">true</span>)</CodeLine>
                 <CodeLine lineNumber={7} indent={1}>.<span className="code-method">addInterests</span>(</CodeLine>
-                <CodeLine lineNumber={8} indent={2} className="is-debug-target"><span className="code-class">List</span>.<span className="code-method">of</span>(<span className="code-string">&quot;Coding&quot;</span>, <span className="code-string">&quot;Gym&quot;</span>)</CodeLine>
+                <CodeLine lineNumber={8} indent={2} className="is-debug-target"><span className="code-class">List</span>.<span className="code-method">of</span>(<span className="code-string">&quot;{primaryInterest}&quot;</span>, <span className="code-string">&quot;{secondaryInterest}&quot;</span>)</CodeLine>
                 <CodeLine lineNumber={9} indent={1}>)</CodeLine>
                 <CodeLine lineNumber={10} indent={1}>.<span className="code-method">addEducation</span>(</CodeLine>
                 <CodeLine lineNumber={11} indent={2}><span className="code-keyword">new</span> <span className="code-class">Degree</span>(</CodeLine>
-                <CodeLine lineNumber={12} indent={3}><span className="code-string">&quot;B.S. in Computer Science&quot;</span>,</CodeLine>
-                <CodeLine lineNumber={13} indent={3}><span className="code-string">&quot;CSU, Columbus, GA&quot;</span>,</CodeLine>
-                <CodeLine lineNumber={14} indent={3}><span className="code-string">&quot;May 15th, 2020&quot;</span></CodeLine>
+                <CodeLine lineNumber={12} indent={3}><span className="code-string">&quot;{copy.code.bachelorDegree}&quot;</span>,</CodeLine>
+                <CodeLine lineNumber={13} indent={3}><span className="code-string">&quot;{copy.code.school}&quot;</span>,</CodeLine>
+                <CodeLine lineNumber={14} indent={3}><span className="code-string">&quot;{copy.code.bachelorDate}&quot;</span></CodeLine>
                 <CodeLine lineNumber={15} indent={2}>),</CodeLine>
                 <CodeLine lineNumber={16} indent={2}><span className="code-keyword">new</span> <span className="code-class">Degree</span>(</CodeLine>
-                <CodeLine lineNumber={17} indent={3}><span className="code-string">&quot;M.S. in Computer Science&quot;</span>,</CodeLine>
-                <CodeLine lineNumber={18} indent={3}><span className="code-string">&quot;CSU, Columbus, GA&quot;</span>,</CodeLine>
-                <CodeLine lineNumber={19} indent={3}><span className="code-string">&quot;Aug 4th, 2021&quot;</span></CodeLine>
+                <CodeLine lineNumber={17} indent={3}><span className="code-string">&quot;{copy.code.masterDegree}&quot;</span>,</CodeLine>
+                <CodeLine lineNumber={18} indent={3}><span className="code-string">&quot;{copy.code.school}&quot;</span>,</CodeLine>
+                <CodeLine lineNumber={19} indent={3}><span className="code-string">&quot;{copy.code.masterDate}&quot;</span></CodeLine>
                 <CodeLine lineNumber={20} indent={2}>)</CodeLine>
                 <CodeLine lineNumber={21} indent={1}>)</CodeLine>
                 <CodeLine lineNumber={22} indent={1} className="is-build-line">.<span className="code-method">build</span>();</CodeLine>
@@ -589,7 +593,8 @@ function IntroCodeBlock({ageState, activity, gitState, showDiff}) {
     );
 }
 
-const Intro = () => {
+const Intro = ({language = DEFAULT_BLOG_LANGUAGE}) => {
+    const copy = getHomeCopy(language);
     const [ageState, setAgeState] = useState("0.000000000");
     const [activity, setActivity] = useState("idle");
     const [gitState, setGitState] = useState("dirty");
@@ -604,7 +609,7 @@ const Intro = () => {
     }, []);
 
     const branch = BRANCHES[branchIndex];
-    const consoleMessage = getConsoleMessage(activity, gitState, branch);
+    const consoleMessage = getConsoleMessage(copy, activity, gitState, branch);
     const diffDelta = showDiff ? 2 : 0;
 
     function handleIdeAction(actionId) {
@@ -642,7 +647,7 @@ const Intro = () => {
 
     return (
         <div id="about">
-            <SectionHeader eyebrow="Profile" title="About Me" sectionId="about" />
+            <SectionHeader eyebrow={copy.profileEyebrow} title={copy.profileTitle} sectionId="about" />
 
             <div className="mt-5 intro-mac-window">
                 <div className="row g-0 p-0 intro-astronomy-body">
@@ -662,7 +667,7 @@ const Intro = () => {
                             <OrbitalSystem />
 
                             <h2 className="intro-profile-name fw-bold mb-0">{name}</h2>
-                            <h4 className="text-secondary my-0">{jobTitle}</h4>
+                            <h4 className="text-secondary my-0">{copy.profileJobTitle}</h4>
 
                             <div className="text-start d-inline-block">
                                 <a className="text-secondary pt-1 h6 text-decoration-none d-block"
@@ -686,26 +691,30 @@ const Intro = () => {
 
                     {/* RIGHT — interactive IDE panel */}
                     <div className={`col-md-7 col-sm-12 intro-code-panel is-${activity} is-git-${gitState}`}>
-                        <div className="intro-ide-toolbar" role="toolbar" aria-label="Profile builder actions">
+                        <div className="intro-ide-toolbar" role="toolbar" aria-label={copy.profileBuilderActions}>
                             <div className="intro-ide-action-group">
-                                {IDE_ACTIONS.map(action => (
+                                {IDE_ACTIONS.map(action => {
+                                    const label = copy.ideActions[action.id];
+
+                                    return (
                                     <button
                                         key={action.id}
                                         type="button"
                                         className={`intro-ide-button ${activity === action.id ? "is-active" : ""}`}
                                         aria-pressed={activity === action.id}
-                                        title={action.label}
+                                        title={label}
                                         onClick={() => handleIdeAction(action.id)}
                                     >
                                         <AtomMaterialIcon name={action.icon} />
-                                        <span>{action.label}</span>
+                                        <span>{label}</span>
                                     </button>
-                                ))}
+                                    );
+                                })}
                             </div>
 
                             <div
                                 className="intro-ide-file-tab"
-                                aria-label="Open file ProfileBuilder.java"
+                                aria-label={copy.openProfileBuilderFile}
                             >
                                 <AtomMaterialIcon name="java" />
                                 <span>ProfileBuilder.java</span>
@@ -713,7 +722,7 @@ const Intro = () => {
                         </div>
 
                         <div className="intro-editor-shell">
-                            <IntroCodeBlock ageState={ageState} activity={activity} gitState={gitState} showDiff={showDiff} />
+                            <IntroCodeBlock ageState={ageState} activity={activity} gitState={gitState} showDiff={showDiff} copy={copy} />
 
                             <IntroActionEffect key={`${activity}-${actionSeed}`} activity={activity} seed={actionSeed}/>
 
@@ -722,7 +731,7 @@ const Intro = () => {
                             </div>
                         </div>
 
-                        <div className="intro-git-bar" aria-label="Git controls">
+                        <div className="intro-git-bar" aria-label={copy.gitControls}>
                             <div className={`intro-branch-menu ${branchOpen ? "is-open" : ""}`}>
                                 <button
                                     type="button"
@@ -734,7 +743,7 @@ const Intro = () => {
                                     <span>{branch}</span>
                                 </button>
 
-                                <div className="intro-branch-popover" aria-label="Branches">
+                                <div className="intro-branch-popover" aria-label={copy.branches}>
                                     {BRANCHES.map((branchName, index) => (
                                         <button
                                             key={branchName}
@@ -749,24 +758,24 @@ const Intro = () => {
                                 </div>
                             </div>
 
-                            <div className="intro-git-delta" aria-label={`${diffDelta} changed lines`}>
+                            <div className="intro-git-delta" aria-label={copy.changedLines(diffDelta)}>
                                 <span className="intro-git-delta-total">Δ {diffDelta}</span>
                                 <span className="intro-git-delta-added">+{showDiff ? 1 : 0}</span>
                                 <span className="intro-git-delta-removed">-{showDiff ? 1 : 0}</span>
                             </div>
 
                             <div className="intro-git-status-text" aria-live="polite">
-                                {gitState === "pushed" ? `Pushed ${COMMIT_HASH} to origin/${branch}` : showDiff ? "setJob() updated" : `commit ${COMMIT_HASH}`}
+                                {gitState === "pushed" ? copy.gitStatusPushed(branch) : showDiff ? copy.gitStatusChanged : copy.gitStatusCommitted}
                             </div>
 
                             <button type="button" className="intro-git-action" onClick={commitChanges}>
                                 <AtomMaterialIcon name="commit" />
-                                <span>Commit</span>
+                                <span>{copy.ideActions.commit}</span>
                             </button>
 
                             <button type="button" className="intro-git-action" onClick={pushChanges}>
                                 <AtomMaterialIcon name="push" />
-                                <span>Push</span>
+                                <span>{copy.ideActions.push}</span>
                             </button>
                         </div>
                     </div>

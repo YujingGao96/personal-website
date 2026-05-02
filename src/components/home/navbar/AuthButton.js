@@ -6,13 +6,16 @@ import {createPortal} from "react-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleUser, faRightToBracket, faUserShield, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {useAuth, useUser, SignOutButton, SignIn} from "@clerk/nextjs";
+import {DEFAULT_BLOG_LANGUAGE} from "../../../lib/blog/language";
+import {getHomeCopy} from "../../../lib/home/content";
 
-export default function AuthButton() {
+export default function AuthButton({language = DEFAULT_BLOG_LANGUAGE}) {
     const {isSignedIn, isLoaded} = useAuth();
     const {user} = useUser();
     const wrapperRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
     const [signInFrame, setSignInFrame] = useState(null);
+    const copy = getHomeCopy(language);
 
     useEffect(() => {
         const closeMenu = (event) => {
@@ -64,7 +67,7 @@ export default function AuthButton() {
             <div className="nav-auth-modal-layer">
                 <div className="nav-auth-modal-backdrop" onClick={() => setSignInFrame(null)} />
                 <section
-                    aria-label="Sign in"
+                    aria-label={copy.authSignIn}
                     aria-modal="true"
                     className="nav-auth-modal-panel"
                     role="dialog"
@@ -76,7 +79,7 @@ export default function AuthButton() {
                     }}
                 >
                     <button
-                        aria-label="Close sign-in dialog"
+                        aria-label={copy.authCloseSignIn}
                         className="nav-auth-modal-close"
                         onClick={() => setSignInFrame(null)}
                         type="button"
@@ -102,7 +105,7 @@ export default function AuthButton() {
                     className="nav-auth-avatar-btn nav-row"
                     onClick={() => setIsOpen((current) => !current)}
                     type="button"
-                    title={`Signed in as ${user.emailAddresses?.[0]?.emailAddress || "user"}`}
+                    title={copy.authSignedInAs(user.emailAddresses?.[0]?.emailAddress)}
                 >
                     <span className="nav-auth-avatar-frame">
                         {user.imageUrl ? (
@@ -116,17 +119,17 @@ export default function AuthButton() {
                             <span className="nav-auth-initials">{initials}</span>
                         )}
                     </span>
-                    <span className="nav-auth-label">Account</span>
+                    <span className="nav-auth-label">{copy.authAccount}</span>
                 </button>
                 <div className="nav-auth-dropdown" role="menu">
                     <Link href="/admin/blog" className="nav-auth-dropdown-item" onClick={() => setIsOpen(false)} role="menuitem">
                         <FontAwesomeIcon icon={faUserShield} fixedWidth/>
-                        Admin
+                        {copy.authAdmin}
                     </Link>
                     <SignOutButton>
                         <button className="nav-auth-dropdown-item" type="button" role="menuitem">
                             <FontAwesomeIcon icon={faRightToBracket} fixedWidth style={{transform: "scaleX(-1)"}}/>
-                            Sign Out
+                            {copy.authSignOut}
                         </button>
                     </SignOutButton>
                 </div>
@@ -137,7 +140,7 @@ export default function AuthButton() {
 
     return (
         <>
-            <button className="nav-auth-signin-item" type="button" aria-label="Sign in" onClick={openSignIn}>
+            <button className="nav-auth-signin-item" type="button" aria-label={copy.authSignIn} onClick={openSignIn}>
                 <FontAwesomeIcon icon={faCircleUser} size="xl"/>
             </button>
             {signInDialog}

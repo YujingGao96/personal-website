@@ -2,6 +2,7 @@ export const DEFAULT_BLOG_LANGUAGE = "en";
 export const BLOG_LANGUAGE_COOKIE = "blog-language";
 export const BLOG_LANGUAGE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 export const BLOG_LANGUAGE_EVENT = "blog-language-change";
+export const BLOG_LANGUAGE_PARAM = "lang";
 
 export const BLOG_LANGUAGES = [
     {code: "en", label: "English", shortLabel: "EN", locale: "en-US"},
@@ -22,7 +23,7 @@ const COPY = {
         blogDescription: "Notes on software, cloud systems, and the things I am learning.",
         blogEyebrow: "Random Thoughts",
         blogIndexTitle: "Blog",
-        blogLanguage: "Blog language",
+        blogLanguage: "Language",
         clearFiltersHint: "Try a different keyword or clear the filters",
         cursorFxOff: "Cursor Effects: OFF",
         cursorFxOn: "Cursor Effects: ON",
@@ -46,7 +47,7 @@ const COPY = {
         blogDescription: "关于软件、云系统，以及我正在学习的事情。",
         blogEyebrow: "随想",
         blogIndexTitle: "博客",
-        blogLanguage: "博客语言",
+        blogLanguage: "语言",
         clearFiltersHint: "换一个关键词，或清除筛选条件",
         cursorFxOff: "光标效果：关闭",
         cursorFxOn: "光标效果：开启",
@@ -76,6 +77,13 @@ export function normalizeBlogLanguage(value) {
         : DEFAULT_BLOG_LANGUAGE;
 }
 
+export function getSupportedBlogLanguage(value) {
+    const normalized = String(value || "").trim().toLowerCase();
+    const aliased = LANGUAGE_ALIASES[normalized] || normalized;
+
+    return BLOG_LANGUAGES.some((language) => language.code === aliased) ? aliased : "";
+}
+
 export function getBlogLanguage(language) {
     const code = normalizeBlogLanguage(language);
     return BLOG_LANGUAGES.find((item) => item.code === code) || BLOG_LANGUAGES[0];
@@ -83,4 +91,15 @@ export function getBlogLanguage(language) {
 
 export function getBlogCopy(language) {
     return COPY[normalizeBlogLanguage(language)] || COPY[DEFAULT_BLOG_LANGUAGE];
+}
+
+export function withBlogLanguage(href, language) {
+    const [pathAndSearch, hash = ""] = String(href || "/").split("#");
+    const [path, search = ""] = pathAndSearch.split("?");
+    const params = new URLSearchParams(search);
+
+    params.set(BLOG_LANGUAGE_PARAM, normalizeBlogLanguage(language));
+
+    const query = params.toString();
+    return `${path}${query ? `?${query}` : ""}${hash ? `#${hash}` : ""}`;
 }

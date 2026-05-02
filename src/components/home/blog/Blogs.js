@@ -5,17 +5,21 @@ import {faArrowRight} from "@fortawesome/free-solid-svg-icons";
 import BlogCard from "./BlogCard";
 import SectionHeader from "../../common/SectionHeader";
 import {getAllPosts} from "../../../lib/blog/blobStore";
-import {DEFAULT_BLOG_LANGUAGE, getBlogCopy} from "../../../lib/blog/language";
+import {DEFAULT_BLOG_LANGUAGE, getBlogCopy, withBlogLanguage} from "../../../lib/blog/language";
 import {rankPostsByPopularity} from "../../../lib/blog/popularity";
 
 const Blogs = async ({language = DEFAULT_BLOG_LANGUAGE}) => {
     const copy = getBlogCopy(language);
     const posts = await getAllPosts({language});
-    const rankedPosts = await rankPostsByPopularity(posts, 6);
-    const latestPost = posts[0];
-    const popularPosts = latestPost && !rankedPosts.some((post) => post.slug === latestPost.slug)
-        ? [latestPost, ...rankedPosts].slice(0, 6)
-        : rankedPosts;
+    const rankedPosts = await rankPostsByPopularity(posts, posts.length);
+    const rankedPostsBySlug = new Map(rankedPosts.map((post) => [post.slug, post]));
+    const latestPost = posts[0] ? (rankedPostsBySlug.get(posts[0].slug) || posts[0]) : null;
+    const popularPosts = latestPost
+        ? [
+            latestPost,
+            ...rankedPosts.filter((post) => post.slug !== latestPost.slug).slice(0, 4),
+        ]
+        : rankedPosts.slice(0, 4);
     const latestSlug = latestPost?.slug || "";
 
     return (
@@ -36,7 +40,7 @@ const Blogs = async ({language = DEFAULT_BLOG_LANGUAGE}) => {
                 <p className="blog-home-empty">{copy.homeBlogEmpty}</p>
             )}
             <div className="blog-home-heading">
-                <Link href="/blog" className="blog-home-link">
+                <Link href={withBlogLanguage("/blog", language)} className="blog-home-link">
                     <span>{copy.viewAllPosts}</span>
                     <span className="blog-home-link-icon" aria-hidden="true">
                         <FontAwesomeIcon icon={faArrowRight}/>

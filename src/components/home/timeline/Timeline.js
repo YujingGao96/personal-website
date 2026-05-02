@@ -4,14 +4,8 @@ import React from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import GeneratedTimelineArt from "./GeneratedTimelineArt";
 import SectionHeader from "../../common/SectionHeader";
-import {timelineElements} from "../../../resolvers/timelineInfoResolver";
-
-const TYPE_LABELS = {
-    work: "Work",
-    education: "Education",
-    teaching: "Teaching",
-    award: "Milestone",
-};
+import {DEFAULT_BLOG_LANGUAGE} from "../../../lib/blog/language";
+import {getHomeCopy, getTimelineElements} from "../../../lib/home/content";
 
 function TimelineNode({entry}) {
     return (
@@ -24,8 +18,9 @@ function TimelineNode({entry}) {
     );
 }
 
-function TimelineCard({entry, index}) {
+function TimelineCard({entry, index, copy}) {
     const isRight = index % 2 === 0;
+    const typeLabel = copy.timelineTypes[entry.type] || copy.timelineTypes.fallback;
 
     return (
         <article className={`timeline-signal-card ${isRight ? "timeline-card-right" : "timeline-card-left"}`} style={{"--timeline-accent": `hsl(${entry.hue} 82% 64%)`}}>
@@ -35,7 +30,7 @@ function TimelineCard({entry, index}) {
             </div>
             <div className="timeline-card-body">
                 <div className="timeline-card-meta">
-                    <span className="timeline-type-pill">{TYPE_LABELS[entry.type] || "Event"}</span>
+                    <span className="timeline-type-pill">{typeLabel}</span>
                     <span className="timeline-period">{entry.period}</span>
                 </div>
                 <h3>{entry.title}</h3>
@@ -60,19 +55,22 @@ function TimelineCard({entry, index}) {
     );
 }
 
-const TimeLine = () => {
+const TimeLine = ({language = DEFAULT_BLOG_LANGUAGE}) => {
+    const copy = getHomeCopy(language);
+    const timelineElements = getTimelineElements(language);
+
     return (
         <div id="timeline" className="timeline-section">
-            <SectionHeader eyebrow="Life Journey" title="Timeline" sectionId="timeline" />
-            <div className="timeline-rail" aria-label="Career and education timeline">
+            <SectionHeader eyebrow={copy.timelineEyebrow} title={copy.timelineTitle} sectionId="timeline" />
+            <div className="timeline-rail" aria-label={copy.timelineAria}>
                 {timelineElements.map((entry, index) => (
                     <div className="timeline-row" key={entry.id}>
                         <div className="timeline-slot timeline-slot-left">
-                            {index % 2 === 1 && <TimelineCard entry={entry} index={index}/>}
+                            {index % 2 === 1 && <TimelineCard entry={entry} index={index} copy={copy}/>}
                         </div>
                         <TimelineNode entry={entry}/>
                         <div className="timeline-slot timeline-slot-right">
-                            {index % 2 === 0 && <TimelineCard entry={entry} index={index}/>}
+                            {index % 2 === 0 && <TimelineCard entry={entry} index={index} copy={copy}/>}
                         </div>
                     </div>
                 ))}

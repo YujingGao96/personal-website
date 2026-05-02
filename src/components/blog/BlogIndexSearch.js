@@ -4,7 +4,7 @@ import Link from "next/link";
 import {useEffect, useMemo, useRef, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
-import {DEFAULT_BLOG_LANGUAGE, getBlogCopy, getBlogLanguage} from "../../lib/blog/language";
+import {DEFAULT_BLOG_LANGUAGE, getBlogCopy, getBlogLanguage, withBlogLanguage} from "../../lib/blog/language";
 
 const LABEL_COLORS = {
     "Cloud": "#3da8a6",
@@ -185,7 +185,7 @@ export default function BlogIndexSearch({posts, language = DEFAULT_BLOG_LANGUAGE
                             key={post.slug}
                             style={{animationDelay: `${index * 60}ms`}}
                         >
-                            <Link href={`/blog/${post.slug}`}>
+                            <Link href={withBlogLanguage(`/blog/${post.slug}`, language)}>
                                 <div className="blog-list-meta-row">
                                     <span className="blog-list-meta">
                                         {post.publishedAt

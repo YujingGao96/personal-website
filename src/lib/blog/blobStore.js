@@ -19,6 +19,8 @@ const emptyIndex = {
     updatedAt: "",
     posts: [],
 };
+const BLOG_READ_CACHE_MS = 5 * 60 * 1000;
+const blobTextCache = new Map();
 
 async function streamToText(stream) {
     if (!stream) {
@@ -44,12 +46,28 @@ function getPostPath(slug) {
     return `${BLOG_POSTS_PREFIX}${slug}.md`;
 }
 
-async function readTextBlob(path) {
+function clearBlobTextCache(path = "") {
+    if (path) {
+        blobTextCache.delete(path);
+        return;
+    }
+
+    blobTextCache.clear();
+}
+
+async function readTextBlob(path, {cache = true} = {}) {
     assertBlobConfigured();
+
+    const cached = blobTextCache.get(path);
+    const now = Date.now();
+
+    if (cache && cached && cached.expiresAt > now) {
+        return cached.text;
+    }
 
     const result = await get(path, {
         access: BLOG_CONTENT_ACCESS,
-        useCache: false,
+        useCache: cache,
         token: getContentBlobToken(),
     });
 
@@ -57,19 +75,33 @@ async function readTextBlob(path) {
         return null;
     }
 
-    return streamToText(result.stream);
+    const text = await streamToText(result.stream);
+
+    if (cache) {
+        blobTextCache.set(path, {
+            text,
+            expiresAt: now + BLOG_READ_CACHE_MS,
+        });
+    }
+
+    return text;
 }
 
 async function writeTextBlob(path, body, contentType = "text/plain; charset=utf-8") {
     assertBlobConfigured();
 
-    return put(path, body, {
+    const result = await put(path, body, {
         access: BLOG_CONTENT_ACCESS,
         allowOverwrite: true,
         contentType,
         cacheControlMaxAge: 60,
         token: getContentBlobToken(),
     });
+
+    clearBlobTextCache(path);
+    clearBlobTextCache(BLOG_INDEX_PATH);
+
+    return result;
 }
 
 function mergePosts(localPosts, blobPosts) {
@@ -101,7 +133,7 @@ export async function getBlogIndex({
     }
 
     try {
-        const text = await readTextBlob(BLOG_INDEX_PATH);
+        const text = await readTextBlob(BLOG_INDEX_PATH, {cache: !includeDrafts});
         const index = text ? JSON.parse(text) : emptyIndex;
         const blobPosts = Array.isArray(index.posts) ? index.posts : [];
         const posts = mergePosts(localPosts, blobPosts);
@@ -149,7 +181,7 @@ export async function getPost(slug, {
     let post = null;
 
     if (hasBlobConfig()) {
-        const text = await readTextBlob(getPostPath(safeSlug));
+        const text = await readTextBlob(getPostPath(safeSlug), {cache: !includeDrafts});
 
         if (text) {
             post = parsePostMarkdown(text, safeSlug);
@@ -182,7 +214,7 @@ async function regenerateIndexFromBlobs() {
             continue;
         }
 
-        const source = await readTextBlob(blob.pathname);
+        const source = await readTextBlob(blob.pathname, {cache: false});
 
         if (!source) {
             continue;
@@ -200,6 +232,7 @@ async function regenerateIndexFromBlobs() {
     };
 
     await writeTextBlob(BLOG_INDEX_PATH, JSON.stringify(index, null, 2) + "\n", "application/json; charset=utf-8");
+    clearBlobTextCache();
 
     return index;
 }
@@ -225,6 +258,7 @@ export async function savePost({metadata, content, previousSlug = ""}) {
 
     if (safePreviousSlug && safePreviousSlug !== normalized.slug) {
         await del(getPostPath(safePreviousSlug), {token: getContentBlobToken()}).catch(() => undefined);
+        clearBlobTextCache(getPostPath(safePreviousSlug));
     }
 
     await regenerateIndexFromBlobs();
@@ -245,6 +279,7 @@ export async function deletePost(slug) {
     }
 
     await del(getPostPath(safeSlug), {token: getContentBlobToken()});
+    clearBlobTextCache(getPostPath(safeSlug));
     await regenerateIndexFromBlobs();
 }
 
