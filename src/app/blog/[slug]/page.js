@@ -43,7 +43,7 @@ export default async function BlogArticleRoute({params, searchParams}) {
     return (
         <main className="blog-article-shell">
             <ViewTracker slug={post.metadata.slug}/>
-            <article className="blog-article">
+            <article className={`blog-article blog-language-${post.metadata.language}`}>
                 <div className="blog-article-topbar">
                     <Link href={withBlogLanguage("/blog", language)} className="blog-back-link">
                         &larr; {copy.articleBack}

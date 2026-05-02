@@ -10,6 +10,7 @@ import {faUser, faFileCode, faStream, faQuoteRight, faPaperPlane} from "@fortawe
 import logo from "./logo.png";
 import {BLOG_LANGUAGE_COOKIE, BLOG_LANGUAGE_EVENT, BLOG_LANGUAGE_PARAM, DEFAULT_BLOG_LANGUAGE, getSupportedBlogLanguage, normalizeBlogLanguage, withBlogLanguage} from "../../../lib/blog/language";
 import {getClientCookie} from "../../../lib/clientPreferenceCookie";
+import {getHomeCopy} from "../../../lib/home/content";
 
 const AuthButton = dynamic(() => import("./AuthButton"), {ssr: false});
 
@@ -20,8 +21,9 @@ const NavBar = () => {
     const [blogLanguage, setBlogLanguage] = useState(DEFAULT_BLOG_LANGUAGE);
     const isHomePage = pathname === "/";
     const activeTab = pathname?.startsWith("/blog") || pathname?.startsWith("/admin/blog") ? "blogs" : currentTab;
+    const copy = getHomeCopy(blogLanguage);
 
-    const currentSelectJSX = <span className="visually-hidden">(current)</span>;
+    const currentSelectJSX = <span className="visually-hidden">{copy.navCurrent}</span>;
 
     useEffect(() => {
         const readLanguage = () => {
@@ -79,7 +81,7 @@ const NavBar = () => {
                         type="button"
                         aria-controls="navbarNav"
                         aria-expanded={showMenu ? "true" : "false"}
-                        aria-label="Toggle navigation"
+                        aria-label={copy.navToggle}
                         onClick={() => setShowMenu(!showMenu)}
                     >
                         <span className="hamburger-box">
@@ -89,15 +91,15 @@ const NavBar = () => {
 
                     <div className={`collapse navbar-collapse ${showMenu ? "show" : ""}`} id="navbarNav">
                         <ul className="navbar-nav">
-                            {renderNavItem('about', isHomePage ? '#about' : withBlogLanguage('/#about', blogLanguage), faUser, 'About', "#6c74ab")}
-                            {renderNavItem('blogs', isHomePage ? '#blogs' : withBlogLanguage('/blog', blogLanguage), faPaperPlane, 'Blogs', "#b593e1")}
-                            {renderNavItem('timeline', isHomePage ? '#timeline' : withBlogLanguage('/#timeline', blogLanguage), faStream, 'Timeline',"#f49f22")}
-                            {renderNavItem('projects', isHomePage ? '#projects' : withBlogLanguage('/#projects', blogLanguage), faFileCode, 'Projects', "#e4899a")}
-                            {renderNavItem('compliments', isHomePage ? '#compliments' : withBlogLanguage('/#compliments', blogLanguage), faQuoteRight, 'Compliments', "#1ad1ee")}
+                            {renderNavItem('about', isHomePage ? '#about' : withBlogLanguage('/#about', blogLanguage), faUser, copy.navAbout, "#6c74ab")}
+                            {renderNavItem('blogs', isHomePage ? '#blogs' : withBlogLanguage('/blog', blogLanguage), faPaperPlane, copy.navBlogs, "#b593e1")}
+                            {renderNavItem('timeline', isHomePage ? '#timeline' : withBlogLanguage('/#timeline', blogLanguage), faStream, copy.navTimeline,"#f49f22")}
+                            {renderNavItem('projects', isHomePage ? '#projects' : withBlogLanguage('/#projects', blogLanguage), faFileCode, copy.navProjects, "#e4899a")}
+                            {renderNavItem('compliments', isHomePage ? '#compliments' : withBlogLanguage('/#compliments', blogLanguage), faQuoteRight, copy.navCompliments, "#1ad1ee")}
                         </ul>
                         {/* Auth button pushed to the right */}
                         <div className="ms-auto">
-                            <AuthButton/>
+                            <AuthButton language={blogLanguage}/>
                         </div>
                     </div>
                 </div>

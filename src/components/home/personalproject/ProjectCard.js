@@ -54,7 +54,7 @@ function GeneratedProjectCover({project, palette}) {
     );
 }
 
-const ProjectCard = ({project, index}) => {
+const ProjectCard = ({project, index, ctaLabel = "Explore Project"}) => {
     const cardRef = useRef(null);
     const shellRef = useRef(null);
     const [visible, setVisible] = useState(false);
@@ -136,7 +136,7 @@ const ProjectCard = ({project, index}) => {
                         ))}
                     </div>
                     <a target="_blank" rel="noopener noreferrer" href={project.link} className="project-link">
-                        Explore Project
+                        {ctaLabel}
                         <FontAwesomeIcon icon={faChevronRight}/>
                     </a>
                 </div>

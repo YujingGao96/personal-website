@@ -4,40 +4,9 @@ import {useCallback, useEffect, useRef, useState} from "react";
 import GeneratedSigil from "../../common/GeneratedSigil";
 import SectionHeader from "../../common/SectionHeader";
 import {hashText} from "../../../util/GenArtUtil";
+import {DEFAULT_BLOG_LANGUAGE} from "../../../lib/blog/language";
+import {getCompliments, getHomeCopy} from "../../../lib/home/content";
 import "./Compliments.css";
-
-const COMPLIMENTS = [
-    {
-        name: "Lee Holmes",
-        title: "Vice President",
-        company: "FIS",
-        quote: "Thank you for guiding and mentoring our interns. With your coaching, they have accomplished great things. I am genuinely grateful for all your wisdom and advice that you have shared with all our team members, including our interns.",
-    },
-    {
-        name: "Larry Cline",
-        title: "Manager",
-        company: "Midland Farmers Market",
-        quote: "I am beyond grateful for your dedication to this project to make it right. I would be happy to help if you ever need a letter of recommendation, as I'm sure any employer would be pleased to know what kind of a person he's considering.",
-    },
-    {
-        name: "Rebecca Hagues",
-        title: "ESOL Teacher",
-        company: "Shaw High School",
-        quote: "Yujing, I am so incredibly proud of you! Your hard work and determination to succeed inspire everyone around you! I am genuinely excited and eager to see the amazing things you will accomplish in the future. Keep being awesome!",
-    },
-    {
-        name: "Rania Hodhod",
-        title: "Assistant CS Professor",
-        company: "Columbus State University",
-        quote: "I want to express my heartfelt gratitude to you for generously offering your time and expertise to support our student, as it will undoubtedly have a significant impact on the professional development of our CS and IT students.",
-    },
-    {
-        name: "Shamim Khan",
-        title: "Professor & Chair of CS Department",
-        company: "Columbus State University",
-        quote: "Your work demonstrates a wonderful example of interdisciplinary work that we always aspire for. This speaks volumes about the calibre of our faculty and students. We won't miss an opportunity to brag about this achievement.",
-    },
-];
 
 const TWO_ROW_THRESHOLD = 6;
 const LOOP_COPIES = 3;
@@ -112,7 +81,7 @@ function ComplimentCard({name, title, company, quote}) {
     );
 }
 
-function MarqueeRow({items, reverse = false, speed = 42}) {
+function MarqueeRow({items, reverse = false, speed = 42, ariaLabel}) {
     const scrollerRef = useRef(null);
     const rafRef = useRef(null);
     const lastInteractionRef = useRef(-AUTO_RESUME_DELAY);
@@ -226,7 +195,7 @@ function MarqueeRow({items, reverse = false, speed = 42}) {
                 onKeyDown={pauseForUserScroll}
                 tabIndex="0"
                 role="region"
-                aria-label="Scrollable compliments"
+                aria-label={ariaLabel}
             >
                 <div className="track">
                     {Array.from({length: LOOP_COPIES}, (_, group) => (
@@ -242,18 +211,20 @@ function MarqueeRow({items, reverse = false, speed = 42}) {
     );
 }
 
-const Compliments = () => {
-    const twoRows = COMPLIMENTS.length >= TWO_ROW_THRESHOLD;
-    const row1 = twoRows ? COMPLIMENTS.slice(0, Math.ceil(COMPLIMENTS.length / 2)) : COMPLIMENTS;
-    const row2 = twoRows ? COMPLIMENTS.slice(Math.ceil(COMPLIMENTS.length / 2)) : [];
+const Compliments = ({language = DEFAULT_BLOG_LANGUAGE}) => {
+    const copy = getHomeCopy(language);
+    const compliments = getCompliments(language);
+    const twoRows = compliments.length >= TWO_ROW_THRESHOLD;
+    const row1 = twoRows ? compliments.slice(0, Math.ceil(compliments.length / 2)) : compliments;
+    const row2 = twoRows ? compliments.slice(Math.ceil(compliments.length / 2)) : [];
 
     return (
         <div id="compliments">
-            <SectionHeader eyebrow="Kind Words" title="Compliments" sectionId="compliments" />
+            <SectionHeader eyebrow={copy.complimentsEyebrow} title={copy.complimentsTitle} sectionId="compliments" />
 
             <div className="compliments-marquee-outer">
-                <MarqueeRow items={row1} speed={44}/>
-                {twoRows && <MarqueeRow items={row2} reverse speed={54}/>}
+                <MarqueeRow items={row1} speed={44} ariaLabel={copy.complimentsAria}/>
+                {twoRows && <MarqueeRow items={row2} reverse speed={54} ariaLabel={copy.complimentsAria}/>}
             </div>
         </div>
     );

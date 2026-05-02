@@ -34,7 +34,7 @@
 
 .blog-page-header h1 {
     color: #fff;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: var(--blog-serif-en);
     font-size: clamp(3rem, 8vw, 4.5rem);
     font-weight: 400;
     line-height: 1;
@@ -349,7 +349,7 @@
 
 .blog-list-item h2 {
     color: rgba(255, 255, 255, 0.9);
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: var(--blog-serif-en);
     font-size: 22px;
     font-weight: 400;
     line-height: 1.25;
@@ -426,7 +426,7 @@
 
 .blog-article-header h1 {
     color: #fff;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: var(--blog-serif-en);
     font-size: clamp(2rem, 6vw, 3rem);
     font-weight: 400;
     line-height: 1.15;
@@ -509,23 +509,40 @@
 
 .blog-article-body {
     color: rgba(255, 248, 237, 0.88);
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: var(--blog-serif-en);
     font-size: clamp(1.05rem, 2.5vw, 1.18rem);
     line-height: 1.86;
+    font-optical-sizing: auto;
 }
 
-.blog-article-body > p:first-of-type::first-letter {
-    color: #fff;
+.blog-lead-paragraph {
+    min-height: 5.2rem;
+}
+
+.blog-dropcap {
+    background:
+        radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.34), transparent 30%),
+        linear-gradient(135deg, rgba(104, 197, 195, 0.28), rgba(181, 147, 225, 0.18));
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 16px 4px 16px 4px;
+    box-shadow:
+        0 14px 34px rgba(0, 0, 0, 0.34),
+        inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    color: #fff8e8;
     float: left;
-    font-size: 4.2rem;
-    line-height: 0.82;
-    padding-right: 0.4rem;
+    font-family: var(--blog-serif-en);
+    font-size: 5.1rem;
+    font-weight: 650;
+    line-height: 0.78;
+    margin: 0.18rem 0.7rem 0.05rem 0;
+    padding: 0.2rem 0.34rem 0.28rem;
+    text-shadow: 0 2px 18px rgba(255, 255, 255, 0.2);
 }
 
 .blog-article-body h2,
 .blog-article-body h3 {
     color: #fff;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: var(--blog-serif-en);
     line-height: 1.16;
     margin-top: 2.5rem;
     margin-bottom: 0.75rem;
@@ -625,8 +642,25 @@
 }
 
 .blog-article-body[lang="zh-Hans"] {
-    font-family: "Songti SC", "Noto Serif SC", "PingFang SC", Georgia, serif;
-    line-height: 2;
+    font-family: var(--blog-serif-zh);
+    font-size: clamp(1.02rem, 2.35vw, 1.14rem);
+    line-height: 2.05;
+}
+
+.blog-article.blog-language-zh .blog-article-header h1,
+.blog-article.blog-language-zh .blog-article-body h2,
+.blog-article.blog-language-zh .blog-article-body h3 {
+    font-family: var(--blog-serif-zh);
+    font-weight: 600;
+}
+
+.blog-article-body[lang="zh-Hans"] .blog-dropcap {
+    font-family: var(--blog-serif-zh);
+    font-size: 3.8rem;
+    font-weight: 700;
+    line-height: 0.95;
+    margin-top: 0.22rem;
+    padding: 0.24rem 0.45rem 0.3rem;
 }
 
 /* Back to Blog link */

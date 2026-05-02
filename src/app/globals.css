@@ -1,5 +1,5 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
-@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&family=Onest:wght@100..900&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800&family=Noto+Serif+SC:wght@400;500;600;700&family=Onest:wght@100..900&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 
 @import "../components/home/home/Home.css";
 @import "../components/home/navbar/NavBar.css";
@@ -23,6 +23,8 @@
         radial-gradient(ellipse at 58% 42%, rgba(181, 147, 225, 0.10), transparent 36%),
         radial-gradient(ellipse at 46% 62%, rgba(244, 159, 34, 0.055), transparent 42%),
         linear-gradient(135deg, #121212 0%, #1e0404 20%, #13031e 45%, #010c00 65%, #1e1001 85%, #121212 100%);
+    --blog-serif-en: "Newsreader", Georgia, "Times New Roman", serif;
+    --blog-serif-zh: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "SimSun", serif;
 }
 
 html {
