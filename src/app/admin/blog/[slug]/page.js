@@ -24,8 +24,8 @@ export default async function EditBlogPostRoute({params}) {
     }
 
     const {slug} = await params;
-    const post = await getPost(slug, {includeDrafts: true});
-    const posts = await getAllPosts({includeDrafts: true});
+    const post = await getPost(slug, {includeDrafts: true, includeLocal: false});
+    const posts = await getAllPosts({includeDrafts: true, includeLocal: false});
 
     if (!post) {
         notFound();

@@ -1,15 +1,19 @@
 import Link from "next/link";
 import {redirect} from "next/navigation";
+import BlogLanguageSelector from "../../../components/blog/BlogLanguageSelector";
 import GeneratedBlogCover, {getBlogLabelColor} from "../../../components/blog/GeneratedBlogCover";
 import MarkdownRenderer from "../../../components/blog/MarkdownRenderer";
 import ViewTracker from "../../../components/blog/ViewTracker";
 import {getPost} from "../../../lib/blog/blobStore";
+import {getBlogCopy, getBlogLanguage} from "../../../lib/blog/language";
+import {getBlogLanguageFromCookies} from "../../../lib/blog/serverLanguage";
 
 export const revalidate = 3600;
 
 export async function generateMetadata({params}) {
     const {slug} = await params;
-    const post = await getPost(slug);
+    const language = await getBlogLanguageFromCookies();
+    const post = await getPost(slug, {language});
 
     if (!post) {
         return {
@@ -25,7 +29,10 @@ export async function generateMetadata({params}) {
 
 export default async function BlogArticleRoute({params}) {
     const {slug} = await params;
-    const post = await getPost(slug);
+    const language = await getBlogLanguageFromCookies();
+    const copy = getBlogCopy(language);
+    const locale = getBlogLanguage(language).locale;
+    const post = await getPost(slug, {language});
 
     if (!post) {
         redirect("/error/404");
@@ -37,9 +44,12 @@ export default async function BlogArticleRoute({params}) {
         <main className="blog-article-shell">
             <ViewTracker slug={post.metadata.slug}/>
             <article className="blog-article">
-                <Link href="/blog" className="blog-back-link">
-                    &larr; Back to Blog
-                </Link>
+                <div className="blog-article-topbar">
+                    <Link href="/blog" className="blog-back-link">
+                        &larr; {copy.articleBack}
+                    </Link>
+                    <BlogLanguageSelector initialLanguage={language} compact/>
+                </div>
 
                 <GeneratedBlogCover post={post.metadata} className="blog-generated-cover"/>
 
@@ -54,16 +64,16 @@ export default async function BlogArticleRoute({params}) {
                     <div className="blog-article-meta">
                         <span>
                             {post.metadata.publishedAt
-                                ? new Date(post.metadata.publishedAt).toLocaleDateString("en-US", {
+                                ? new Date(post.metadata.publishedAt).toLocaleDateString(locale, {
                                     month: "long",
                                     day: "numeric",
                                     year: "numeric",
                                 })
-                                : "Draft"
+                                : copy.draft
                             }
                         </span>
                         <span className="meta-dot"/>
-                        <span>{post.metadata.readingTime} min read</span>
+                        <span>{post.metadata.readingTime} {copy.minRead}</span>
                     </div>
 
                     {labels.length > 0 && (
@@ -92,7 +102,7 @@ export default async function BlogArticleRoute({params}) {
 
                 <hr className="blog-article-divider"/>
 
-                <div className="blog-article-body">
+                <div className="blog-article-body" lang={post.metadata.language === "zh" ? "zh-Hans" : "en"}>
                     <MarkdownRenderer content={post.content}/>
                 </div>
 

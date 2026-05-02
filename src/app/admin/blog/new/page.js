@@ -23,7 +23,7 @@ export default async function NewBlogPostRoute() {
         redirect("/admin/blog");
     }
 
-    const posts = await getAllPosts({includeDrafts: true});
+    const posts = await getAllPosts({includeDrafts: true, includeLocal: false});
 
     return (
         <main className="admin-blog-shell">

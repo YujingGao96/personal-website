@@ -10,7 +10,9 @@ import {
     hasBlobConfig,
     hasPublicBlobConfig,
 } from "./config";
-import {normalizePostMetadata, parsePostMarkdown, serializePostMarkdown, slugify} from "./markdown";
+import {DEFAULT_BLOG_LANGUAGE} from "./language";
+import {getLocalPost, getLocalPosts} from "./localStore";
+import {localizePost, localizePostMetadata, normalizePostMetadata, parsePostMarkdown, serializePostMarkdown, slugify} from "./markdown";
 
 const emptyIndex = {
     version: 1,
@@ -70,28 +72,60 @@ async function writeTextBlob(path, body, contentType = "text/plain; charset=utf-
     });
 }
 
-export async function getBlogIndex({includeDrafts = false} = {}) {
+function mergePosts(localPosts, blobPosts) {
+    const postsBySlug = new Map();
+
+    for (const post of localPosts) {
+        postsBySlug.set(post.slug, post);
+    }
+
+    for (const post of blobPosts) {
+        postsBySlug.set(post.slug, post);
+    }
+
+    return Array.from(postsBySlug.values());
+}
+
+export async function getBlogIndex({
+    includeDrafts = false,
+    includeLocal = true,
+    language = DEFAULT_BLOG_LANGUAGE,
+} = {}) {
+    const localPosts = includeLocal ? await getLocalPosts({includeDrafts}) : [];
+
     if (!hasBlobConfig()) {
-        return emptyIndex;
+        return {
+            ...emptyIndex,
+            posts: localPosts.map((post) => localizePostMetadata(post, language)),
+        };
     }
 
     try {
         const text = await readTextBlob(BLOG_INDEX_PATH);
         const index = text ? JSON.parse(text) : emptyIndex;
-        const posts = Array.isArray(index.posts) ? index.posts : [];
+        const blobPosts = Array.isArray(index.posts) ? index.posts : [];
+        const posts = mergePosts(localPosts, blobPosts);
 
         return {
             ...emptyIndex,
             ...index,
-            posts: includeDrafts ? posts : posts.filter((post) => post.status === BLOG_PUBLIC_STATUS),
+            posts: (includeDrafts ? posts : posts.filter((post) => post.status === BLOG_PUBLIC_STATUS))
+                .map((post) => localizePostMetadata(post, language)),
         };
     } catch {
-        return emptyIndex;
+        return {
+            ...emptyIndex,
+            posts: localPosts.map((post) => localizePostMetadata(post, language)),
+        };
     }
 }
 
-export async function getAllPosts({includeDrafts = false} = {}) {
-    const index = await getBlogIndex({includeDrafts});
+export async function getAllPosts({
+    includeDrafts = false,
+    includeLocal = true,
+    language = DEFAULT_BLOG_LANGUAGE,
+} = {}) {
+    const index = await getBlogIndex({includeDrafts, includeLocal, language});
 
     return [...index.posts].sort((a, b) => {
         const aDate = a.publishedAt || a.updatedAt || "";
@@ -101,26 +135,40 @@ export async function getAllPosts({includeDrafts = false} = {}) {
     });
 }
 
-export async function getPost(slug, {includeDrafts = false} = {}) {
+export async function getPost(slug, {
+    includeDrafts = false,
+    includeLocal = true,
+    language = DEFAULT_BLOG_LANGUAGE,
+} = {}) {
     const safeSlug = slugify(slug);
 
-    if (!safeSlug || !hasBlobConfig()) {
+    if (!safeSlug) {
         return null;
     }
 
-    const text = await readTextBlob(getPostPath(safeSlug));
+    let post = null;
 
-    if (!text) {
-        return null;
+    if (hasBlobConfig()) {
+        const text = await readTextBlob(getPostPath(safeSlug));
+
+        if (text) {
+            post = parsePostMarkdown(text, safeSlug);
+        }
     }
 
-    const post = parsePostMarkdown(text, safeSlug);
+    if (!post && includeLocal) {
+        post = await getLocalPost(safeSlug, {includeDrafts});
+    }
+
+    if (!post) {
+        return null;
+    }
 
     if (!includeDrafts && post.metadata.status !== BLOG_PUBLIC_STATUS) {
         return null;
     }
 
-    return post;
+    return localizePost(post, language);
 }
 
 async function regenerateIndexFromBlobs() {
