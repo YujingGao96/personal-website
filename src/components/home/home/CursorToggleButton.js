@@ -1,12 +1,29 @@
 'use client';
-import { useState, useSyncExternalStore } from 'react';
-import { TOGGLE_EVENT } from './FluidCursor';
+import { useEffect, useState, useSyncExternalStore } from 'react';
+import {BLOG_LANGUAGE_EVENT, getBlogCopy, normalizeBlogLanguage} from "../../../lib/blog/language";
+import {getClientCookie, setClientCookie} from "../../../lib/clientPreferenceCookie";
+import { CURSOR_FX_COOKIE, TOGGLE_EVENT } from './FluidCursor';
 
-const STORAGE_KEY = 'fluid-cursor-enabled';
+const LEGACY_STORAGE_KEY = 'fluid-cursor-enabled';
+
+function getStoredEnabled() {
+    const cookieValue = getClientCookie(CURSOR_FX_COOKIE);
+
+    if (cookieValue) {
+        return cookieValue === 'true';
+    }
+
+    try {
+        const stored = localStorage.getItem(LEGACY_STORAGE_KEY);
+        return stored === null ? null : stored === 'true';
+    } catch {
+        return null;
+    }
+}
 
 function getDefaultEnabled() {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored !== null) return stored === 'true';
+    const stored = getStoredEnabled();
+    if (stored !== null) return stored;
     return (
         window.matchMedia('(pointer: fine)').matches &&
         !window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -21,7 +38,9 @@ function getServerEnabled() {
     return null;
 }
 
-const CursorToggleButton = () => {
+const CursorToggleButton = ({language}) => {
+    const [selectedLanguage, setSelectedLanguage] = useState(normalizeBlogLanguage(language));
+    const copy = getBlogCopy(selectedLanguage);
     const defaultEnabled = useSyncExternalStore(
         subscribeDefaultEnabled,
         getDefaultEnabled,
@@ -30,19 +49,33 @@ const CursorToggleButton = () => {
     const [selectedEnabled, setSelectedEnabled] = useState(null);
     const enabled = selectedEnabled ?? defaultEnabled;
 
+    useEffect(() => {
+        const handleLanguageChange = (event) => {
+            setSelectedLanguage(normalizeBlogLanguage(event.detail?.language));
+        };
+
+        window.addEventListener(BLOG_LANGUAGE_EVENT, handleLanguageChange);
+        return () => window.removeEventListener(BLOG_LANGUAGE_EVENT, handleLanguageChange);
+    }, []);
+
     if (enabled === null) return null;
 
     function toggle() {
         const next = !enabled;
         setSelectedEnabled(next);
-        localStorage.setItem(STORAGE_KEY, String(next));
+        setClientCookie(CURSOR_FX_COOKIE, String(next));
+        try {
+            localStorage.setItem(LEGACY_STORAGE_KEY, String(next));
+        } catch {
+            // The cookie is the durable preference; localStorage is only a legacy mirror.
+        }
         window.dispatchEvent(new CustomEvent(TOGGLE_EVENT, { detail: { enabled: next } }));
     }
 
     return (
         <button
             onClick={toggle}
-            aria-label="Toggle cursor fluid effect"
+            aria-label={copy.toggleCursorFx}
             style={{
                 background: 'rgba(255,255,255,0.06)',
                 border: '1px solid rgba(255,255,255,0.15)',
@@ -55,7 +88,7 @@ const CursorToggleButton = () => {
                 transition: 'color 0.2s, border-color 0.2s',
             }}
         >
-            {enabled ? '✦ Cursor Effects: ON' : '✦ Cursor Effects: OFF'}
+            {enabled ? `✦ ${copy.cursorFxOn}` : `✦ ${copy.cursorFxOff}`}
         </button>
     );
 };

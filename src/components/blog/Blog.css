@@ -49,6 +49,71 @@
     line-height: 1.6;
 }
 
+/* ===== Language Selector ===== */
+
+.blog-language-selector {
+    align-items: center;
+    display: inline-flex;
+    gap: 0.65rem;
+    justify-content: center;
+}
+
+.blog-language-selector-label {
+    color: rgba(255, 255, 255, 0.42);
+    font-family: "DM Mono", "Onest", monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.blog-language-options {
+    align-items: center;
+    background: rgba(255, 255, 255, 0.045);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    display: inline-flex;
+    gap: 3px;
+    padding: 3px;
+}
+
+.blog-language-option {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.46);
+    cursor: pointer;
+    display: inline-flex;
+    font-family: "Onest", sans-serif;
+    font-size: 0.74rem;
+    gap: 0.4rem;
+    min-height: 32px;
+    padding: 0.32rem 0.7rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.blog-language-option.active {
+    background: rgba(104, 197, 195, 0.16);
+    color: #f7ffff;
+}
+
+.blog-language-option:hover,
+.blog-language-option:focus-visible {
+    color: #ffffff;
+}
+
+.blog-language-short {
+    color: #68c5c3;
+    font-family: "DM Mono", "Onest", monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+}
+
+.blog-language-selector.compact .blog-language-selector-label,
+.blog-language-selector.compact .blog-language-name {
+    display: none;
+}
+
 /* ===== Search ===== */
 
 .blog-index-panel {
@@ -351,6 +416,14 @@
     text-transform: uppercase;
 }
 
+.blog-article-topbar {
+    align-items: center;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
 .blog-article-header h1 {
     color: #fff;
     font-family: Georgia, "Times New Roman", serif;
@@ -529,6 +602,11 @@
     padding: 0.5rem 0 0.5rem 1.25rem;
 }
 
+.blog-article-body[lang="zh-Hans"] {
+    font-family: "Songti SC", "Noto Serif SC", "PingFang SC", Georgia, serif;
+    line-height: 2;
+}
+
 /* Back to Blog link */
 .blog-back-link {
     display: inline-flex;
@@ -538,7 +616,7 @@
     font-family: "Onest", sans-serif;
     font-size: 13px;
     letter-spacing: 0.04em;
-    margin-bottom: 2rem;
+    margin-bottom: 0;
     text-decoration: none;
     transition: color 0.2s ease;
 }
@@ -591,5 +669,15 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
+    }
+
+    .blog-article-topbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .blog-language-selector {
+        align-items: flex-start;
+        flex-direction: column;
     }
 }

@@ -1,12 +1,29 @@
 'use client';
 import { useEffect, useRef } from 'react';
+import {getClientCookie} from "../../../lib/clientPreferenceCookie";
 
-const STORAGE_KEY = 'fluid-cursor-enabled';
+export const CURSOR_FX_COOKIE = 'fluid-cursor-enabled';
+const LEGACY_STORAGE_KEY = 'fluid-cursor-enabled';
 export const TOGGLE_EVENT = 'fluid-cursor-toggle';
 
+function getStoredEnabled() {
+    const cookieValue = getClientCookie(CURSOR_FX_COOKIE);
+
+    if (cookieValue) {
+        return cookieValue === 'true';
+    }
+
+    try {
+        const stored = localStorage.getItem(LEGACY_STORAGE_KEY);
+        return stored === null ? null : stored === 'true';
+    } catch {
+        return null;
+    }
+}
+
 function getDefaultEnabled() {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored !== null) return stored === 'true';
+    const stored = getStoredEnabled();
+    if (stored !== null) return stored;
     return (
         window.matchMedia('(pointer: fine)').matches &&
         !window.matchMedia('(prefers-reduced-motion: reduce)').matches

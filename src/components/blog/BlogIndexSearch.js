@@ -4,6 +4,7 @@ import Link from "next/link";
 import {useEffect, useMemo, useRef, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
+import {DEFAULT_BLOG_LANGUAGE, getBlogCopy, getBlogLanguage} from "../../lib/blog/language";
 
 const LABEL_COLORS = {
     "Cloud": "#3da8a6",
@@ -39,10 +40,10 @@ function matchesSearch(post, query) {
 }
 
 const SORT_OPTIONS = [
-    {key: "newest", label: "↓ Date"},
-    {key: "oldest", label: "↑ Date"},
-    {key: "short", label: "Short"},
-    {key: "long", label: "Long"},
+    {key: "newest", label: {en: "↓ Date", zh: "↓ 日期"}},
+    {key: "oldest", label: {en: "↑ Date", zh: "↑ 日期"}},
+    {key: "short", label: {en: "Short", zh: "短文"}},
+    {key: "long", label: {en: "Long", zh: "长文"}},
 ];
 
 function sortPosts(posts, sortKey) {
@@ -59,7 +60,9 @@ function sortPosts(posts, sortKey) {
     }
 }
 
-export default function BlogIndexSearch({posts}) {
+export default function BlogIndexSearch({posts, language = DEFAULT_BLOG_LANGUAGE}) {
+    const copy = getBlogCopy(language);
+    const locale = getBlogLanguage(language).locale;
     const [query, setQuery] = useState("");
     const [activeLabel, setActiveLabel] = useState("");
     const [sortKey, setSortKey] = useState("newest");
@@ -107,7 +110,7 @@ export default function BlogIndexSearch({posts}) {
                         type="search"
                         value={query}
                         onChange={(event) => setQuery(event.target.value)}
-                        placeholder="Search posts by title, summary, label..."
+                        placeholder={copy.searchPlaceholder}
                     />
                     {!query && <kbd className="blog-search-shortcut">/</kbd>}
                 </label>
@@ -153,8 +156,8 @@ export default function BlogIndexSearch({posts}) {
                 <div className="blog-controls-row">
                     <span className="blog-results-count">
                         {isFiltered
-                            ? `${filteredPosts.length} of ${posts.length} posts · filtered`
-                            : `${posts.length} posts`
+                            ? `${filteredPosts.length} of ${posts.length} ${copy.posts} · ${copy.filtered}`
+                            : `${posts.length} ${copy.posts}`
                         }
                     </span>
                     <div className="blog-sort-group">
@@ -165,7 +168,7 @@ export default function BlogIndexSearch({posts}) {
                                 className={`blog-sort-btn${sortKey === opt.key ? " active" : ""}`}
                                 onClick={() => setSortKey(opt.key)}
                             >
-                                {opt.label}
+                                {opt.label[language] || opt.label.en}
                             </button>
                         ))}
                     </div>
@@ -186,15 +189,15 @@ export default function BlogIndexSearch({posts}) {
                                 <div className="blog-list-meta-row">
                                     <span className="blog-list-meta">
                                         {post.publishedAt
-                                            ? new Date(post.publishedAt).toLocaleDateString("en-US", {
+                                            ? new Date(post.publishedAt).toLocaleDateString(locale, {
                                                 month: "short",
                                                 day: "numeric",
                                                 year: "numeric",
                                             })
-                                            : "Draft"
+                                            : copy.draft
                                         }
                                         <span className="meta-dot"/>
-                                        {post.readingTime} min read
+                                        {post.readingTime} {copy.minRead}
                                     </span>
                                     {postLabels.length > 0 && (
                                         <span className="blog-list-labels">
@@ -229,14 +232,14 @@ export default function BlogIndexSearch({posts}) {
             {/* Empty states */}
             {posts.length === 0 && (
                 <div className="blog-empty-state">
-                    No posts published yet
-                    <div className="blog-empty-sub">Posts will appear here once published.</div>
+                    {copy.noPostsYet}
+                    <div className="blog-empty-sub">{copy.homeBlogEmpty}</div>
                 </div>
             )}
             {posts.length > 0 && filteredPosts.length === 0 && (
                 <div className="blog-empty-state">
-                    No posts found
-                    <div className="blog-empty-sub">Try a different keyword or clear the filters</div>
+                    {copy.noPostsFound}
+                    <div className="blog-empty-sub">{copy.clearFiltersHint}</div>
                 </div>
             )}
         </div>
