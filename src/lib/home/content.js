@@ -13,8 +13,10 @@ const HOME_COPY = {
 
         authAccount: "Account",
         authAdmin: "Admin",
+        authCloseAuth: "Close auth dialog",
         authCloseSignIn: "Close sign-in dialog",
         authSignIn: "Sign in",
+        authSignUp: "Sign up",
         authSignOut: "Sign Out",
         authSignedInAs: (email) => `Signed in as ${email || "user"}`,
 
@@ -94,8 +96,10 @@ const HOME_COPY = {
 
         authAccount: "账户",
         authAdmin: "后台",
+        authCloseAuth: "关闭登录窗口",
         authCloseSignIn: "关闭登录窗口",
         authSignIn: "登录",
+        authSignUp: "注册",
         authSignOut: "退出登录",
         authSignedInAs: (email) => `已登录：${email || "用户"}`,
 

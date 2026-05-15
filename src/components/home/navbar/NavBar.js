@@ -67,7 +67,7 @@ const NavBar = () => {
 
     return (
         <div className="container fixed-top">
-            <nav className="navbar navbar-expand-lg navbar-dark px-3" id="navbar-bg">
+            <nav className={`navbar navbar-expand-lg navbar-dark px-3 ${showMenu ? "nav-menu-open" : ""}`} id="navbar-bg">
                 <div className="container-fluid">
                     {/* Logo on the left */}
                     <Link className="navbar-brand nav-row me-3" href={withBlogLanguage("/", blogLanguage)}>

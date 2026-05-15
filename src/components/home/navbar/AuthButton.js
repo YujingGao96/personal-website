@@ -5,17 +5,50 @@ import {useEffect, useRef, useState} from "react";
 import {createPortal} from "react-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleUser, faRightToBracket, faUserShield, faXmark} from "@fortawesome/free-solid-svg-icons";
-import {useAuth, useUser, SignOutButton, SignIn} from "@clerk/nextjs";
+import {useAuth, useUser, SignOutButton, SignIn, SignUp} from "@clerk/nextjs";
 import {DEFAULT_BLOG_LANGUAGE} from "../../../lib/blog/language";
 import {getHomeCopy} from "../../../lib/home/content";
 
+const PHONE_AUTH_BREAKPOINT = 640;
+
 export default function AuthButton({language = DEFAULT_BLOG_LANGUAGE}) {
-    const {isSignedIn, isLoaded} = useAuth();
+    const {isSignedIn, isLoaded, sessionId} = useAuth();
     const {user} = useUser();
     const wrapperRef = useRef(null);
+    const authPanelRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
-    const [signInFrame, setSignInFrame] = useState(null);
+    const [adminSessionId, setAdminSessionId] = useState(null);
+    const [authFrame, setAuthFrame] = useState(null);
     const copy = getHomeCopy(language);
+    const isAdmin = Boolean(isSignedIn && sessionId && adminSessionId === sessionId);
+    const authMode = authFrame?.mode;
+
+    useEffect(() => {
+        if (!isLoaded || !isSignedIn || !sessionId) {
+            return;
+        }
+
+        const controller = new AbortController();
+
+        fetch("/api/admin/me", {
+            cache: "no-store",
+            headers: {Accept: "application/json"},
+            signal: controller.signal,
+        })
+            .then((response) => response.ok ? response.json() : {isAdmin: false})
+            .then((data) => {
+                if (!controller.signal.aborted) {
+                    setAdminSessionId(data?.isAdmin ? sessionId : null);
+                }
+            })
+            .catch((error) => {
+                if (error.name !== "AbortError") {
+                    setAdminSessionId(null);
+                }
+            });
+
+        return () => controller.abort();
+    }, [isLoaded, isSignedIn, sessionId]);
 
     useEffect(() => {
         const closeMenu = (event) => {
@@ -29,11 +62,11 @@ export default function AuthButton({language = DEFAULT_BLOG_LANGUAGE}) {
     }, []);
 
     useEffect(() => {
-        if (!signInFrame) return;
+        if (!authFrame) return;
 
         const handleKeyDown = (event) => {
             if (event.key === "Escape") {
-                setSignInFrame(null);
+                setAuthFrame(null);
             }
         };
 
@@ -45,48 +78,87 @@ export default function AuthButton({language = DEFAULT_BLOG_LANGUAGE}) {
             document.body.style.overflow = previousOverflow;
             document.removeEventListener("keydown", handleKeyDown);
         };
-    }, [signInFrame]);
+    }, [authFrame]);
 
-    const openSignIn = (event) => {
+    const openAuth = (event, mode = "sign-in") => {
         const rect = event.currentTarget.getBoundingClientRect();
-        const panelWidth = Math.min(560, window.innerWidth - 32);
-        const preferredLeft = rect.left + rect.width / 2 - panelWidth / 2;
-        const left = Math.min(Math.max(preferredLeft, 16), window.innerWidth - panelWidth - 16);
+        const compact = window.innerWidth <= PHONE_AUTH_BREAKPOINT;
+        const panelWidth = Math.min(450, window.innerWidth - 32);
+        const anchorY = event.clientY || rect.top + rect.height / 2;
+        const preferredLeft = compact
+            ? window.innerWidth / 2
+            : rect.right - panelWidth;
+        const left = compact
+            ? preferredLeft
+            : Math.min(Math.max(preferredLeft, 16), window.innerWidth - panelWidth - 16);
         const top = Math.max(Math.min(rect.bottom + 12, window.innerHeight - 96), 16);
 
-        setSignInFrame({
+        setAuthFrame({
+            compact,
             left,
-            top,
-            originX: rect.left + rect.width / 2 - left,
-            originY: Math.max(rect.top + rect.height / 2 - top, 0),
+            mode,
+            originX: compact ? panelWidth / 2 : rect.right - left,
+            originY: compact ? window.innerHeight / 2 : Math.max(anchorY - top, 0),
+            top: compact ? window.innerHeight / 2 : top,
         });
     };
 
-    const signInDialog = signInFrame && typeof document !== "undefined"
+    useEffect(() => {
+        if (!authMode || !authPanelRef.current) return;
+
+        const panel = authPanelRef.current;
+        const handleAuthSwitch = (event) => {
+            const target = event.target?.closest?.("a");
+            if (!target) return;
+
+            const href = target.getAttribute("href") || "";
+            const text = (target.textContent || "").trim().toLowerCase();
+            const wantsSignUp = authMode === "sign-in"
+                && (href.includes("sign-up") || href === "#sign-up" || text.includes("sign up") || text.includes("注册"));
+            const wantsSignIn = authMode === "sign-up"
+                && (href.includes("sign-in") || href === "#sign-in" || text.includes("sign in") || text.includes("登录"));
+
+            if (!wantsSignUp && !wantsSignIn) return;
+
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            setAuthFrame((current) => current ? {...current, mode: wantsSignUp ? "sign-up" : "sign-in"} : current);
+        };
+
+        panel.addEventListener("click", handleAuthSwitch, true);
+        return () => panel.removeEventListener("click", handleAuthSwitch, true);
+    }, [authMode]);
+
+    const authDialog = authFrame && typeof document !== "undefined"
         ? createPortal(
             <div className="nav-auth-modal-layer">
-                <div className="nav-auth-modal-backdrop" onClick={() => setSignInFrame(null)} />
+                <div className="nav-auth-modal-backdrop" onClick={() => setAuthFrame(null)} />
                 <section
-                    aria-label={copy.authSignIn}
+                    aria-label={authFrame.mode === "sign-up" ? copy.authSignUp : copy.authSignIn}
                     aria-modal="true"
-                    className="nav-auth-modal-panel"
+                    className={`nav-auth-modal-panel ${authFrame.compact ? "is-centered" : ""}`}
+                    ref={authPanelRef}
                     role="dialog"
                     style={{
-                        "--auth-modal-left": `${signInFrame.left}px`,
-                        "--auth-modal-top": `${signInFrame.top}px`,
-                        "--auth-modal-origin-x": `${signInFrame.originX}px`,
-                        "--auth-modal-origin-y": `${signInFrame.originY}px`,
+                        "--auth-modal-left": `${authFrame.left}px`,
+                        "--auth-modal-top": `${authFrame.top}px`,
+                        "--auth-modal-origin-x": `${authFrame.originX}px`,
+                        "--auth-modal-origin-y": `${authFrame.originY}px`,
                     }}
                 >
                     <button
-                        aria-label={copy.authCloseSignIn}
+                        aria-label={copy.authCloseAuth}
                         className="nav-auth-modal-close"
-                        onClick={() => setSignInFrame(null)}
+                        onClick={() => setAuthFrame(null)}
                         type="button"
                     >
                         <FontAwesomeIcon icon={faXmark}/>
                     </button>
-                    <SignIn routing="hash"/>
+                    {authFrame.mode === "sign-up" ? (
+                        <SignUp key="sign-up" routing="hash" signInUrl="#sign-in"/>
+                    ) : (
+                        <SignIn key="sign-in" routing="hash" signUpUrl="#sign-up"/>
+                    )}
                 </section>
             </div>,
             document.body
@@ -122,10 +194,12 @@ export default function AuthButton({language = DEFAULT_BLOG_LANGUAGE}) {
                     <span className="nav-auth-label">{copy.authAccount}</span>
                 </button>
                 <div className="nav-auth-dropdown" role="menu">
-                    <Link href="/admin/blog" className="nav-auth-dropdown-item" onClick={() => setIsOpen(false)} role="menuitem">
-                        <FontAwesomeIcon icon={faUserShield} fixedWidth/>
-                        {copy.authAdmin}
-                    </Link>
+                    {isAdmin && (
+                        <Link href="/admin/blog" className="nav-auth-dropdown-item" onClick={() => setIsOpen(false)} role="menuitem">
+                            <FontAwesomeIcon icon={faUserShield} fixedWidth/>
+                            {copy.authAdmin}
+                        </Link>
+                    )}
                     <SignOutButton>
                         <button className="nav-auth-dropdown-item" type="button" role="menuitem">
                             <FontAwesomeIcon icon={faRightToBracket} fixedWidth style={{transform: "scaleX(-1)"}}/>
@@ -133,17 +207,18 @@ export default function AuthButton({language = DEFAULT_BLOG_LANGUAGE}) {
                         </button>
                     </SignOutButton>
                 </div>
-                {signInDialog}
+                {authDialog}
             </div>
         );
     }
 
     return (
         <>
-            <button className="nav-auth-signin-item" type="button" aria-label={copy.authSignIn} onClick={openSignIn}>
+            <button className="nav-auth-signin-item" type="button" aria-label={copy.authSignIn} onClick={(event) => openAuth(event)}>
                 <FontAwesomeIcon icon={faCircleUser} size="xl"/>
+                <span className="nav-auth-signin-label">{copy.authSignIn}</span>
             </button>
-            {signInDialog}
+            {authDialog}
         </>
     );
 }
