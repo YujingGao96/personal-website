@@ -34,12 +34,6 @@ export default async function EditBlogPostRoute({params}) {
     return (
         <main className="admin-blog-shell">
             <div className="admin-blog-inner">
-                <header className="admin-blog-header">
-                    <div>
-                        <p>Editor</p>
-                        <h1>Edit Post</h1>
-                    </div>
-                </header>
                 <BlogEditor
                     post={post}
                     blobConfigured={hasBlobConfig()}
