@@ -15,6 +15,7 @@
     inset: 0;
     width: 100%;
     height: 100%;
+    border-radius: inherit;
     filter: blur(var(--banner-softness));
 }
 
@@ -24,6 +25,7 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
+    border-radius: inherit;
 }
 
 .generated-banner-treatment::before {
@@ -47,4 +49,6 @@
 
 .generated-banner-treatment.blog-generated-cover {
     --banner-softness: 1.1px;
+    /* Clip the composited blur and grain together, including on mobile Safari. */
+    clip-path: inset(0 round var(--card-radius));
 }
