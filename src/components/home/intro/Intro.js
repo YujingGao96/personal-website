@@ -6,7 +6,7 @@ import {
     birthday, company, email,
     getAge, linkedin,
 } from "../../../resolvers/profileResolver";
-import {hashText, seededFloat, seededNumber, VIBRANT_COLORS} from "../../../util/GenArtUtil";
+import {hashText, seededFloat, seededNumber} from "../../../util/GenArtUtil";
 import fisIcon      from "./images/fis.png";
 import emailIcon    from "./images/email.png";
 import linkedinIcon from "./images/linkedin.png";
@@ -95,14 +95,8 @@ function nextActionSeed(seed, actionId, branch) {
 }
 
 function getActionPalette(seed, shift = 0) {
-    const first = (seed + shift) % VIBRANT_COLORS.length;
-    return [
-        VIBRANT_COLORS[first],
-        VIBRANT_COLORS[(first + 3) % VIBRANT_COLORS.length],
-        VIBRANT_COLORS[(first + 6) % VIBRANT_COLORS.length],
-        VIBRANT_COLORS[(first + 8) % VIBRANT_COLORS.length],
-        "#f8f8f2",
-    ];
+    const cool = ["#529bb7", "#369bae", "#7a85b1"];
+    return [cool[(seed + shift) % cool.length], "#e98762", "#457692", "#f3b46d", "#dce8e7"];
 }
 
 function getActionSvgId(prefix, seed) {
@@ -222,7 +216,7 @@ function OrbitalSystem({displayName}) {
                 }}
             >
                 <Image
-                    src="/profile.jpg"
+                    src="/art/profile-film.webp"
                     alt={displayName}
                     width={PROFILE_PHOTO_SIZE}
                     height={PROFILE_PHOTO_SIZE}

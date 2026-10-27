@@ -56,6 +56,12 @@ function getFirstParagraphOffset(content) {
 export default function MarkdownRenderer({content}) {
     const firstParagraphOffset = getFirstParagraphOffset(content);
     const markdownComponents = {
+        img: ({src, alt, title}) => (
+            <span className="film-photo">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={src} alt={alt || ""} title={title} loading="lazy"/>
+            </span>
+        ),
         a: ({children, href}) => (
             <a href={href} target={href?.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
                 {children}

@@ -1,0 +1,81 @@
+/* Image treatment stays inside artwork; labels and controls remain crisp. */
+.film-artwork {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #081724;
+}
+
+.film-photo {
+    display: inline-block;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    max-width: 100%;
+    border-radius: 12px;
+    vertical-align: middle;
+    background: #102c43;
+}
+
+.film-photo img {
+    display: block;
+    filter: saturate(0.7) contrast(1.08) blur(0.45px);
+}
+
+.film-photo::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(115deg, #2589b5aa, #17345855 58%, #ed8c5a88);
+    mix-blend-mode: color;
+}
+
+.film-photo::after,
+.intro-action-art::after,
+#bottom-frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background-image: url("/art/film-grain.svg");
+    background-size: 180px 180px;
+    mix-blend-mode: soft-light;
+    opacity: 0.65;
+}
+
+.intro-action-art .intro-action-svg {
+    filter: blur(2px) saturate(0.75);
+}
+
+.intro-action-art::before {
+    background: radial-gradient(ellipse at 22% 35%, #3899bd55, transparent 60%),
+        radial-gradient(ellipse at 85% 60%, #e8906366, transparent 45%);
+}
+
+.intro-action-art::after {
+    background-size: 180px 180px;
+    opacity: 0.65;
+}
+
+#bottom-frame {
+    position: relative;
+    overflow: hidden;
+    background-image: linear-gradient(0deg, #06121ed9, #06121e22), url("/art/blue-hour.webp");
+    background-size: cover;
+    background-position: center 65%;
+}
+
+/* Keep captions legible over the brighter photographic highlights. */
+.home-blog-cover h2,
+.project-cover-title h3 {
+    text-shadow: 0 2px 12px #030e1c;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .intro-action-art .intro-action-svg {
+        animation: none;
+    }
+}

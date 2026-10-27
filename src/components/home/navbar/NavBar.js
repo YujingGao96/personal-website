@@ -14,7 +14,7 @@ import {getHomeCopy} from "../../../lib/home/content";
 
 const AuthButton = dynamic(() => import("./AuthButton"), {ssr: false});
 
-const NavBar = () => {
+const NavBar = ({authEnabled = false}) => {
     const pathname = usePathname();
     const [currentTab, setCurrentTab] = useState('about');
     const [showMenu, setShowMenu] = useState(false);
@@ -99,7 +99,7 @@ const NavBar = () => {
                         </ul>
                         {/* Auth button pushed to the right */}
                         <div className="ms-auto">
-                            <AuthButton language={blogLanguage}/>
+                            {authEnabled && <AuthButton language={blogLanguage}/>}
                         </div>
                     </div>
                 </div>
