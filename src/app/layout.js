@@ -1,6 +1,5 @@
 import {ClerkProvider} from "@clerk/nextjs";
 import "./globals.css";
-import "../components/common/FilmImagery.css";
 import NavBar from "../components/home/navbar/NavBar";
 import {hasClerkConfig} from "../lib/blog/config";
 
@@ -29,7 +28,7 @@ export default function RootLayout({children}) {
     const layout = (
         <html lang="en" data-scroll-behavior="smooth">
             <body>
-                <NavBar authEnabled={hasClerkConfig()}/>
+                <NavBar/>
                 <div className="page-top-progressive-blur" aria-hidden="true">
                     <span className="page-top-progressive-blur-layer" />
                     <span className="page-top-progressive-blur-layer" />

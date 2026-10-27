@@ -1,0 +1,61 @@
+/* A shared photographic finish for the original, live SVG artwork. */
+.generated-banner-treatment {
+    --banner-softness: 0.8px;
+    --banner-grain: 0.62;
+    isolation: isolate;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #081825;
+}
+
+.generated-banner-treatment > svg {
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    /* Preserve the generated shapes and motion while quieting neon colors. */
+    filter: grayscale(0.85) saturate(0.7) contrast(1.12) brightness(0.95) blur(var(--banner-softness));
+}
+
+.generated-banner-treatment::before,
+.generated-banner-treatment::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.generated-banner-treatment::before {
+    z-index: 1;
+    /* Cool blue/teal shadows, a violet transition, then warm light leaks. */
+    background: linear-gradient(118deg,
+        rgba(55, 160, 195, 0.9),
+        rgba(35, 101, 144, 0.88) 40%,
+        rgba(100, 107, 164, 0.8) 60%,
+        rgba(238, 133, 87, 0.94) 83%,
+        rgba(245, 188, 108, 0.9));
+    mix-blend-mode: color;
+    opacity: 0.82;
+    -webkit-backdrop-filter: blur(0.6px);
+    backdrop-filter: blur(0.6px);
+}
+
+.generated-banner-treatment::after {
+    z-index: 2;
+    background-image: url("/art/banner-grain.svg");
+    background-size: 180px 180px;
+    mix-blend-mode: soft-light;
+    opacity: var(--banner-grain);
+}
+
+/* Thin timeline motifs need a gentler blur than the larger cover artwork. */
+.generated-banner-treatment.timeline-art {
+    --banner-softness: 0.45px;
+}
+
+.generated-banner-treatment.blog-generated-cover {
+    --banner-softness: 1.1px;
+}

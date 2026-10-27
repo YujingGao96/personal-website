@@ -13,6 +13,7 @@
 @import "../components/home/timeline/Timeline.css";
 @import "../components/common/TerminalWindow.css";
 @import "../components/error/ErrorPage.css";
+@import "../components/common/BannerTreatment.css";
 
 :root {
     --browser-chrome-bleed: 10rem;

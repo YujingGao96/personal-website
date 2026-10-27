@@ -1,12 +1,13 @@
 "use client";
 
+import BannerTreatment from "../../common/BannerTreatment";
 import React, {useEffect, useRef, useState} from "react";
 import Image from "next/image";
 import {
     birthday, company, email,
     getAge, linkedin,
 } from "../../../resolvers/profileResolver";
-import {hashText, seededFloat, seededNumber} from "../../../util/GenArtUtil";
+import {hashText, seededFloat, seededNumber, VIBRANT_COLORS} from "../../../util/GenArtUtil";
 import fisIcon      from "./images/fis.png";
 import emailIcon    from "./images/email.png";
 import linkedinIcon from "./images/linkedin.png";
@@ -95,8 +96,14 @@ function nextActionSeed(seed, actionId, branch) {
 }
 
 function getActionPalette(seed, shift = 0) {
-    const cool = ["#529bb7", "#369bae", "#7a85b1"];
-    return [cool[(seed + shift) % cool.length], "#e98762", "#457692", "#f3b46d", "#dce8e7"];
+    const first = (seed + shift) % VIBRANT_COLORS.length;
+    return [
+        VIBRANT_COLORS[first],
+        VIBRANT_COLORS[(first + 3) % VIBRANT_COLORS.length],
+        VIBRANT_COLORS[(first + 6) % VIBRANT_COLORS.length],
+        VIBRANT_COLORS[(first + 8) % VIBRANT_COLORS.length],
+        "#f8f8f2",
+    ];
 }
 
 function getActionSvgId(prefix, seed) {
@@ -216,7 +223,7 @@ function OrbitalSystem({displayName}) {
                 }}
             >
                 <Image
-                    src="/art/profile-film.webp"
+                    src="/profile.jpg"
                     alt={displayName}
                     width={PROFILE_PHOTO_SIZE}
                     height={PROFILE_PHOTO_SIZE}
@@ -315,117 +322,119 @@ function IntroRunArtifact({seed}) {
             aria-hidden="true"
             style={{"--art-a": colorA, "--art-b": colorB, "--art-c": colorC, "--art-d": colorD}}
         >
-            <svg className="intro-action-svg" viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice">
-                <defs>
-                    <radialGradient id={`${id}-core`} cx="50%" cy="52%" r="48%">
-                        <stop offset="0%" stopColor={colorE} stopOpacity="0.9"/>
-                        <stop offset="24%" stopColor={colorA} stopOpacity="0.5"/>
-                        <stop offset="68%" stopColor={colorB} stopOpacity="0.12"/>
-                        <stop offset="100%" stopColor="#050511" stopOpacity="0"/>
-                    </radialGradient>
-                    <linearGradient id={`${id}-body`} x1="38%" y1="18%" x2="68%" y2="92%">
-                        <stop offset="0%" stopColor={colorE} stopOpacity="0.95"/>
-                        <stop offset="36%" stopColor={colorA} stopOpacity="0.86"/>
-                        <stop offset="100%" stopColor={colorB} stopOpacity="0.84"/>
-                    </linearGradient>
-                    <linearGradient id={`${id}-visor`} x1="22%" y1="16%" x2="84%" y2="88%">
-                        <stop offset="0%" stopColor={colorC}/>
-                        <stop offset="55%" stopColor={colorA}/>
-                        <stop offset="100%" stopColor="#111827"/>
-                    </linearGradient>
-                    <filter id={`${id}-glow`} x="-40%" y="-40%" width="180%" height="180%">
-                        <feGaussianBlur stdDeviation="5" result="blur"/>
-                        <feMerge>
-                            <feMergeNode in="blur"/>
-                            <feMergeNode in="SourceGraphic"/>
-                        </feMerge>
-                    </filter>
-                </defs>
+            <BannerTreatment className="intro-action-svg">
+                <svg viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice">
+                    <defs>
+                        <radialGradient id={`${id}-core`} cx="50%" cy="52%" r="48%">
+                            <stop offset="0%" stopColor={colorE} stopOpacity="0.9"/>
+                            <stop offset="24%" stopColor={colorA} stopOpacity="0.5"/>
+                            <stop offset="68%" stopColor={colorB} stopOpacity="0.12"/>
+                            <stop offset="100%" stopColor="#050511" stopOpacity="0"/>
+                        </radialGradient>
+                        <linearGradient id={`${id}-body`} x1="38%" y1="18%" x2="68%" y2="92%">
+                            <stop offset="0%" stopColor={colorE} stopOpacity="0.95"/>
+                            <stop offset="36%" stopColor={colorA} stopOpacity="0.86"/>
+                            <stop offset="100%" stopColor={colorB} stopOpacity="0.84"/>
+                        </linearGradient>
+                        <linearGradient id={`${id}-visor`} x1="22%" y1="16%" x2="84%" y2="88%">
+                            <stop offset="0%" stopColor={colorC}/>
+                            <stop offset="55%" stopColor={colorA}/>
+                            <stop offset="100%" stopColor="#111827"/>
+                        </linearGradient>
+                        <filter id={`${id}-glow`} x="-40%" y="-40%" width="180%" height="180%">
+                            <feGaussianBlur stdDeviation="5" result="blur"/>
+                            <feMerge>
+                                <feMergeNode in="blur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
 
-                <rect width="640" height="360" fill="#050511" opacity="0.54"/>
-                <rect width="640" height="360" fill={`url(#${id}-core)`}/>
+                    <rect width="640" height="360" fill="#050511" opacity="0.54"/>
+                    <rect width="640" height="360" fill={`url(#${id}-core)`}/>
 
-                <g className="intro-run-beams">
-                    {beams.map((beam, index) => (
-                        <polygon key={index} points={beam.points} fill={beam.color} opacity={beam.opacity}/>
-                    ))}
-                </g>
+                    <g className="intro-run-beams">
+                        {beams.map((beam, index) => (
+                            <polygon key={index} points={beam.points} fill={beam.color} opacity={beam.opacity}/>
+                        ))}
+                    </g>
 
-                <g className="intro-run-grid" opacity="0.22">
-                    {Array.from({length: 9}, (_, index) => (
-                        <path key={`h-${index}`} d={`M0 ${44 + index * 34} C144 ${32 + index * 21} 262 ${64 + index * 26} 640 ${38 + index * 34}`} fill="none" stroke={index % 2 ? colorB : colorE} strokeWidth="0.8"/>
-                    ))}
-                    {Array.from({length: 10}, (_, index) => (
-                        <path key={`v-${index}`} d={`M${index * 72 - 20} 0 L${index * 54 + 52} 360`} fill="none" stroke={index % 2 ? colorC : colorA} strokeWidth="0.65"/>
-                    ))}
-                </g>
+                    <g className="intro-run-grid" opacity="0.22">
+                        {Array.from({length: 9}, (_, index) => (
+                            <path key={`h-${index}`} d={`M0 ${44 + index * 34} C144 ${32 + index * 21} 262 ${64 + index * 26} 640 ${38 + index * 34}`} fill="none" stroke={index % 2 ? colorB : colorE} strokeWidth="0.8"/>
+                        ))}
+                        {Array.from({length: 10}, (_, index) => (
+                            <path key={`v-${index}`} d={`M${index * 72 - 20} 0 L${index * 54 + 52} 360`} fill="none" stroke={index % 2 ? colorC : colorA} strokeWidth="0.65"/>
+                        ))}
+                    </g>
 
-                <g className="intro-run-portal" filter={`url(#${id}-glow)`}>
-                    {[0, 1, 2, 3].map(index => (
-                        <ellipse
-                            key={index}
-                            cx="320"
-                            cy="194"
-                            rx={82 + index * 32}
-                            ry={22 + index * 15}
-                            fill="none"
-                            stroke={[colorA, colorB, colorC, colorD][index]}
-                            strokeWidth={index === 0 ? 3 : 1.35}
-                            strokeDasharray={`${7 + index * 3} ${8 + seededNumber(seed, index + 151, 8)}`}
-                            opacity={0.72 - index * 0.1}
-                            transform={`rotate(${seededNumber(seed, index + 163, 76) - 38} 320 194)`}
-                        />
-                    ))}
-                    <circle cx="320" cy="194" r="58" fill="none" stroke={colorE} strokeWidth="0.8" strokeOpacity="0.35"/>
-                </g>
+                    <g className="intro-run-portal" filter={`url(#${id}-glow)`}>
+                        {[0, 1, 2, 3].map(index => (
+                            <ellipse
+                                key={index}
+                                cx="320"
+                                cy="194"
+                                rx={82 + index * 32}
+                                ry={22 + index * 15}
+                                fill="none"
+                                stroke={[colorA, colorB, colorC, colorD][index]}
+                                strokeWidth={index === 0 ? 3 : 1.35}
+                                strokeDasharray={`${7 + index * 3} ${8 + seededNumber(seed, index + 151, 8)}`}
+                                opacity={0.72 - index * 0.1}
+                                transform={`rotate(${seededNumber(seed, index + 163, 76) - 38} 320 194)`}
+                            />
+                        ))}
+                        <circle cx="320" cy="194" r="58" fill="none" stroke={colorE} strokeWidth="0.8" strokeOpacity="0.35"/>
+                    </g>
 
-                <g className="intro-run-avatar" filter={`url(#${id}-glow)`}>
-                    <ellipse cx="320" cy="314" rx="82" ry="16" fill="#000" opacity="0.32"/>
-                    <path d="M284 191 L356 191 L389 302 C350 326 290 326 251 302 Z" fill={`url(#${id}-body)`} opacity="0.9"/>
-                    <polygon points="320,190 356,222 338,296 320,314 302,296 284,222" fill="#ffffff" opacity="0.13"/>
-                    <polygon points="284,222 251,302 302,296 320,190" fill={colorC} opacity="0.2"/>
-                    <polygon points="356,222 389,302 338,296 320,190" fill={colorD} opacity="0.18"/>
-                    <circle cx="320" cy="136" r="47" fill={`url(#${id}-visor)`}/>
-                    <path d="M286 138 C306 112 346 111 366 137 C348 153 307 158 286 138 Z" fill="#050511" opacity="0.5" stroke={colorE} strokeOpacity="0.45" strokeWidth="1.2"/>
-                    <circle cx="306" cy="130" r="4" fill={colorE} opacity="0.84"/>
-                    <circle cx="340" cy="130" r="4" fill={colorE} opacity="0.84"/>
-                    <path className="intro-run-avatar-line" d="M282 231 C228 212 190 173 175 126" fill="none" stroke={colorA} strokeWidth="10" strokeLinecap="round" strokeOpacity="0.64"/>
-                    <path className="intro-run-avatar-line" d="M358 231 C412 210 450 172 466 126" fill="none" stroke={colorB} strokeWidth="10" strokeLinecap="round" strokeOpacity="0.64"/>
-                    <path d="M292 304 L274 344 M348 304 L366 344" fill="none" stroke={colorE} strokeWidth="9" strokeLinecap="round" strokeOpacity="0.54"/>
-                </g>
+                    <g className="intro-run-avatar" filter={`url(#${id}-glow)`}>
+                        <ellipse cx="320" cy="314" rx="82" ry="16" fill="#000" opacity="0.32"/>
+                        <path d="M284 191 L356 191 L389 302 C350 326 290 326 251 302 Z" fill={`url(#${id}-body)`} opacity="0.9"/>
+                        <polygon points="320,190 356,222 338,296 320,314 302,296 284,222" fill="#ffffff" opacity="0.13"/>
+                        <polygon points="284,222 251,302 302,296 320,190" fill={colorC} opacity="0.2"/>
+                        <polygon points="356,222 389,302 338,296 320,190" fill={colorD} opacity="0.18"/>
+                        <circle cx="320" cy="136" r="47" fill={`url(#${id}-visor)`}/>
+                        <path d="M286 138 C306 112 346 111 366 137 C348 153 307 158 286 138 Z" fill="#050511" opacity="0.5" stroke={colorE} strokeOpacity="0.45" strokeWidth="1.2"/>
+                        <circle cx="306" cy="130" r="4" fill={colorE} opacity="0.84"/>
+                        <circle cx="340" cy="130" r="4" fill={colorE} opacity="0.84"/>
+                        <path className="intro-run-avatar-line" d="M282 231 C228 212 190 173 175 126" fill="none" stroke={colorA} strokeWidth="10" strokeLinecap="round" strokeOpacity="0.64"/>
+                        <path className="intro-run-avatar-line" d="M358 231 C412 210 450 172 466 126" fill="none" stroke={colorB} strokeWidth="10" strokeLinecap="round" strokeOpacity="0.64"/>
+                        <path d="M292 304 L274 344 M348 304 L366 344" fill="none" stroke={colorE} strokeWidth="9" strokeLinecap="round" strokeOpacity="0.54"/>
+                    </g>
 
-                <g>
-                    {particles.map((particle, index) => (
-                        <circle
-                            className="intro-run-particle"
-                            key={index}
-                            cx={particle.x}
-                            cy={particle.y}
-                            r={particle.r}
-                            fill={particle.color}
-                            opacity={particle.opacity}
-                            style={{"--spark-delay": particle.delay, "--spark-duration": particle.duration}}
-                        />
-                    ))}
-                </g>
+                    <g>
+                        {particles.map((particle, index) => (
+                            <circle
+                                className="intro-run-particle"
+                                key={index}
+                                cx={particle.x}
+                                cy={particle.y}
+                                r={particle.r}
+                                fill={particle.color}
+                                opacity={particle.opacity}
+                                style={{"--spark-delay": particle.delay, "--spark-duration": particle.duration}}
+                            />
+                        ))}
+                    </g>
 
-                <g className="intro-run-shards">
-                    {shards.map((shard, index) => (
-                        <text
-                            className="intro-run-shard"
-                            key={index}
-                            x={shard.x}
-                            y={shard.y}
-                            fill={shard.color}
-                            opacity="0.64"
-                            transform={`rotate(${shard.rotate} ${shard.x} ${shard.y})`}
-                            style={{"--shard-delay": shard.delay}}
-                        >
-                            {shard.label}
-                        </text>
-                    ))}
-                </g>
-            </svg>
+                    <g className="intro-run-shards">
+                        {shards.map((shard, index) => (
+                            <text
+                                className="intro-run-shard"
+                                key={index}
+                                x={shard.x}
+                                y={shard.y}
+                                fill={shard.color}
+                                opacity="0.64"
+                                transform={`rotate(${shard.rotate} ${shard.x} ${shard.y})`}
+                                style={{"--shard-delay": shard.delay}}
+                            >
+                                {shard.label}
+                            </text>
+                        ))}
+                    </g>
+                </svg>
+            </BannerTreatment>
         </div>
     );
 }
@@ -463,108 +472,110 @@ function IntroDebugArtifact({seed}) {
             aria-hidden="true"
             style={{"--art-a": colorA, "--art-b": colorB, "--art-c": colorC, "--art-d": colorD}}
         >
-            <svg className="intro-action-svg" viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice">
-                <defs>
-                    <radialGradient id={`${id}-field`} cx="52%" cy="48%" r="58%">
-                        <stop offset="0%" stopColor={colorA} stopOpacity="0.32"/>
-                        <stop offset="48%" stopColor={colorB} stopOpacity="0.11"/>
-                        <stop offset="100%" stopColor="#050511" stopOpacity="0"/>
-                    </radialGradient>
-                    <linearGradient id={`${id}-body`} x1="24%" y1="12%" x2="78%" y2="90%">
-                        <stop offset="0%" stopColor={colorE}/>
-                        <stop offset="38%" stopColor={colorA}/>
-                        <stop offset="100%" stopColor={colorC}/>
-                    </linearGradient>
-                    <filter id={`${id}-glow`} x="-35%" y="-35%" width="170%" height="170%">
-                        <feGaussianBlur stdDeviation="4" result="blur"/>
-                        <feMerge>
-                            <feMergeNode in="blur"/>
-                            <feMergeNode in="SourceGraphic"/>
-                        </feMerge>
-                    </filter>
-                </defs>
+            <BannerTreatment className="intro-action-svg">
+                <svg viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice">
+                    <defs>
+                        <radialGradient id={`${id}-field`} cx="52%" cy="48%" r="58%">
+                            <stop offset="0%" stopColor={colorA} stopOpacity="0.32"/>
+                            <stop offset="48%" stopColor={colorB} stopOpacity="0.11"/>
+                            <stop offset="100%" stopColor="#050511" stopOpacity="0"/>
+                        </radialGradient>
+                        <linearGradient id={`${id}-body`} x1="24%" y1="12%" x2="78%" y2="90%">
+                            <stop offset="0%" stopColor={colorE}/>
+                            <stop offset="38%" stopColor={colorA}/>
+                            <stop offset="100%" stopColor={colorC}/>
+                        </linearGradient>
+                        <filter id={`${id}-glow`} x="-35%" y="-35%" width="170%" height="170%">
+                            <feGaussianBlur stdDeviation="4" result="blur"/>
+                            <feMerge>
+                                <feMergeNode in="blur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
 
-                <rect width="640" height="360" fill="#050511" opacity="0.62"/>
-                <rect width="640" height="360" fill={`url(#${id}-field)`}/>
+                    <rect width="640" height="360" fill="#050511" opacity="0.62"/>
+                    <rect width="640" height="360" fill={`url(#${id}-field)`}/>
 
-                <g className="intro-debug-mesh" opacity="0.34">
-                    {nodes.map((node, index) => (
-                        <circle
-                            className="intro-debug-node"
-                            key={`node-${index}`}
-                            cx={node.x}
-                            cy={node.y}
-                            r={node.r}
-                            fill={node.color}
-                            opacity="0.55"
-                            style={{"--node-delay": node.delay}}
-                        />
-                    ))}
-                    {nodes.slice(0, 18).map((node, index) => {
-                        const nextNode = nodes[(index * 5 + 7) % nodes.length];
-                        return (
-                            <line
-                                className="intro-debug-trace"
-                                key={`trace-${index}`}
-                                x1={node.x}
-                                y1={node.y}
-                                x2={nextNode.x}
-                                y2={nextNode.y}
-                                stroke={index % 2 ? colorB : colorE}
-                                strokeWidth="0.7"
-                                strokeOpacity="0.44"
+                    <g className="intro-debug-mesh" opacity="0.34">
+                        {nodes.map((node, index) => (
+                            <circle
+                                className="intro-debug-node"
+                                key={`node-${index}`}
+                                cx={node.x}
+                                cy={node.y}
+                                r={node.r}
+                                fill={node.color}
+                                opacity="0.55"
+                                style={{"--node-delay": node.delay}}
                             />
-                        );
-                    })}
-                </g>
+                        ))}
+                        {nodes.slice(0, 18).map((node, index) => {
+                            const nextNode = nodes[(index * 5 + 7) % nodes.length];
+                            return (
+                                <line
+                                    className="intro-debug-trace"
+                                    key={`trace-${index}`}
+                                    x1={node.x}
+                                    y1={node.y}
+                                    x2={nextNode.x}
+                                    y2={nextNode.y}
+                                    stroke={index % 2 ? colorB : colorE}
+                                    strokeWidth="0.7"
+                                    strokeOpacity="0.44"
+                                />
+                            );
+                        })}
+                    </g>
 
-                <g className="intro-debug-lens" filter={`url(#${id}-glow)`}>
-                    <circle cx="320" cy="180" r="118" fill="#050511" opacity="0.32"/>
-                    <circle cx="320" cy="180" r="112" fill="none" stroke={colorE} strokeOpacity="0.42" strokeWidth="1.4"/>
-                    <circle cx="320" cy="180" r="87" fill="none" stroke={colorA} strokeOpacity="0.58" strokeWidth="1.2" strokeDasharray="12 9"/>
-                    <line className="intro-debug-scan" x1="212" y1="118" x2="428" y2="242" stroke={colorB} strokeWidth="3" strokeLinecap="round" strokeOpacity="0.72"/>
-                    <path d="M404 260 L482 326" fill="none" stroke={colorE} strokeWidth="11" strokeLinecap="round" strokeOpacity="0.28"/>
-                    <path d="M404 260 L482 326" fill="none" stroke={colorB} strokeWidth="4" strokeLinecap="round" strokeOpacity="0.62"/>
-                </g>
+                    <g className="intro-debug-lens" filter={`url(#${id}-glow)`}>
+                        <circle cx="320" cy="180" r="118" fill="#050511" opacity="0.32"/>
+                        <circle cx="320" cy="180" r="112" fill="none" stroke={colorE} strokeOpacity="0.42" strokeWidth="1.4"/>
+                        <circle cx="320" cy="180" r="87" fill="none" stroke={colorA} strokeOpacity="0.58" strokeWidth="1.2" strokeDasharray="12 9"/>
+                        <line className="intro-debug-scan" x1="212" y1="118" x2="428" y2="242" stroke={colorB} strokeWidth="3" strokeLinecap="round" strokeOpacity="0.72"/>
+                        <path d="M404 260 L482 326" fill="none" stroke={colorE} strokeWidth="11" strokeLinecap="round" strokeOpacity="0.28"/>
+                        <path d="M404 260 L482 326" fill="none" stroke={colorB} strokeWidth="4" strokeLinecap="round" strokeOpacity="0.62"/>
+                    </g>
 
-                <g className="intro-debug-specimen" filter={`url(#${id}-glow)`}>
-                    <path className="intro-debug-wing" d="M304 153 C254 92 216 102 198 162 C230 173 264 172 304 153 Z" fill={colorA} opacity="0.22"/>
-                    <path className="intro-debug-wing" d="M336 153 C386 92 424 102 442 162 C410 173 376 172 336 153 Z" fill={colorB} opacity="0.22"/>
-                    {legs.map((path, index) => (
-                        <path key={path} d={path} fill="none" stroke={index < 3 ? colorA : colorB} strokeWidth="4" strokeLinecap="round" strokeOpacity="0.72"/>
-                    ))}
-                    <ellipse cx="320" cy="181" rx="39" ry="72" fill={`url(#${id}-body)`} opacity="0.86"/>
-                    <polygon points="320,112 352,164 337,246 320,282 303,246 288,164" fill="#050511" opacity="0.28"/>
-                    <polygon points="288,164 320,112 320,282 303,246" fill={colorD} opacity="0.22"/>
-                    <polygon points="352,164 320,112 320,282 337,246" fill={colorB} opacity="0.22"/>
-                    <circle cx="320" cy="101" r="30" fill={`url(#${id}-body)`} opacity="0.92"/>
-                    <circle cx="309" cy="97" r="4" fill="#050511" opacity="0.8"/>
-                    <circle cx="331" cy="97" r="4" fill="#050511" opacity="0.8"/>
-                    <path d="M302 79 C284 58 264 54 246 66 M338 79 C356 58 376 54 394 66" fill="none" stroke={colorE} strokeWidth="3" strokeLinecap="round" strokeOpacity="0.58"/>
-                    <line x1="320" y1="126" x2="320" y2="267" stroke="#050511" strokeOpacity="0.46" strokeWidth="2"/>
-                    {[142, 168, 194, 220, 246].map((y, index) => (
-                        <line key={y} x1="293" y1={y} x2="347" y2={y + (index % 2 ? -8 : 8)} stroke={colorE} strokeOpacity="0.32" strokeWidth="1"/>
-                    ))}
-                </g>
+                    <g className="intro-debug-specimen" filter={`url(#${id}-glow)`}>
+                        <path className="intro-debug-wing" d="M304 153 C254 92 216 102 198 162 C230 173 264 172 304 153 Z" fill={colorA} opacity="0.22"/>
+                        <path className="intro-debug-wing" d="M336 153 C386 92 424 102 442 162 C410 173 376 172 336 153 Z" fill={colorB} opacity="0.22"/>
+                        {legs.map((path, index) => (
+                            <path key={path} d={path} fill="none" stroke={index < 3 ? colorA : colorB} strokeWidth="4" strokeLinecap="round" strokeOpacity="0.72"/>
+                        ))}
+                        <ellipse cx="320" cy="181" rx="39" ry="72" fill={`url(#${id}-body)`} opacity="0.86"/>
+                        <polygon points="320,112 352,164 337,246 320,282 303,246 288,164" fill="#050511" opacity="0.28"/>
+                        <polygon points="288,164 320,112 320,282 303,246" fill={colorD} opacity="0.22"/>
+                        <polygon points="352,164 320,112 320,282 337,246" fill={colorB} opacity="0.22"/>
+                        <circle cx="320" cy="101" r="30" fill={`url(#${id}-body)`} opacity="0.92"/>
+                        <circle cx="309" cy="97" r="4" fill="#050511" opacity="0.8"/>
+                        <circle cx="331" cy="97" r="4" fill="#050511" opacity="0.8"/>
+                        <path d="M302 79 C284 58 264 54 246 66 M338 79 C356 58 376 54 394 66" fill="none" stroke={colorE} strokeWidth="3" strokeLinecap="round" strokeOpacity="0.58"/>
+                        <line x1="320" y1="126" x2="320" y2="267" stroke="#050511" strokeOpacity="0.46" strokeWidth="2"/>
+                        {[142, 168, 194, 220, 246].map((y, index) => (
+                            <line key={y} x1="293" y1={y} x2="347" y2={y + (index % 2 ? -8 : 8)} stroke={colorE} strokeOpacity="0.32" strokeWidth="1"/>
+                        ))}
+                    </g>
 
-                <g className="intro-debug-packets">
-                    {packets.map((packet, index) => (
-                        <rect
-                            className="intro-debug-packet"
-                            key={index}
-                            x={packet.x}
-                            y={packet.y}
-                            width={packet.width}
-                            height="5"
-                            rx="2.5"
-                            fill={packet.color}
-                            opacity="0.52"
-                            transform={`rotate(${packet.rotate} ${packet.x} ${packet.y})`}
-                            style={{"--packet-delay": packet.delay}}
-                        />
-                    ))}
-                </g>
-            </svg>
+                    <g className="intro-debug-packets">
+                        {packets.map((packet, index) => (
+                            <rect
+                                className="intro-debug-packet"
+                                key={index}
+                                x={packet.x}
+                                y={packet.y}
+                                width={packet.width}
+                                height="5"
+                                rx="2.5"
+                                fill={packet.color}
+                                opacity="0.52"
+                                transform={`rotate(${packet.rotate} ${packet.x} ${packet.y})`}
+                                style={{"--packet-delay": packet.delay}}
+                            />
+                        ))}
+                    </g>
+                </svg>
+            </BannerTreatment>
         </div>
     );
 }
