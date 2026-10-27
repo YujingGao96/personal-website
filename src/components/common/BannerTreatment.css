@@ -1,6 +1,5 @@
-/* Soft focus and grain preserve each live SVG's original palette. */
+/* Crisp live SVG artwork with a separate paper-grain layer. */
 .generated-banner-treatment {
-    --banner-softness: 0.8px;
     --banner-grain: 0.82;
     isolation: isolate;
     overflow: hidden;
@@ -16,40 +15,23 @@
     width: 100%;
     height: 100%;
     border-radius: inherit;
-    filter: blur(var(--banner-softness));
 }
 
-.generated-banner-treatment::before,
 .generated-banner-treatment::after {
     content: "";
     position: absolute;
     inset: 0;
     pointer-events: none;
     border-radius: inherit;
-}
-
-.generated-banner-treatment::before {
-    z-index: 1;
-    -webkit-backdrop-filter: blur(0.6px);
-    backdrop-filter: blur(0.6px);
-}
-
-.generated-banner-treatment::after {
     z-index: 2;
     background-image: url("/art/banner-grain.svg");
     background-size: 180px 180px;
-    /* Keep the print texture sharp above the softened artwork. */
+    /* Texture stays independent of the original shapes and animations. */
     mix-blend-mode: soft-light;
     opacity: var(--banner-grain);
 }
 
-/* Thin timeline motifs need a gentler blur than the larger cover artwork. */
-.generated-banner-treatment.timeline-art {
-    --banner-softness: 0.45px;
-}
-
 .generated-banner-treatment.blog-generated-cover {
-    --banner-softness: 1.1px;
-    /* Clip the composited blur and grain together, including on mobile Safari. */
+    /* Clip the grain with the artwork, including on mobile Safari. */
     clip-path: inset(0 round var(--card-radius));
 }
