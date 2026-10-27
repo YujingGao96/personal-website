@@ -1,7 +1,7 @@
 /* Soft focus and grain preserve each live SVG's original palette. */
 .generated-banner-treatment {
     --banner-softness: 0.8px;
-    --banner-grain: 0.62;
+    --banner-grain: 0.82;
     isolation: isolate;
     overflow: hidden;
     position: relative;
@@ -38,6 +38,7 @@
     z-index: 2;
     background-image: url("/art/banner-grain.svg");
     background-size: 180px 180px;
+    /* Keep the print texture sharp above the softened artwork. */
     mix-blend-mode: soft-light;
     opacity: var(--banner-grain);
 }
