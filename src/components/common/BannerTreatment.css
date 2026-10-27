@@ -1,6 +1,6 @@
-/* Crisp live SVG artwork with a separate paper-grain layer. */
+/* Crisp live SVG artwork with fine ink speckles on a transparent layer. */
 .generated-banner-treatment {
-    --banner-grain: 0.82;
+    --banner-grain: 0.5;
     isolation: isolate;
     overflow: hidden;
     position: relative;
@@ -26,8 +26,8 @@
     z-index: 2;
     background-image: url("/art/banner-grain.svg");
     background-size: 180px 180px;
-    /* Texture stays independent of the original shapes and animations. */
-    mix-blend-mode: soft-light;
+    /* Transparent black speckles add texture without a gray veil in shadows. */
+    mix-blend-mode: multiply;
     opacity: var(--banner-grain);
 }
 
