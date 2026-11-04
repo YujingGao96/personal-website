@@ -1,0 +1,135 @@
+.orbital-stage {
+    position: relative;
+    isolation: isolate;
+}
+
+.orbital-stage-sky {
+    position: absolute;
+    inset: -8rem -0.5rem -4rem;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    -webkit-mask-image: radial-gradient(ellipse at 50% 42%, #000 36%, transparent 75%);
+    mask-image: radial-gradient(ellipse at 50% 42%, #000 36%, transparent 75%);
+}
+
+.orbital-stage-aura {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 42% 48% at 24% 34%, rgb(22 191 253 / 0.13), transparent 78%),
+        radial-gradient(ellipse 38% 42% at 79% 30%, rgb(181 147 225 / 0.12), transparent 78%),
+        radial-gradient(ellipse 26% 40% at 85% 75%, rgb(244 159 34 / 0.06), transparent 78%);
+    animation: orbital-aura-in 1.5s ease-out both;
+}
+
+.orbital-stage-map {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.orbital-stage-track {
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 1;
+    animation: orbital-track-in 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.orbital-stage-track-inner {
+    animation-delay: 0.15s;
+}
+
+.orbital-stage-track-cross {
+    opacity: 0.6;
+    animation-delay: 0.25s;
+}
+
+.orbital-stage-tracer {
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 0.025 0.975;
+    animation: orbital-signal-pass 2s 0.35s ease-out both;
+}
+
+.orbital-stage-stars {
+    animation: orbital-stars-in 1.2s 0.4s ease-out both;
+}
+
+.orbital-stage-content {
+    position: relative;
+    z-index: 1;
+}
+
+.orbital-stage .section-header {
+    animation: orbital-copy-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.orbital-stage .intro-mac-window {
+    animation: orbital-copy-in 0.9s 0.12s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes orbital-track-in {
+    from { opacity: 0; stroke-dashoffset: 1; }
+    to { stroke-dashoffset: 0; }
+}
+
+@keyframes orbital-signal-pass {
+    0% { opacity: 0; stroke-dashoffset: 0.8; }
+    15% { opacity: 0.9; }
+    80% { opacity: 0.6; }
+    100% { opacity: 0; stroke-dashoffset: -0.2; }
+}
+
+@keyframes orbital-aura-in {
+    from { opacity: 0; transform: scale(0.94); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes orbital-stars-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes orbital-copy-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 767px) {
+    .orbital-stage-sky {
+        inset: -6rem 0 auto;
+        height: 40rem;
+    }
+
+    .orbital-stage-map {
+        position: absolute;
+        width: 56rem;
+        max-width: none;
+        height: 35rem;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .orbital-stage-track-inner,
+    .orbital-stage-track-cross {
+        display: none;
+    }
+
+    .orbital-stage-beacon {
+        transform: translateX(-220px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .orbital-stage-sky *,
+    .orbital-stage .section-header,
+    .orbital-stage .intro-mac-window {
+        animation: none;
+    }
+
+    .orbital-stage-tracer {
+        display: none;
+    }
+}

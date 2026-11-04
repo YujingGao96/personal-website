@@ -14,6 +14,7 @@
 @import "../components/common/TerminalWindow.css";
 @import "../components/error/ErrorPage.css";
 @import "../components/common/BannerTreatment.css";
+@import "../components/home/intro/OrbitalStage.css";
 
 :root {
     --browser-chrome-bleed: 10rem;

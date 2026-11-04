@@ -1,6 +1,7 @@
 "use client";
 
 import BannerTreatment from "../../common/BannerTreatment";
+import OrbitalStage from "./OrbitalStage";
 import React, {useEffect, useRef, useState} from "react";
 import Image from "next/image";
 import {
@@ -673,7 +674,7 @@ const Intro = ({language = DEFAULT_BLOG_LANGUAGE}) => {
     }
 
     return (
-        <div id="about">
+        <OrbitalStage>
             <SectionHeader eyebrow={copy.profileEyebrow} title={copy.profileTitle} sectionId="about" />
 
             <div className="mt-5 intro-mac-window">
@@ -809,7 +810,7 @@ const Intro = ({language = DEFAULT_BLOG_LANGUAGE}) => {
 
                 </div>
             </div>
-        </div>
+        </OrbitalStage>
     );
 };
 
