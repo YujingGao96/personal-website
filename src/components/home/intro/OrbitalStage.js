@@ -1,11 +1,12 @@
 import {useId} from "react";
+import MotionBoundary from "../../common/MotionBoundary";
 
 // A decorative entrance around the existing profile, never over its artwork.
 export default function OrbitalStage({children}) {
     const id = `orbital-stage-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
 
     return (
-        <div id="about" className="orbital-stage">
+        <MotionBoundary id="about" className="orbital-stage">
             <div className="orbital-stage-sky" aria-hidden="true">
                 <div className="orbital-stage-aura"/>
                 <svg className="orbital-stage-map" viewBox="0 0 1440 900" fill="none" focusable="false">
@@ -50,6 +51,6 @@ export default function OrbitalStage({children}) {
                 </svg>
             </div>
             <div className="orbital-stage-content">{children}</div>
-        </div>
+        </MotionBoundary>
     );
 }

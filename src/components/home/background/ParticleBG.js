@@ -1,4 +1,6 @@
-const SNOW_PARTICLES = Array.from({length: 72}, (_, index) => {
+import MotionBoundary from "../../common/MotionBoundary";
+
+const SNOW_PARTICLES = Array.from({length: 28}, (_, index) => {
     const seed = index + 1;
     const size = 1.2 + (seed % 5) * 0.45;
     const left = (seed * 37) % 100;
@@ -12,7 +14,7 @@ const SNOW_PARTICLES = Array.from({length: 72}, (_, index) => {
 
 const ParticleBG = () => {
     return (
-        <div className="particle-bg" aria-hidden="true">
+        <MotionBoundary className="particle-bg" aria-hidden="true">
             <div className="particle-ambient particle-ambient-a" />
             <div className="particle-ambient particle-ambient-b" />
             <div className="particle-ambient particle-ambient-c" />
@@ -32,7 +34,7 @@ const ParticleBG = () => {
                     />
                 ))}
             </div>
-        </div>
+        </MotionBoundary>
     );
 };
 

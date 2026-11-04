@@ -1,11 +1,26 @@
 const fluidCursor = () => {
     const canvas = document.getElementById('fluid');
-    if (!canvas) return { destroy() {} };
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (!canvas || document.visibilityState === 'hidden' || reducedMotion.matches) {
+        return { destroy() {} };
+    }
+    const resources = {
+        textures: new Set(),
+        framebuffers: new Set(),
+        programs: new Set(),
+        shaders: new Set(),
+        buffers: new Set(),
+    };
+
+    function trackResource(kind, resource) {
+        resources[kind].add(resource);
+        return resource;
+    }
 
     resizeCanvas();
     let config = {
-        SIM_RESOLUTION: 96,
-        DYE_RESOLUTION: 420,
+        SIM_RESOLUTION: 80,
+        DYE_RESOLUTION: 320,
         CAPTURE_RESOLUTION: 512,
         DENSITY_DISSIPATION: 4,
         VELOCITY_DISSIPATION: 2.4,
@@ -30,6 +45,7 @@ const fluidCursor = () => {
         this.deltaY = 0;
         this.down = false;
         this.moved = false;
+        this.clicked = false;
         this.color = [0, 0, 0];
     }
     const pointers = [];
@@ -67,6 +83,7 @@ const fluidCursor = () => {
         } else {
             halfFloat = gl.getExtension('OES_texture_half_float');
             supportLinearFiltering = gl.getExtension('OES_texture_half_float_linear');
+            if (!halfFloat) return { gl: null, ext: null };
         }
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         const halfFloatTexType = isWebGL2
@@ -89,6 +106,7 @@ const fluidCursor = () => {
             formatRG = getSupportedFormat(gl, gl.RGBA, gl.RGBA, halfFloatTexType);
             formatR = getSupportedFormat(gl, gl.RGBA, gl.RGBA, halfFloatTexType);
         }
+        if (!formatRGBA || !formatRG || !formatR) return { gl: null, ext: null };
         return {
             gl,
             ext: {
@@ -144,6 +162,8 @@ const fluidCursor = () => {
             0
         );
         const status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+        gl.deleteTexture(texture);
+        gl.deleteFramebuffer(fbo);
         return status == gl.FRAMEBUFFER_COMPLETE;
     }
     class Material {
@@ -186,7 +206,7 @@ const fluidCursor = () => {
         }
     }
     function createProgram(vertexShader, fragmentShader) {
-        let program = gl.createProgram();
+        let program = trackResource('programs', gl.createProgram());
         gl.attachShader(program, vertexShader);
         gl.attachShader(program, fragmentShader);
         gl.linkProgram(program);
@@ -205,7 +225,7 @@ const fluidCursor = () => {
     }
     function compileShader(type, source, keywords) {
         source = addKeywords(source, keywords);
-        const shader = gl.createShader(type);
+        const shader = trackResource('shaders', gl.createShader(type));
         gl.shaderSource(shader, source);
         gl.compileShader(shader);
         if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
@@ -568,13 +588,13 @@ const fluidCursor = () => {
    `
     );
     const blit = (() => {
-        gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+        gl.bindBuffer(gl.ARRAY_BUFFER, trackResource('buffers', gl.createBuffer()));
         gl.bufferData(
             gl.ARRAY_BUFFER,
             new Float32Array([-1, -1, -1, 1, 1, 1, 1, -1]),
             gl.STATIC_DRAW
         );
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, gl.createBuffer());
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, trackResource('buffers', gl.createBuffer()));
         gl.bufferData(
             gl.ELEMENT_ARRAY_BUFFER,
             new Uint16Array([0, 1, 2, 0, 2, 3]),
@@ -662,6 +682,10 @@ const fluidCursor = () => {
                 texType,
                 filtering
             );
+        releaseFBO(divergence);
+        releaseFBO(curl);
+        releaseFBO(pressure?.read);
+        releaseFBO(pressure?.write);
         divergence = createFBO(
             simRes.width,
             simRes.height,
@@ -689,7 +713,7 @@ const fluidCursor = () => {
     }
     function createFBO(w, h, internalFormat, format, type, param) {
         gl.activeTexture(gl.TEXTURE0);
-        let texture = gl.createTexture();
+        let texture = trackResource('textures', gl.createTexture());
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, param);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, param);
@@ -706,7 +730,7 @@ const fluidCursor = () => {
             type,
             null
         );
-        let fbo = gl.createFramebuffer();
+        let fbo = trackResource('framebuffers', gl.createFramebuffer());
         gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
         gl.framebufferTexture2D(
             gl.FRAMEBUFFER,
@@ -732,6 +756,13 @@ const fluidCursor = () => {
                 return id;
             },
         };
+    }
+    function releaseFBO(target) {
+        if (!target) return;
+        gl.deleteTexture(target.texture);
+        gl.deleteFramebuffer(target.fbo);
+        resources.textures.delete(target.texture);
+        resources.framebuffers.delete(target.fbo);
     }
     function createDoubleFBO(w, h, internalFormat, format, type, param) {
         let fbo1 = createFBO(w, h, internalFormat, format, type, param);
@@ -765,6 +796,7 @@ const fluidCursor = () => {
         copyProgram.bind();
         gl.uniform1i(copyProgram.uniforms.uTexture, target.attach(0));
         blit(newFBO);
+        releaseFBO(target);
         return newFBO;
     }
     function resizeDoubleFBO(target, w, h, internalFormat, format, type, param) {
@@ -778,6 +810,7 @@ const fluidCursor = () => {
             type,
             param
         );
+        releaseFBO(target.write);
         target.write = createFBO(w, h, internalFormat, format, type, param);
         target.width = w;
         target.height = h;
@@ -786,7 +819,7 @@ const fluidCursor = () => {
         return target;
     }
     function createTextureAsync(url) {
-        let texture = gl.createTexture();
+        let texture = trackResource('textures', gl.createTexture());
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -830,40 +863,56 @@ const fluidCursor = () => {
     }
     updateKeywords();
     initFramebuffers();
-    let lastUpdateTime = Date.now();
+    let lastUpdateTime = performance.now();
+    let lastFrameTime = lastUpdateTime;
     let colorUpdateTimer = 0.0;
     let rafId = null;
-    let lastActivityTime = Date.now();
-    const IDLE_TIMEOUT_MS = 3000;
+    let lastActivityTime = lastUpdateTime;
+    let destroyed = false;
+    let pageHidden = false;
+    const IDLE_TIMEOUT_MS = 1800;
+    const FRAME_INTERVAL_MS = 1000 / 30;
 
-    function update() {
-        if (Date.now() - lastActivityTime > IDLE_TIMEOUT_MS) {
-            rafId = null;
-            return;
+    function canAnimate() {
+        return !destroyed && !pageHidden && document.visibilityState !== 'hidden' &&
+            !reducedMotion.matches;
+    }
+
+    function update(now) {
+        rafId = null;
+        if (!canAnimate() || now - lastActivityTime > IDLE_TIMEOUT_MS) return;
+        if (now - lastFrameTime >= FRAME_INTERVAL_MS) {
+            lastFrameTime = now;
+            const dt = calcDeltaTime(now);
+            if (resizeCanvas()) initFramebuffers();
+            updateColors(dt);
+            applyInputs();
+            step(dt);
+            render(null);
         }
-        const dt = calcDeltaTime();
-        if (resizeCanvas()) initFramebuffers();
-        updateColors(dt);
-        applyInputs();
-        step(dt);
-        render(null);
         rafId = requestAnimationFrame(update);
     }
 
     function startLoop() {
-        if (rafId !== null) return;
-        lastUpdateTime = Date.now();
+        if (rafId !== null || !canAnimate()) return;
+        lastUpdateTime = performance.now();
+        lastFrameTime = lastUpdateTime - FRAME_INTERVAL_MS;
         rafId = requestAnimationFrame(update);
     }
 
+    function stopLoop() {
+        if (rafId !== null) cancelAnimationFrame(rafId);
+        rafId = null;
+    }
+
     function onActivity() {
-        lastActivityTime = Date.now();
+        if (!canAnimate()) return;
+        lastActivityTime = performance.now();
         startLoop();
     }
-    function calcDeltaTime() {
-        let now = Date.now();
+    function calcDeltaTime(now) {
         let dt = (now - lastUpdateTime) / 1000;
-        dt = Math.min(dt, 0.016666);
+        dt = Math.min(dt, FRAME_INTERVAL_MS / 1000);
         lastUpdateTime = now;
         return dt;
     }
@@ -888,6 +937,10 @@ const fluidCursor = () => {
     }
     function applyInputs() {
         pointers.forEach((p) => {
+            if (p.clicked) {
+                p.clicked = false;
+                clickSplat(p);
+            }
             if (p.moved) {
                 p.moved = false;
                 splatPointer(p);
@@ -1052,14 +1105,16 @@ const fluidCursor = () => {
         return radius;
     }
     function onMouseDown(e) {
+        if (!canAnimate()) return;
         let pointer = pointers[0];
         let posX = scaleByPixelRatio(e.clientX);
         let posY = scaleByPixelRatio(e.clientY);
         updatePointerDownData(pointer, -1, posX, posY);
-        clickSplat(pointer);
+        pointer.clicked = true;
         onActivity();
     }
     function onMouseMove(e) {
+        if (!canAnimate()) return;
         let pointer = pointers[0];
         let posX = scaleByPixelRatio(e.clientX);
         let posY = scaleByPixelRatio(e.clientY);
@@ -1067,6 +1122,7 @@ const fluidCursor = () => {
         onActivity();
     }
     function onTouchStart(e) {
+        if (!canAnimate()) return;
         const touches = e.targetTouches;
         let pointer = pointers[0];
         for (let i = 0; i < touches.length; i++) {
@@ -1077,6 +1133,7 @@ const fluidCursor = () => {
         onActivity();
     }
     function onTouchMove(e) {
+        if (!canAnimate()) return;
         const touches = e.targetTouches;
         let pointer = pointers[0];
         for (let i = 0; i < touches.length; i++) {
@@ -1093,25 +1150,64 @@ const fluidCursor = () => {
             updatePointerUpData(pointer);
         }
     }
-    window.addEventListener('mousedown', onMouseDown);
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('touchstart', onTouchStart);
-    window.addEventListener('touchmove', onTouchMove, false);
-    window.addEventListener('touchend', onTouchEnd);
+    function onVisibilityChange() {
+        if (document.visibilityState === 'hidden') stopLoop();
+        // Visible pages stay idle until the next pointer/touch input.
+    }
+
+    function onMotionChange() {
+        if (reducedMotion.matches) stopLoop();
+    }
+
+    function onPageHide() {
+        pageHidden = true;
+        stopLoop();
+    }
+
+    function onPageShow() {
+        pageHidden = false;
+    }
+
+    window.addEventListener('mousedown', onMouseDown, {passive: true});
+    window.addEventListener('mousemove', onMouseMove, {passive: true});
+    window.addEventListener('touchstart', onTouchStart, {passive: true});
+    window.addEventListener('touchmove', onTouchMove, {passive: true});
+    window.addEventListener('touchend', onTouchEnd, {passive: true});
+    window.addEventListener('touchcancel', onTouchEnd, {passive: true});
+    window.addEventListener('pagehide', onPageHide, {passive: true});
+    window.addEventListener('pageshow', onPageShow, {passive: true});
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    reducedMotion.addEventListener('change', onMotionChange);
 
     function destroy() {
-        if (rafId !== null) {
-            cancelAnimationFrame(rafId);
-            rafId = null;
-        }
+        if (destroyed) return;
+        destroyed = true;
+        stopLoop();
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         gl.clearColor(0, 0, 0, 0);
         gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.useProgram(null);
         window.removeEventListener('mousedown', onMouseDown);
         window.removeEventListener('mousemove', onMouseMove);
         window.removeEventListener('touchstart', onTouchStart);
-        window.removeEventListener('touchmove', onTouchMove, false);
+        window.removeEventListener('touchmove', onTouchMove);
         window.removeEventListener('touchend', onTouchEnd);
+        window.removeEventListener('touchcancel', onTouchEnd);
+        window.removeEventListener('pagehide', onPageHide);
+        window.removeEventListener('pageshow', onPageShow);
+        document.removeEventListener('visibilitychange', onVisibilityChange);
+        reducedMotion.removeEventListener('change', onMotionChange);
+        const deleteMethods = {
+            textures: 'deleteTexture',
+            framebuffers: 'deleteFramebuffer',
+            programs: 'deleteProgram',
+            shaders: 'deleteShader',
+            buffers: 'deleteBuffer',
+        };
+        Object.entries(resources).forEach(([kind, allocated]) => {
+            allocated.forEach((resource) => gl[deleteMethods[kind]](resource));
+            allocated.clear();
+        });
     }
     return { destroy };
     function updatePointerDownData(pointer, id, posX, posY) {
@@ -1205,7 +1301,7 @@ const fluidCursor = () => {
         else return { width: min, height: max };
     }
     function scaleByPixelRatio(input) {
-        const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+        const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.25);
         return Math.floor(input * pixelRatio);
     }
     function hashCode(s) {

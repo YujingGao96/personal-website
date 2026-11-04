@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import {getClientCookie} from "../../../lib/clientPreferenceCookie";
 
 export const CURSOR_FX_COOKIE = 'fluid-cursor-enabled';
@@ -21,96 +21,160 @@ function getStoredEnabled() {
     }
 }
 
-function getDefaultEnabled() {
-    const stored = getStoredEnabled();
-    if (stored !== null) return stored;
-    return (
-        window.matchMedia('(pointer: fine)').matches &&
-        !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    );
+function getInitialPreference() {
+    // Touch devices can opt in with the button, without starting WebGL on page load.
+    return getStoredEnabled() === true && window.matchMedia('(pointer: fine)').matches;
+}
+
+export function getDefaultEnabled() {
+    return getInitialPreference() && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
 const FluidCursor = () => {
-    const stateRef = useRef({ destroy: null, starting: null, mounted: true, cancelQueuedStart: null });
-
     useEffect(() => {
-        const state = stateRef.current;
-        state.mounted = true;
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const finePointer = window.matchMedia('(pointer: fine)');
+        const state = {
+            mounted: true,
+            enabled: getInitialPreference(),
+            hasManualPreference: false,
+            pageHidden: false,
+            generation: 0,
+            destroy: null,
+            starting: null,
+            startRequested: false,
+            cancelQueuedStart: null,
+        };
 
-        async function start() {
-            if (state.destroy || state.starting) return;
-            state.starting = (async () => {
-                try {
-                    const { default: fluidCursor } = await import('./hook/use-FluidCursor');
-                    const result = fluidCursor();
-                    if (!state.mounted) {
-                        result?.destroy?.();
-                        return;
-                    }
-                    state.destroy = result?.destroy ?? null;
-                } finally {
-                    state.starting = null;
-                }
-            })();
+        function canStart() {
+            return state.mounted && state.enabled && !state.pageHidden &&
+                document.visibilityState !== 'hidden' && !reducedMotion.matches;
         }
 
-        function clearQueuedStart() {
-            if (state.cancelQueuedStart) {
-                state.cancelQueuedStart();
-                state.cancelQueuedStart = null;
+        async function start() {
+            if (!canStart() || state.destroy) return;
+            if (state.starting) {
+                state.startRequested = true;
+                return;
+            }
+            const generation = state.generation;
+            state.startRequested = false;
+            state.starting = import('./hook/use-FluidCursor');
+            try {
+                const { default: fluidCursor } = await state.starting;
+                // OFF, navigation, visibility and motion changes can happen during import.
+                if (!canStart() || generation !== state.generation) return;
+                const result = fluidCursor();
+                if (!canStart() || generation !== state.generation) {
+                    result?.destroy?.();
+                    return;
+                }
+                state.destroy = result?.destroy ?? null;
+            } catch (error) {
+                console.warn('Unable to start the fluid cursor.', error);
+            } finally {
+                state.starting = null;
+                if (state.startRequested && canStart()) start();
             }
         }
 
-        function queueStart() {
-            if (state.cancelQueuedStart || state.destroy || state.starting) return;
+        function clearQueuedStart() {
+            state.cancelQueuedStart?.();
+            state.cancelQueuedStart = null;
+        }
 
+        function queueStart({allowIdle = false} = {}) {
+            if (!canStart() || state.cancelQueuedStart || state.destroy) return;
             const events = ['pointermove', 'pointerdown'];
             const run = () => {
                 clearQueuedStart();
                 start();
             };
-
             events.forEach((eventName) => {
                 window.addEventListener(eventName, run, {once: true, passive: true});
             });
 
             let idleId = null;
             let timeoutId = null;
-            if ('requestIdleCallback' in window) {
-                idleId = window.requestIdleCallback(run, {timeout: 1800});
-            } else {
-                timeoutId = window.setTimeout(run, 900);
+            if (allowIdle) {
+                if ('requestIdleCallback' in window) {
+                    idleId = window.requestIdleCallback(run, {timeout: 1800});
+                } else {
+                    timeoutId = window.setTimeout(run, 900);
+                }
             }
-
             state.cancelQueuedStart = () => {
-                events.forEach((eventName) => {
-                    window.removeEventListener(eventName, run);
-                });
+                events.forEach((eventName) => window.removeEventListener(eventName, run));
                 if (idleId !== null) window.cancelIdleCallback(idleId);
                 if (timeoutId !== null) window.clearTimeout(timeoutId);
             };
         }
 
-        function stop() {
+        function cancelStart() {
             clearQueuedStart();
-            if (state.destroy) {
-                state.destroy();
-                state.destroy = null;
+            state.generation += 1;
+            state.startRequested = false;
+        }
+
+        function stop() {
+            cancelStart();
+            state.destroy?.();
+            state.destroy = null;
+        }
+
+        function handleToggle(event) {
+            state.hasManualPreference = true;
+            state.enabled = event.detail?.enabled === true;
+            if (state.enabled) {
+                clearQueuedStart();
+                start();
+            } else {
+                stop();
             }
         }
 
-        if (getDefaultEnabled()) queueStart();
+        function handleMotionChange() {
+            if (reducedMotion.matches) stop();
+            else queueStart();
+        }
 
-        function handleToggle(e) {
-            if (e.detail?.enabled) start();
+        function handlePointerChange() {
+            if (state.hasManualPreference) return;
+            state.enabled = getInitialPreference();
+            if (state.enabled) queueStart();
             else stop();
         }
 
+        function handleVisibilityChange() {
+            if (document.visibilityState === 'hidden') cancelStart();
+            else queueStart();
+        }
+
+        function handlePageHide() {
+            state.pageHidden = true;
+            cancelStart();
+        }
+
+        function handlePageShow() {
+            state.pageHidden = false;
+            queueStart();
+        }
+
+        queueStart({allowIdle: true});
         window.addEventListener(TOGGLE_EVENT, handleToggle);
+        window.addEventListener('pagehide', handlePageHide, {passive: true});
+        window.addEventListener('pageshow', handlePageShow, {passive: true});
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        reducedMotion.addEventListener('change', handleMotionChange);
+        finePointer.addEventListener('change', handlePointerChange);
         return () => {
             state.mounted = false;
             window.removeEventListener(TOGGLE_EVENT, handleToggle);
-            clearQueuedStart();
+            window.removeEventListener('pagehide', handlePageHide);
+            window.removeEventListener('pageshow', handlePageShow);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            reducedMotion.removeEventListener('change', handleMotionChange);
+            finePointer.removeEventListener('change', handlePointerChange);
             stop();
         };
     }, []);

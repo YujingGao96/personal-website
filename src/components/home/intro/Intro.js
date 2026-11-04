@@ -2,11 +2,12 @@
 
 import BannerTreatment from "../../common/BannerTreatment";
 import OrbitalStage from "./OrbitalStage";
+import LiveAge from "./LiveAge";
+import useMotionVisibility from "../../../hooks/useMotionVisibility";
 import React, {useEffect, useRef, useState} from "react";
 import Image from "next/image";
 import {
-    birthday, company, email,
-    getAge, linkedin,
+    company, email, linkedin,
 } from "../../../resolvers/profileResolver";
 import {hashText, seededFloat, seededNumber, VIBRANT_COLORS} from "../../../util/GenArtUtil";
 import fisIcon      from "./images/fis.png";
@@ -132,67 +133,62 @@ function getConsoleMessage(copy, activity, gitState, branch) {
     return copy.consoleMessages.dirty;
 }
 
+function getPlanetPosition(planet, elapsedMs) {
+    const angle = elapsedMs / 1000 * planet.speed + planet.phase;
+    const orbitX = planet.rx * Math.cos(angle);
+    const orbitY = planet.ry * Math.sin(angle);
+    const x = orbitX * ORBIT_TILT_COS - orbitY * ORBIT_TILT_SIN;
+    const y = orbitX * ORBIT_TILT_SIN + orbitY * ORBIT_TILT_COS;
+    const maxY = Math.hypot(planet.rx * ORBIT_TILT_SIN, planet.ry * ORBIT_TILT_COS);
+    const depth = (y / maxY + 1) / 2;
+
+    return {
+        transform: `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`,
+        opacity: 0.35 + depth * 0.65,
+        zIndex: y > 0 ? "4" : "1",
+    };
+}
+
 function OrbitalSystem({displayName}) {
     const planetRefs = useRef([]);
-    const rafRef = useRef(null);
     const containerRef = useRef(null);
-    const activeRef = useRef(true);
+    const elapsedRef = useRef(0);
+    const active = useMotionVisibility(containerRef, {rootMargin: "120px"});
 
     useEffect(() => {
-        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (!active) return undefined;
 
-        function updatePlanets(ts = 0) {
-            const t = ts / 1000;
-            PLANETS.forEach((planet, index) => {
-                const el = planetRefs.current[index];
-                if (!el) return;
-
-                const ang = t * planet.speed + planet.phase;
-                const orbitX = planet.rx * Math.cos(ang);
-                const orbitY = planet.ry * Math.sin(ang);
-                const tiltedX = orbitX * ORBIT_TILT_COS - orbitY * ORBIT_TILT_SIN;
-                const tiltedY = orbitX * ORBIT_TILT_SIN + orbitY * ORBIT_TILT_COS;
-                const maxTiltedY = Math.hypot(planet.rx * ORBIT_TILT_SIN, planet.ry * ORBIT_TILT_COS);
-                const depth = (tiltedY / maxTiltedY + 1) / 2;
-
-                el.style.left = `${ORBIT_CENTER_X + tiltedX}px`;
-                el.style.top = `${ORBIT_CENTER_Y + tiltedY}px`;
-                el.style.zIndex = tiltedY > 0 ? "4" : "1";
-                el.style.opacity = String(0.35 + depth * 0.65);
-                el.style.filter = `brightness(${0.65 + depth * 0.35})`;
-            });
-        }
-
-        if (reducedMotion) {
-            updatePlanets(0);
-            return undefined;
-        }
-
+        let rafId;
+        let previousTimestamp = null;
         let lastDraw = 0;
-        function tick(ts) {
-            if (activeRef.current && ts - lastDraw >= 32) {
-                updatePlanets(ts);
-                lastDraw = ts;
+
+        function tick(timestamp) {
+            // Only visible time advances the orbit, so resuming never jumps ahead.
+            if (previousTimestamp !== null) {
+                elapsedRef.current += Math.min(timestamp - previousTimestamp, 64);
             }
-            rafRef.current = requestAnimationFrame(tick);
+            previousTimestamp = timestamp;
+
+            if (timestamp - lastDraw >= 32) {
+                PLANETS.forEach((planet, index) => {
+                    const element = planetRefs.current[index];
+                    if (!element) return;
+
+                    const position = getPlanetPosition(planet, elapsedRef.current);
+                    element.style.transform = position.transform;
+                    element.style.opacity = String(position.opacity);
+                    if (element.style.zIndex !== position.zIndex) {
+                        element.style.zIndex = position.zIndex;
+                    }
+                });
+                lastDraw = timestamp;
+            }
+            rafId = requestAnimationFrame(tick);
         }
 
-        const observer = new IntersectionObserver(([entry]) => {
-            activeRef.current = entry.isIntersecting;
-        }, {rootMargin: "120px"});
-
-        if (containerRef.current) {
-            observer.observe(containerRef.current);
-        }
-
-        updatePlanets(0);
-        rafRef.current = requestAnimationFrame(tick);
-
-        return () => {
-            observer.disconnect();
-            cancelAnimationFrame(rafRef.current);
-        };
-    }, []);
+        rafId = requestAnimationFrame(tick);
+        return () => cancelAnimationFrame(rafId);
+    }, [active]);
 
     return (
         <div
@@ -248,6 +244,11 @@ function OrbitalSystem({displayName}) {
                     key={planet.name}
                     ref={el => { planetRefs.current[index] = el; }}
                     className={`planet-dot ${planet.cls}`}
+                    style={{
+                        left: "var(--orbit-center-x)",
+                        top: "var(--orbit-center-y)",
+                        ...getPlanetPosition(planet, 0),
+                    }}
                 />
             ))}
         </div>
@@ -587,7 +588,7 @@ function IntroActionEffect({activity, seed}) {
     return null;
 }
 
-function IntroCodeBlock({ageState, activity, gitState, showDiff, copy}) {
+function IntroCodeBlock({activity, gitState, showDiff, copy}) {
     const [primaryInterest, secondaryInterest] = copy.code.interests;
 
     return (
@@ -597,7 +598,7 @@ function IntroCodeBlock({ageState, activity, gitState, showDiff, copy}) {
                     <span className="code-class">PersonBuilder</span>
                 </CodeLine>
                 <CodeLine lineNumber={2} indent={1}>.<span className="code-method">setName</span>(<span className="code-string">&quot;{copy.code.name}&quot;</span>)</CodeLine>
-                <CodeLine lineNumber={3} indent={1}>.<span className="code-method">setAge</span>(<span className="code-number">{ageState}</span>)</CodeLine>
+                <CodeLine lineNumber={3} indent={1}>.<span className="code-method">setAge</span>(<LiveAge/>)</CodeLine>
                 <CodeLine lineNumber={4} indent={1}>.<span className="code-method">setGender</span>(<span className="code-class">Gender</span>.<span className="code-constant">{copy.code.gender}</span>)</CodeLine>
                 {showDiff ? (
                     <>
@@ -623,18 +624,12 @@ function IntroCodeBlock({ageState, activity, gitState, showDiff, copy}) {
 
 const Intro = ({language = DEFAULT_BLOG_LANGUAGE}) => {
     const copy = getHomeCopy(language);
-    const [ageState, setAgeState] = useState("0.000000000");
     const [activity, setActivity] = useState("idle");
     const [gitState, setGitState] = useState("dirty");
     const [branchIndex, setBranchIndex] = useState(0);
     const [branchOpen, setBranchOpen] = useState(false);
     const [showDiff, setShowDiff] = useState(true);
     const [actionSeed, setActionSeed] = useState(ACTION_ART_BASE_SEED);
-
-    useEffect(() => {
-        const iv = setInterval(() => setAgeState(getAge(birthday)), 500);
-        return () => clearInterval(iv);
-    }, []);
 
     const branch = BRANCHES[branchIndex];
     const consoleMessage = getConsoleMessage(copy, activity, gitState, branch);
@@ -750,7 +745,7 @@ const Intro = ({language = DEFAULT_BLOG_LANGUAGE}) => {
                         </div>
 
                         <div className="intro-editor-shell">
-                            <IntroCodeBlock ageState={ageState} activity={activity} gitState={gitState} showDiff={showDiff} copy={copy} />
+                            <IntroCodeBlock activity={activity} gitState={gitState} showDiff={showDiff} copy={copy} />
 
                             <IntroActionEffect key={`${activity}-${actionSeed}`} activity={activity} seed={actionSeed}/>
 

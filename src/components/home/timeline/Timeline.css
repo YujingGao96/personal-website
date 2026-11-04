@@ -1,5 +1,7 @@
 .timeline-section {
     margin: 7rem auto 0;
+    /* Paused entry transforms must not widen the page before a card is visible. */
+    overflow-x: clip;
 }
 
 .timeline-rail {

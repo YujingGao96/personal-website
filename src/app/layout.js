@@ -31,9 +31,6 @@ export default function RootLayout({children}) {
                 <NavBar/>
                 <div className="page-top-progressive-blur" aria-hidden="true">
                     <span className="page-top-progressive-blur-layer" />
-                    <span className="page-top-progressive-blur-layer" />
-                    <span className="page-top-progressive-blur-layer" />
-                    <span className="page-top-progressive-blur-layer" />
                 </div>
                 {children}
             </body>

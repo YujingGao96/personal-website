@@ -1,37 +1,28 @@
 'use client';
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import {BLOG_LANGUAGE_EVENT, getBlogCopy, normalizeBlogLanguage} from "../../../lib/blog/language";
-import {getClientCookie, setClientCookie} from "../../../lib/clientPreferenceCookie";
-import { CURSOR_FX_COOKIE, TOGGLE_EVENT } from './FluidCursor';
+import {setClientCookie} from "../../../lib/clientPreferenceCookie";
+import { CURSOR_FX_COOKIE, TOGGLE_EVENT, getDefaultEnabled } from './FluidCursor';
 
 const LEGACY_STORAGE_KEY = 'fluid-cursor-enabled';
 
-function getStoredEnabled() {
-    const cookieValue = getClientCookie(CURSOR_FX_COOKIE);
-
-    if (cookieValue) {
-        return cookieValue === 'true';
-    }
-
-    try {
-        const stored = localStorage.getItem(LEGACY_STORAGE_KEY);
-        return stored === null ? null : stored === 'true';
-    } catch {
-        return null;
-    }
+function subscribeMotionPreference(onChange) {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const finePointer = window.matchMedia('(pointer: fine)');
+    reducedMotion.addEventListener('change', onChange);
+    finePointer.addEventListener('change', onChange);
+    return () => {
+        reducedMotion.removeEventListener('change', onChange);
+        finePointer.removeEventListener('change', onChange);
+    };
 }
 
-function getDefaultEnabled() {
-    const stored = getStoredEnabled();
-    if (stored !== null) return stored;
-    return (
-        window.matchMedia('(pointer: fine)').matches &&
-        !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    );
+function getReducedMotion() {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-function subscribeDefaultEnabled() {
-    return () => {};
+function getServerReducedMotion() {
+    return false;
 }
 
 function getServerEnabled() {
@@ -42,12 +33,18 @@ const CursorToggleButton = ({language}) => {
     const [selectedLanguage, setSelectedLanguage] = useState(normalizeBlogLanguage(language));
     const copy = getBlogCopy(selectedLanguage);
     const defaultEnabled = useSyncExternalStore(
-        subscribeDefaultEnabled,
+        subscribeMotionPreference,
         getDefaultEnabled,
         getServerEnabled
     );
+    const reducedMotion = useSyncExternalStore(
+        subscribeMotionPreference,
+        getReducedMotion,
+        getServerReducedMotion
+    );
     const [selectedEnabled, setSelectedEnabled] = useState(null);
-    const enabled = selectedEnabled ?? defaultEnabled;
+    const preferredEnabled = selectedEnabled ?? defaultEnabled;
+    const enabled = preferredEnabled === null ? null : preferredEnabled && !reducedMotion;
 
     useEffect(() => {
         const handleLanguageChange = (event) => {
@@ -77,6 +74,7 @@ const CursorToggleButton = ({language}) => {
             type="button"
             className={`cursor-toggle-button ${enabled ? 'enabled' : 'disabled'}`}
             onClick={toggle}
+            disabled={reducedMotion}
             aria-label={copy.toggleCursorFx}
             aria-pressed={enabled}
         >

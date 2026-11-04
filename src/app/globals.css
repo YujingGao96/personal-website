@@ -15,6 +15,7 @@
 @import "../components/error/ErrorPage.css";
 @import "../components/common/BannerTreatment.css";
 @import "../components/home/intro/OrbitalStage.css";
+@import "../components/common/MotionBoundary.css";
 
 :root {
     --browser-chrome-bleed: 10rem;
@@ -93,26 +94,8 @@ body {
 }
 
 .page-top-progressive-blur-layer:nth-child(1) {
-    --top-page-blur: 4px;
+    --top-page-blur: 8px;
     --top-page-blur-fade: 100%;
-    --top-page-blur-solid: 0%;
-}
-
-.page-top-progressive-blur-layer:nth-child(2) {
-    --top-page-blur: 10px;
-    --top-page-blur-fade: 82%;
-    --top-page-blur-solid: 0%;
-}
-
-.page-top-progressive-blur-layer:nth-child(3) {
-    --top-page-blur: 18px;
-    --top-page-blur-fade: 62%;
-    --top-page-blur-solid: 0%;
-}
-
-.page-top-progressive-blur-layer:nth-child(4) {
-    --top-page-blur: 30px;
-    --top-page-blur-fade: 42%;
     --top-page-blur-solid: 0%;
 }
 
@@ -174,16 +157,15 @@ body {
 /* ══════════════════════════════════════════════════════════
    FROSTED GLASS — one recipe for the card/window surfaces.
 
-   Keep the glass mostly blur-driven instead of opacity-driven. Safari and
-   Chrome diverge most when blur, saturate(), transforms, and opaque background
-   shorthands are all mixed on the same element, so the shared recipe avoids
-   saturate() and uses a moderate tint plus a stronger blur.
+   Desktop cards use one moderate blur layer; small/coarse-pointer screens use
+   a stronger tint instead. Nested editor surfaces keep their tint without
+   creating additional backdrop roots.
    ══════════════════════════════════════════════════════════ */
 
 :root {
     --glass-bg: rgba(14, 14, 24, 0.38);
     --glass-bg-strong: rgba(14, 14, 24, 0.5);
-    --glass-blur: 12px;
+    --glass-blur: 8px;
     --glass-border: rgba(255, 255, 255, 0.055);
     --glass-top-light: rgba(255, 255, 255, 0.11);
     --glass-side-light: rgba(255, 255, 255, 0.035);
@@ -428,8 +410,8 @@ body {
         0 14px 28px rgba(0, 0, 0, 0.34),
         inset 0 1px 0 rgba(255, 255, 255, 0.09),
         inset 0 -1px 0 rgba(0, 0, 0, 0.45);
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
 }
 
 .intro-ide-toolbar {
@@ -897,6 +879,29 @@ body {
     }
 }
 
+/* Small screens retain the glass tint without stacking full-surface blur passes. */
+@media (max-width: 767px), (pointer: coarse) {
+    :root {
+        --glass-blur: 0px;
+        --glass-bg: rgba(14, 14, 24, 0.68);
+    }
+
+    .page-top-progressive-blur-layer {
+        display: none;
+    }
+
+    .home-blog-card,
+    .blog-list-item,
+    .timeline-signal-card,
+    .terminal-window,
+    .dark-bg,
+    .intro-code-panel,
+    .astro-panel {
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
+    }
+}
+
 .intro-ide-console {
     border-top: 1px solid rgba(255, 255, 255, 0.055);
     color: rgba(248, 248, 242, 0.68);
@@ -1230,7 +1235,7 @@ body {
     border-radius: 50%;
     transform: translate(-50%, -50%);
     pointer-events: none;
-    transition: opacity 0.5s ease, filter 0.5s ease;
+    transition: opacity 0.5s ease;
 }
 
 /* ─── Mercury — 5px, smallest, grey rocky body ─── */

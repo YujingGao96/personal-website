@@ -1,0 +1,20 @@
+.motion-boundary[data-motion="paused"],
+.motion-boundary[data-motion="paused"]::before,
+.motion-boundary[data-motion="paused"]::after,
+.motion-boundary[data-motion="paused"] *,
+.motion-boundary[data-motion="paused"] *::before,
+.motion-boundary[data-motion="paused"] *::after {
+    animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .motion-boundary,
+    .motion-boundary::before,
+    .motion-boundary::after,
+    .motion-boundary *,
+    .motion-boundary *::before,
+    .motion-boundary *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}

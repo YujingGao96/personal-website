@@ -1,8 +1,190 @@
 #bottom-frame {
+    background-color: #000;
     background-image: url("./city-line.png");
-    height: 7em;
+    background-position: left top;
+    background-repeat: repeat-x;
+    background-size: auto 7em;
+    height: calc(7em + 3.75rem);
+    image-rendering: pixelated;
+    overflow: hidden;
+    pointer-events: none;
+    position: relative;
     width: 100%;
-    background-size: contain;
+}
+
+.footer-cyclists {
+    bottom: 0;
+    height: 4.5rem;
+    left: 0;
+    position: absolute;
+    width: 100%;
+}
+
+.footer-cyclists::after {
+    background: repeating-linear-gradient(90deg, #c9eff52e 0 12px, transparent 12px 64px);
+    bottom: 5px;
+    content: "";
+    height: 2px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+}
+
+.footer-shooting-star {
+    animation: footer-shooting-star 21s linear infinite;
+    animation-delay: -17s;
+    background: #fff3aa;
+    box-shadow: -4px 0 #c1edf3c0, -8px 0 #c1edf380, -12px 0 #c1edf340;
+    height: 3px;
+    left: 14%;
+    opacity: 0;
+    position: absolute;
+    top: -4.25rem;
+    width: 4px;
+}
+
+.footer-cycle-trip {
+    --cycle-frame: #fff3aa;
+    --cycle-rim: #c1edf3;
+    --cycle-shirt: #a4dce5;
+    --cycle-trousers: #688f9c;
+    animation: footer-cycle-crossing 27s linear infinite;
+    animation-delay: -8s;
+    bottom: 9px;
+    height: 68px;
+    left: -88px;
+    position: absolute;
+    width: 88px;
+}
+
+.footer-cycle-trip--evening {
+    --cycle-shirt: #e8daa3;
+    animation-delay: -22s;
+    animation-direction: reverse;
+    animation-duration: 37s;
+    bottom: 13px;
+}
+
+.footer-cycle-trip--late {
+    --cycle-shirt: #b7b7d5;
+    animation-delay: -28s;
+    animation-duration: 41s;
+}
+
+.footer-cycle-trip--home {
+    --cycle-shirt: #c1d7ac;
+    animation-delay: -4s;
+    animation-direction: reverse;
+    animation-duration: 31s;
+    bottom: 13px;
+}
+
+.footer-cycle-trip--evening .footer-cycle-facing,
+.footer-cycle-trip--home .footer-cycle-facing {
+    transform: scaleX(-1);
+}
+
+.footer-bicycle {
+    display: block;
+    height: 68px;
+    overflow: visible;
+    width: 88px;
+}
+
+.footer-bike-spokes {
+    animation: footer-wheel-turn 0.9s steps(8, end) infinite;
+    transform-box: view-box;
+}
+
+.footer-bike-spokes--rear {
+    transform-origin: 20px 51px;
+}
+
+.footer-bike-spokes--front {
+    transform-origin: 68px 51px;
+}
+
+.footer-bike-crank {
+    animation: footer-wheel-turn 0.9s steps(4, end) infinite;
+    transform-box: view-box;
+    transform-origin: 44px 51px;
+}
+
+.footer-rider-legs {
+    animation: footer-pedal-step 0.9s steps(1, end) infinite;
+}
+
+.footer-rider-legs--second {
+    animation-delay: -0.45s;
+    opacity: 0;
+}
+
+@keyframes footer-cycle-crossing {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(100vw + 176px)); }
+}
+
+@keyframes footer-shooting-star {
+    0%, 84% {
+        opacity: 0;
+        transform: translate3d(0, 0, 0) rotate(18deg);
+    }
+    85% { opacity: 1; }
+    90%, 100% {
+        opacity: 0;
+        transform: translate3d(min(46vw, 460px), 60px, 0) rotate(18deg);
+    }
+}
+
+@keyframes footer-wheel-turn {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes footer-pedal-step {
+    0%, 49.99% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+}
+
+@media (max-width: 640px) {
+    .footer-cycle-trip--late,
+    .footer-cycle-trip--home {
+        display: none;
+    }
+
+    .footer-cycle-trip--morning {
+        animation-duration: 20s;
+    }
+
+    .footer-cycle-trip--evening {
+        animation-duration: 26s;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .footer-shooting-star {
+        display: none;
+    }
+
+    .footer-cycle-trip,
+    .footer-bike-spokes,
+    .footer-bike-crank,
+    .footer-rider-legs {
+        animation: none;
+    }
+
+    .footer-cycle-trip {
+        left: 17%;
+        transform: translateX(-50%);
+    }
+
+    .footer-cycle-trip--evening { left: 39%; }
+    .footer-cycle-trip--late { left: 62%; }
+    .footer-cycle-trip--home { left: 83%; }
+}
+
+@media (prefers-reduced-motion: reduce) and (max-width: 640px) {
+    .footer-cycle-trip--morning { left: 25%; }
+    .footer-cycle-trip--evening { left: 75%; }
 }
 
 .footer-preferences {

@@ -32,11 +32,8 @@ body {
     width: 48vmax;
     height: 48vmax;
     border-radius: 50%;
-    -webkit-filter: blur(36px);
-    filter: blur(36px);
     opacity: 0.2;
     transform: translate3d(0, 0, 0);
-    will-change: transform, opacity;
 }
 
 .particle-ambient-a {
@@ -79,7 +76,6 @@ body {
     top: -10vh;
     transform: translate3d(0, -10vh, 0);
     width: var(--snow-size);
-    will-change: transform, opacity;
 }
 
 @keyframes ambient-drift-a {
@@ -225,6 +221,21 @@ canvas#fluid {
     z-index: 9999;
     pointer-events: none;
     opacity: 40%;
+}
+
+@media (max-width: 767px), (pointer: coarse) {
+    .snow-particle:nth-child(n + 11) {
+        display: none;
+    }
+
+    .snow-particle {
+        box-shadow: none;
+    }
+
+    .particle-ambient {
+        animation: none;
+        opacity: 0.18;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

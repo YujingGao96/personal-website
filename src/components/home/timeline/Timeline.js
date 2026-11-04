@@ -3,6 +3,7 @@
 import React from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import GeneratedTimelineArt from "./GeneratedTimelineArt";
+import MotionBoundary from "../../common/MotionBoundary";
 import SectionHeader from "../../common/SectionHeader";
 import {DEFAULT_BLOG_LANGUAGE} from "../../../lib/blog/language";
 import {getHomeCopy, getTimelineElements} from "../../../lib/home/content";
@@ -60,11 +61,11 @@ const TimeLine = ({language = DEFAULT_BLOG_LANGUAGE}) => {
     const timelineElements = getTimelineElements(language);
 
     return (
-        <div id="timeline" className="timeline-section">
+        <MotionBoundary id="timeline" className="timeline-section">
             <SectionHeader eyebrow={copy.timelineEyebrow} title={copy.timelineTitle} sectionId="timeline" />
             <div className="timeline-rail" aria-label={copy.timelineAria}>
                 {timelineElements.map((entry, index) => (
-                    <div className="timeline-row" key={entry.id}>
+                    <MotionBoundary className="timeline-row" key={entry.id}>
                         <div className="timeline-slot timeline-slot-left">
                             {index % 2 === 1 && <TimelineCard entry={entry} index={index} copy={copy}/>}
                         </div>
@@ -72,10 +73,10 @@ const TimeLine = ({language = DEFAULT_BLOG_LANGUAGE}) => {
                         <div className="timeline-slot timeline-slot-right">
                             {index % 2 === 0 && <TimelineCard entry={entry} index={index} copy={copy}/>}
                         </div>
-                    </div>
+                    </MotionBoundary>
                 ))}
             </div>
-        </div>
+        </MotionBoundary>
     );
 };
 

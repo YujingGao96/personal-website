@@ -2,7 +2,9 @@
 
 import {useCallback, useEffect, useRef, useState} from "react";
 import GeneratedSigil from "../../common/GeneratedSigil";
+import MotionBoundary from "../../common/MotionBoundary";
 import SectionHeader from "../../common/SectionHeader";
+import useMotionVisibility from "../../../hooks/useMotionVisibility";
 import {hashText} from "../../../util/GenArtUtil";
 import {DEFAULT_BLOG_LANGUAGE} from "../../../lib/blog/language";
 import {getCompliments, getHomeCopy} from "../../../lib/home/content";
@@ -88,6 +90,7 @@ function MarqueeRow({items, reverse = false, speed = 42, ariaLabel}) {
     const scrollPositionRef = useRef(0);
     const cardsRef = useRef([]);
     const depthRafRef = useRef(null);
+    const motionActive = useMotionVisibility(scrollerRef, {rootMargin: "120px"});
 
     const getSegmentWidth = useCallback((scroller) => scroller.scrollWidth / LOOP_COPIES, []);
 
@@ -117,7 +120,7 @@ function MarqueeRow({items, reverse = false, speed = 42, ariaLabel}) {
 
     const updateCardDepth = useCallback(() => {
         const scroller = scrollerRef.current;
-        if (!scroller) return;
+        if (!scroller || !scroller.clientWidth) return;
 
         const centerX = scroller.scrollLeft + scroller.clientWidth / 2;
         const maxDistance = scroller.clientWidth * 0.58;
@@ -174,21 +177,39 @@ function MarqueeRow({items, reverse = false, speed = 42, ariaLabel}) {
         const scroller = scrollerRef.current;
         if (!scroller) return undefined;
 
-        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        const centerScroller = () => {
+        let segmentWidth = 0;
+        const refreshLayout = () => {
+            const progress = segmentWidth ? scroller.scrollLeft / segmentWidth : 1;
             collectCards();
-            scrollPositionRef.current = getSegmentWidth(scroller);
+            segmentWidth = getSegmentWidth(scroller);
+            scrollPositionRef.current = segmentWidth * progress;
             scroller.scrollLeft = scrollPositionRef.current;
             updateCardDepth();
         };
 
-        let lastTimestamp = 0;
+        const initialFrame = window.requestAnimationFrame(refreshLayout);
+        window.addEventListener("resize", refreshLayout);
+
+        return () => {
+            window.cancelAnimationFrame(initialFrame);
+            window.cancelAnimationFrame(depthRafRef.current);
+            depthRafRef.current = null;
+            window.removeEventListener("resize", refreshLayout);
+        };
+    }, [collectCards, getSegmentWidth, updateCardDepth]);
+
+    useEffect(() => {
+        const scroller = scrollerRef.current;
+        if (!motionActive || !scroller) return undefined;
+
+        // Begin each visible interval at the current scroll position and time.
+        scrollPositionRef.current = scroller.scrollLeft;
+        let lastTimestamp = null;
         const animate = (timestamp) => {
-            if (!lastTimestamp) lastTimestamp = timestamp;
-            const delta = timestamp - lastTimestamp;
+            const delta = lastTimestamp === null ? 0 : Math.min(timestamp - lastTimestamp, 64);
             lastTimestamp = timestamp;
 
-            if (!reducedMotion && timestamp - lastInteractionRef.current >= AUTO_RESUME_DELAY) {
+            if (timestamp - lastInteractionRef.current >= AUTO_RESUME_DELAY) {
                 const segmentWidth = getSegmentWidth(scroller);
                 const pixelsPerMillisecond = segmentWidth / (speed * 1000);
                 scrollPositionRef.current += (reverse ? -1 : 1) * pixelsPerMillisecond * delta;
@@ -206,16 +227,15 @@ function MarqueeRow({items, reverse = false, speed = 42, ariaLabel}) {
             rafRef.current = window.requestAnimationFrame(animate);
         };
 
-        window.requestAnimationFrame(centerScroller);
         rafRef.current = window.requestAnimationFrame(animate);
-        window.addEventListener("resize", centerScroller);
 
         return () => {
             window.cancelAnimationFrame(rafRef.current);
+            rafRef.current = null;
             window.cancelAnimationFrame(depthRafRef.current);
-            window.removeEventListener("resize", centerScroller);
+            depthRafRef.current = null;
         };
-    }, [collectCards, getSegmentWidth, resetLoopPosition, reverse, scheduleDepthUpdate, speed, updateCardDepth]);
+    }, [getSegmentWidth, motionActive, reverse, scheduleDepthUpdate, speed]);
 
     return (
         <div className="marquee-row">
@@ -227,6 +247,7 @@ function MarqueeRow({items, reverse = false, speed = 42, ariaLabel}) {
                 onPointerDown={pauseForUserScroll}
                 onTouchStart={pauseForUserScroll}
                 onKeyDown={pauseForUserScroll}
+                onFocus={pauseForUserScroll}
                 tabIndex="0"
                 role="region"
                 aria-label={ariaLabel}
@@ -253,14 +274,14 @@ const Compliments = ({language = DEFAULT_BLOG_LANGUAGE}) => {
     const row2 = twoRows ? compliments.slice(Math.ceil(compliments.length / 2)) : [];
 
     return (
-        <div id="compliments">
+        <MotionBoundary id="compliments">
             <SectionHeader eyebrow={copy.complimentsEyebrow} title={copy.complimentsTitle} sectionId="compliments" />
 
             <div className="compliments-marquee-outer">
                 <MarqueeRow items={row1} speed={44} ariaLabel={copy.complimentsAria}/>
                 {twoRows && <MarqueeRow items={row2} reverse speed={54} ariaLabel={copy.complimentsAria}/>}
             </div>
-        </div>
+        </MotionBoundary>
     );
 };
 

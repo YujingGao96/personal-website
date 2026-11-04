@@ -4,6 +4,8 @@ import BlogLanguageSelector from "../../blog/BlogLanguageSelector";
 import {DEFAULT_BLOG_LANGUAGE} from "../../../lib/blog/language";
 import CursorToggleButton from "../home/CursorToggleButton";
 import FooterText from "./FooterText";
+import MotionBoundary from "../../common/MotionBoundary";
+import FooterCyclists from "./FooterCyclists";
 
 const BottomFrame = ({blogLanguage = DEFAULT_BLOG_LANGUAGE}) => {
     return (
@@ -13,7 +15,9 @@ const BottomFrame = ({blogLanguage = DEFAULT_BLOG_LANGUAGE}) => {
                 <CursorToggleButton language={blogLanguage}/>
             </div>
             <FooterText key={`footer-text-${blogLanguage}`} initialLanguage={blogLanguage} currentYear={currentYear}/>
-            <div id="bottom-frame"/>
+            <MotionBoundary id="bottom-frame" className="footer-city-scene">
+                <FooterCyclists/>
+            </MotionBoundary>
         </>
     );
 };
