@@ -1,10 +1,10 @@
 #bottom-frame {
-    background-color: #000;
+    background-color: transparent;
     background-image: url("./city-line.png");
     background-position: left top;
     background-repeat: repeat-x;
     background-size: auto 7em;
-    height: calc(7em + 3.75rem);
+    height: 7em;
     image-rendering: pixelated;
     overflow: hidden;
     pointer-events: none;
@@ -14,17 +14,7 @@
 
 .footer-cyclists {
     bottom: 0;
-    height: 4.5rem;
-    left: 0;
-    position: absolute;
-    width: 100%;
-}
-
-.footer-cyclists::after {
-    background: repeating-linear-gradient(90deg, #c9eff52e 0 12px, transparent 12px 64px);
-    bottom: 5px;
-    content: "";
-    height: 2px;
+    height: 100%;
     left: 0;
     position: absolute;
     width: 100%;
@@ -35,26 +25,27 @@
     animation-delay: -17s;
     background: #fff3aa;
     box-shadow: -4px 0 #c1edf3c0, -8px 0 #c1edf380, -12px 0 #c1edf340;
-    height: 3px;
+    height: 2px;
     left: 14%;
     opacity: 0;
     position: absolute;
-    top: -4.25rem;
-    width: 4px;
+    top: 6px;
+    width: 3px;
 }
 
 .footer-cycle-trip {
+    --pedal-cycle: 1.2s;
     --cycle-frame: #fff3aa;
     --cycle-rim: #c1edf3;
     --cycle-shirt: #a4dce5;
     --cycle-trousers: #688f9c;
     animation: footer-cycle-crossing 27s linear infinite;
     animation-delay: -8s;
-    bottom: 9px;
-    height: 68px;
-    left: -88px;
+    bottom: 0;
+    height: 28px;
+    left: -40px;
     position: absolute;
-    width: 88px;
+    width: 36px;
 }
 
 .footer-cycle-trip--evening {
@@ -62,7 +53,6 @@
     animation-delay: -22s;
     animation-direction: reverse;
     animation-duration: 37s;
-    bottom: 13px;
 }
 
 .footer-cycle-trip--late {
@@ -76,7 +66,6 @@
     animation-delay: -4s;
     animation-direction: reverse;
     animation-duration: 31s;
-    bottom: 13px;
 }
 
 .footer-cycle-trip--evening .footer-cycle-facing,
@@ -86,13 +75,13 @@
 
 .footer-bicycle {
     display: block;
-    height: 68px;
+    height: 100%;
     overflow: visible;
-    width: 88px;
+    width: 100%;
 }
 
 .footer-bike-spokes {
-    animation: footer-wheel-turn 0.9s steps(8, end) infinite;
+    animation: footer-wheel-turn 1s linear infinite;
     transform-box: view-box;
 }
 
@@ -105,23 +94,113 @@
 }
 
 .footer-bike-crank {
-    animation: footer-wheel-turn 0.9s steps(4, end) infinite;
+    animation: footer-wheel-turn var(--pedal-cycle) linear infinite;
     transform-box: view-box;
     transform-origin: 44px 51px;
 }
 
-.footer-rider-legs {
-    animation: footer-pedal-step 0.9s steps(1, end) infinite;
+.footer-rider-leg--rear {
+    opacity: 0.65;
 }
 
-.footer-rider-legs--second {
-    animation-delay: -0.45s;
-    opacity: 0;
+.footer-leg-thigh,
+.footer-leg-shin,
+.footer-leg-shoe {
+    animation-duration: var(--pedal-cycle);
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    transform-box: view-box;
+}
+
+.footer-leg-thigh {
+    animation-name: footer-thigh-turn;
+    transform-origin: 38px 32px;
+    transform: rotate(16.651deg);
+}
+
+.footer-leg-shin {
+    animation-name: footer-shin-turn;
+    transform-origin: 52px 32px;
+    transform: rotate(71.107deg);
+}
+
+.footer-leg-shoe {
+    animation-name: footer-shoe-level;
+    transform-origin: 67px 32px;
+    transform: rotate(-87.757deg);
+}
+
+.footer-rider-leg--rear .footer-leg-thigh,
+.footer-rider-leg--rear .footer-leg-shin,
+.footer-rider-leg--rear .footer-leg-shoe {
+    animation-delay: calc(var(--pedal-cycle) * -0.5);
+}
+
+.footer-rider-leg--rear .footer-leg-thigh { transform: rotate(44.920deg); }
+.footer-rider-leg--rear .footer-leg-shin { transform: rotate(97.662deg); }
+.footer-rider-leg--rear .footer-leg-shoe { transform: rotate(-142.582deg); }
+
+/* Sampled joint angles keep both feet on opposite pedals; no per-frame JS. */
+@keyframes footer-thigh-turn {
+    0%, 100% { transform: rotate(16.651deg); }
+    6.25% { transform: rotate(30.574deg); }
+    12.5% { transform: rotate(44.100deg); }
+    18.75% { transform: rotate(54.674deg); }
+    25% { transform: rotate(59.343deg); }
+    31.25% { transform: rotate(59.063deg); }
+    37.5% { transform: rotate(56.204deg); }
+    43.75% { transform: rotate(51.563deg); }
+    50% { transform: rotate(44.920deg); }
+    56.25% { transform: rotate(35.430deg); }
+    62.5% { transform: rotate(22.049deg); }
+    68.75% { transform: rotate(5.745deg); }
+    75% { transform: rotate(-7.213deg); }
+    81.25% { transform: rotate(-10.869deg); }
+    87.5% { transform: rotate(-6.089deg); }
+    93.75% { transform: rotate(3.889deg); }
+}
+
+@keyframes footer-shin-turn {
+    0%, 100% { transform: rotate(71.107deg); }
+    6.25% { transform: rotate(54.310deg); }
+    12.5% { transform: rotate(39.765deg); }
+    18.75% { transform: rotate(31.633deg); }
+    25% { transform: rotate(35.010deg); }
+    31.25% { transform: rotate(47.431deg); }
+    37.5% { transform: rotate(63.550deg); }
+    43.75% { transform: rotate(80.732deg); }
+    50% { transform: rotate(97.662deg); }
+    56.25% { transform: rotate(113.137deg); }
+    62.5% { transform: rotate(125.324deg); }
+    68.75% { transform: rotate(131.372deg); }
+    75% { transform: rotate(128.945deg); }
+    81.25% { transform: rotate(119.078deg); }
+    87.5% { transform: rotate(104.771deg); }
+    93.75% { transform: rotate(88.314deg); }
+}
+
+@keyframes footer-shoe-level {
+    0%, 100% { transform: rotate(-87.757deg); }
+    6.25% { transform: rotate(-84.884deg); }
+    12.5% { transform: rotate(-83.865deg); }
+    18.75% { transform: rotate(-86.307deg); }
+    25% { transform: rotate(-94.353deg); }
+    31.25% { transform: rotate(-106.494deg); }
+    37.5% { transform: rotate(-119.754deg); }
+    43.75% { transform: rotate(-132.295deg); }
+    50% { transform: rotate(-142.582deg); }
+    56.25% { transform: rotate(-148.566deg); }
+    62.5% { transform: rotate(-147.373deg); }
+    68.75% { transform: rotate(-137.117deg); }
+    75% { transform: rotate(-121.732deg); }
+    81.25% { transform: rotate(-108.210deg); }
+    87.5% { transform: rotate(-98.682deg); }
+    93.75% { transform: rotate(-92.203deg); }
 }
 
 @keyframes footer-cycle-crossing {
     from { transform: translateX(0); }
-    to { transform: translateX(calc(100vw + 176px)); }
+    to { transform: translateX(calc(100vw + 80px)); }
 }
 
 @keyframes footer-shooting-star {
@@ -132,17 +211,12 @@
     85% { opacity: 1; }
     90%, 100% {
         opacity: 0;
-        transform: translate3d(min(46vw, 460px), 60px, 0) rotate(18deg);
+        transform: translate3d(min(46vw, 460px), 22px, 0) rotate(18deg);
     }
 }
 
 @keyframes footer-wheel-turn {
     to { transform: rotate(360deg); }
-}
-
-@keyframes footer-pedal-step {
-    0%, 49.99% { opacity: 1; }
-    50%, 100% { opacity: 0; }
 }
 
 @media (max-width: 640px) {
@@ -168,7 +242,9 @@
     .footer-cycle-trip,
     .footer-bike-spokes,
     .footer-bike-crank,
-    .footer-rider-legs {
+    .footer-leg-thigh,
+    .footer-leg-shin,
+    .footer-leg-shoe {
         animation: none;
     }
 
