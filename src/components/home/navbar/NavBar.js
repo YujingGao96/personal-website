@@ -11,8 +11,9 @@ import logo from "./logo.png";
 import {BLOG_LANGUAGE_COOKIE, BLOG_LANGUAGE_EVENT, BLOG_LANGUAGE_PARAM, DEFAULT_BLOG_LANGUAGE, getSupportedBlogLanguage, normalizeBlogLanguage, withBlogLanguage} from "../../../lib/blog/language";
 import {getClientCookie} from "../../../lib/clientPreferenceCookie";
 import {getHomeCopy} from "../../../lib/home/content";
+import {NavAuthSkeleton} from "../../common/LoadingSkeleton";
 
-const AuthButton = dynamic(() => import("./AuthButton"), {ssr: false});
+const AuthButton = dynamic(() => import("./AuthButton"), {ssr: false, loading: () => <NavAuthSkeleton/>});
 
 const NavBar = () => {
     const pathname = usePathname();

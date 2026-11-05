@@ -8,6 +8,8 @@ import {faCircleUser, faRightToBracket, faUserShield, faXmark} from "@fortawesom
 import {useAuth, useUser, SignOutButton, SignIn, SignUp} from "@clerk/nextjs";
 import {DEFAULT_BLOG_LANGUAGE} from "../../../lib/blog/language";
 import {getHomeCopy} from "../../../lib/home/content";
+import {NavAuthSkeleton} from "../../common/LoadingSkeleton";
+import {AuthFormSkeleton} from "../../common/PageSkeletons";
 
 const PHONE_AUTH_BREAKPOINT = 640;
 
@@ -155,9 +157,9 @@ export default function AuthButton({language = DEFAULT_BLOG_LANGUAGE}) {
                         <FontAwesomeIcon icon={faXmark}/>
                     </button>
                     {authFrame.mode === "sign-up" ? (
-                        <SignUp key="sign-up" routing="hash" signInUrl="#sign-in"/>
+                        <SignUp key="sign-up" routing="hash" signInUrl="#sign-in" fallback={<AuthFormSkeleton/>}/>
                     ) : (
-                        <SignIn key="sign-in" routing="hash" signUpUrl="#sign-up"/>
+                        <SignIn key="sign-in" routing="hash" signUpUrl="#sign-up" fallback={<AuthFormSkeleton/>}/>
                     )}
                 </section>
             </div>,
@@ -165,7 +167,7 @@ export default function AuthButton({language = DEFAULT_BLOG_LANGUAGE}) {
         )
         : null;
 
-    if (!isLoaded) return null;
+    if (!isLoaded) return <NavAuthSkeleton/>;
 
     if (isSignedIn && user) {
         const initials = (user.firstName?.[0] || "") + (user.lastName?.[0] || "") || user.emailAddresses?.[0]?.emailAddress?.[0]?.toUpperCase() || "U";

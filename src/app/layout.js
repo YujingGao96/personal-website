@@ -2,6 +2,7 @@ import {ClerkProvider} from "@clerk/nextjs";
 import "./globals.css";
 import NavBar from "../components/home/navbar/NavBar";
 import {hasClerkConfig} from "../lib/blog/config";
+import SiteSkeletonProvider from "../components/common/SiteSkeletonProvider";
 
 export const metadata = {
     title: "Welcome to Yujing Gao's Website",
@@ -28,11 +29,13 @@ export default function RootLayout({children}) {
     const layout = (
         <html lang="en" data-scroll-behavior="smooth">
             <body>
-                <NavBar/>
-                <div className="page-top-progressive-blur" aria-hidden="true">
-                    <span className="page-top-progressive-blur-layer" />
-                </div>
-                {children}
+                <SiteSkeletonProvider>
+                    <NavBar/>
+                    <div className="page-top-progressive-blur" aria-hidden="true">
+                        <span className="page-top-progressive-blur-layer" />
+                    </div>
+                    {children}
+                </SiteSkeletonProvider>
             </body>
         </html>
     );

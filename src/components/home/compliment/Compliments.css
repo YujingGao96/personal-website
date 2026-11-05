@@ -109,10 +109,6 @@
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px color-mix(in srgb, var(--c) 28%, transparent);
 }
 
-.compliment-sigil-placeholder {
-    flex-shrink: 0;
-}
-
 /* Card top band */
 .compliment-card-header {
     position: relative;

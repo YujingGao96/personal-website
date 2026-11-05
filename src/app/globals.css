@@ -16,6 +16,8 @@
 @import "../components/common/BannerTreatment.css";
 @import "../components/home/intro/OrbitalStage.css";
 @import "../components/common/MotionBoundary.css";
+@import "../components/common/LoadingSkeleton.css";
+@import "../components/common/PageSkeletons.css";
 
 :root {
     --browser-chrome-bleed: 10rem;

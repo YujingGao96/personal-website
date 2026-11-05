@@ -1,5 +1,6 @@
 import {SignUp} from "@clerk/nextjs";
 import {hasClerkConfig} from "../../../lib/blog/config";
+import {AuthFormSkeleton} from "../../../components/common/PageSkeletons";
 
 export const metadata = {
     title: "Sign Up | Yujing Gao",
@@ -21,7 +22,7 @@ export default function SignUpRoute() {
     return (
         <main className="admin-blog-shell">
             <div className="admin-blog-inner">
-                <SignUp routing="path" path="/sign-up"/>
+                <SignUp routing="path" path="/sign-up" fallback={<AuthFormSkeleton/>}/>
             </div>
         </main>
     );

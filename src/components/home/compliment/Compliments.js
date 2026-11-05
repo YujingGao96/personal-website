@@ -3,6 +3,7 @@
 import {useCallback, useEffect, useRef, useState} from "react";
 import GeneratedSigil from "../../common/GeneratedSigil";
 import MotionBoundary from "../../common/MotionBoundary";
+import {AvatarSkeleton} from "../../common/LoadingSkeleton";
 import SectionHeader from "../../common/SectionHeader";
 import useMotionVisibility from "../../../hooks/useMotionVisibility";
 import {hashText} from "../../../util/GenArtUtil";
@@ -27,7 +28,7 @@ function ClientSigil({name, size}) {
     }, []);
 
     if (!mounted) {
-        return <div className="compliment-sigil-placeholder" style={{width: size, height: size}} aria-hidden="true"/>;
+        return <AvatarSkeleton size={size}/>;
     }
 
     return <GeneratedSigil name={name} size={size}/>;

@@ -1,0 +1,26 @@
+.loading-region {
+    min-width: 0;
+}
+
+.loading-region-content {
+    display: contents;
+}
+
+.loading-box {
+    max-width: 100%;
+}
+
+.loading-avatar {
+    display: inline-flex;
+    flex-shrink: 0;
+    vertical-align: middle;
+}
+
+.loading-nav-auth {
+    align-items: center;
+    display: flex;
+    flex-shrink: 0;
+    height: 38px;
+    justify-content: center;
+    width: 38px;
+}
