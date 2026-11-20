@@ -22,30 +22,25 @@ function Pills() {
 
 function SectionHeading() {
     return (
-        <div className="section-header loading-home-section-heading">
-            <LoadingBox width={110} height={11} radius={2}/>
-            <LoadingBox width="min(460px, 80%)" height="clamp(44px, 6.1vw, 94px)" radius={3}/>
+        <div className="loading-section-heading">
+            <LoadingBox width={110} height={10} radius={3}/>
+            <LoadingBox width="min(290px, 80%)" height={54} radius={6}/>
+            <LoadingBox width="min(380px, 90%)" height={14} radius={4}/>
         </div>
     );
 }
 
 function HomeBlogCards() {
     return (
-        <div className="blog-card-grid">
-            {[0, 1, 2].map((index) => (
-                <div className={`home-blog-card loading-home-blog-card${index === 0 ? " latest" : ""}`} key={index}>
-                    <div className="home-blog-card-link">
-                        <div className="home-blog-cover">
-                            <LoadingBox width="100%" height="100%" radius={0} className="loading-home-blog-cover"/>
-                        </div>
-                        <div className="home-blog-card-body loading-home-blog-copy">
-                            <LoadingBox width={105} height={10} radius={2}/>
-                            <Lines widths={["94%", "70%"]} height={index === 0 ? "clamp(31px, 3.7vw, 48px)" : 30}/>
-                            <Lines widths={["100%", "95%", "68%"]} height={13}/>
-                            <div className="home-blog-footer">
-                                <LoadingBox width={150} height={10} radius={2}/>
-                            </div>
-                        </div>
+        <div className="loading-home-blogs-grid">
+            {[0, 1].map((index) => (
+                <div className={`loading-panel loading-home-blog-card${index === 0 ? " loading-home-blog-featured" : ""}`} key={index}>
+                    <LoadingBox width="100%" height="100%" radius={0} className="loading-home-blog-cover"/>
+                    <div className="loading-home-blog-copy">
+                        <LoadingBox width={105} height={10} radius={3}/>
+                        <Lines widths={["90%", "64%"]} height={25}/>
+                        <Lines/>
+                        <Pills/>
                     </div>
                 </div>
             ))}
@@ -56,12 +51,10 @@ function HomeBlogCards() {
 export function HomeBlogsSkeleton() {
     return (
         <LoadingRegion label="Loading posts… / 正在加载文章…" className="loading-home-blogs">
-            <div id="blogs">
-                <SectionHeading/>
-                <HomeBlogCards/>
-                <div className="blog-home-heading">
-                    <LoadingBox width={160} height={48} radius={2}/>
-                </div>
+            <SectionHeading/>
+            <HomeBlogCards/>
+            <div className="loading-centered">
+                <LoadingBox width={185} height={56} radius={99}/>
             </div>
         </LoadingRegion>
     );
@@ -69,59 +62,36 @@ export function HomeBlogsSkeleton() {
 
 export function HomeSkeleton() {
     return (
-        <div className="signal-page">
-            <main className="signal-content">
-                <section className="signal-hero">
-                    <LoadingRegion label="Loading home… / 正在加载首页…">
-                        <div className="signal-hero-grid">
-                            <div className="signal-intro loading-home-intro">
-                                <div className="signal-identity">
-                                    <LoadingBox width={44} height={44} radius="50%"/>
-                                    <div className="loading-lines">
-                                        <LoadingBox width={180} height={10} radius={2}/>
-                                        <LoadingBox width={65} height={10} radius={2}/>
-                                    </div>
-                                </div>
-                                <div className="signal-title loading-home-title">
-                                    <LoadingBox width="100%" height="clamp(64px, 7.5vw, 112px)" radius={3}/>
-                                    <LoadingBox width="100%" height="clamp(64px, 7.5vw, 112px)" radius={3} className="loading-home-title-short"/>
-                                </div>
-                                <div className="signal-description">
-                                    <Lines widths={["96%", "90%", "65%"]} height={17}/>
-                                </div>
-                                <div className="signal-actions">
-                                    <LoadingBox width={161} height={46} radius={2}/>
-                                    <LoadingBox width={102} height={46} radius={2}/>
-                                </div>
-                                <div className="signal-contact">
-                                    <LoadingBox width={45} height={12} radius={2}/>
-                                    <LoadingBox width={77} height={12} radius={2}/>
-                                </div>
-                            </div>
-                            <div className="signal-stage">
-                                <div className="signal-scene">
-                                    <LoadingBox width="100%" height="100%" radius={4} style={{position: "absolute", inset: 0}}/>
-                                </div>
-                                <div className="signal-tabs">
-                                    {[0, 1, 2].map(index => <LoadingBox key={index} width="100%" height={46} radius={0}/>)}
-                                </div>
-                                <div className="signal-caption">
-                                    <div className="loading-lines">
-                                        <LoadingBox width={145} height={13} radius={2}/>
-                                        <LoadingBox width={215} height={11} radius={2}/>
-                                    </div>
-                                </div>
-                            </div>
+        <main className="container loading-home-shell">
+            <LoadingRegion label="Loading home… / 正在加载首页…">
+                <SectionHeading/>
+                <div className="loading-panel loading-home-intro">
+                    <div className="loading-home-profile">
+                        <LoadingBox width="min(240px, 80%)" height={240} radius={999}/>
+                        <LoadingBox width="65%" height={30} radius={5}/>
+                        <LoadingBox width="82%" height={14} radius={4}/>
+                        <div className="loading-row">
+                            <LoadingBox width={40} height={40} radius={99}/>
+                            <LoadingBox width={40} height={40} radius={99}/>
+                            <LoadingBox width={40} height={40} radius={99}/>
                         </div>
-                        <div className="signal-source loading-home-source-row">
-                            <LoadingBox width={180} height={12} radius={2}/>
-                            <LoadingBox width={88} height={12} radius={2}/>
+                    </div>
+                    <div className="loading-home-code">
+                        <div className="loading-row loading-code-toolbar">
+                            <LoadingBox width={12} height={12} radius={99}/>
+                            <LoadingBox width={12} height={12} radius={99}/>
+                            <LoadingBox width={12} height={12} radius={99}/>
                         </div>
-                    </LoadingRegion>
-                </section>
-                <section><HomeBlogsSkeleton/></section>
-            </main>
-        </div>
+                        <Lines widths={["42%", "78%", "63%", "86%", "70%", "58%", "83%", "66%", "38%"]} height={15}/>
+                        <LoadingBox width="100%" height={28} radius={5}/>
+                    </div>
+                </div>
+                <div className="loading-home-next">
+                    <SectionHeading/>
+                    <HomeBlogCards/>
+                </div>
+            </LoadingRegion>
+        </main>
     );
 }
 

@@ -26,7 +26,7 @@ const Blogs = async ({language = DEFAULT_BLOG_LANGUAGE}) => {
         <div id="blogs">
             <SectionHeader eyebrow={copy.homeBlogEyebrow} title={copy.homeBlogTitle} sectionId="blogs" />
             {popularPosts.length > 0 ? (
-                <div className="blog-card-grid">
+                <div className="blog-card-grid py-5 px-3">
                     {popularPosts.map((post) => (
                         <BlogCard
                             key={post.slug}

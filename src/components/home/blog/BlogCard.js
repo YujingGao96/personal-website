@@ -25,9 +25,12 @@ const BlogCard = ({post, isLatest = false, language = DEFAULT_BLOG_LANGUAGE}) =>
             <Link href={withBlogLanguage(`/blog/${post.slug}`, language)} className="home-blog-card-link">
                 <div className="home-blog-cover">
                     <GeneratedBlogCover post={post} className="home-blog-cover-svg"/>
+                    <div className="home-blog-cover-fade"/>
                     {isLatest && <span className="home-blog-latest-badge">{copy.latest}</span>}
+                    <h2>{post.title}</h2>
                 </div>
                 <div className="home-blog-card-body">
+                    {isLatest && <h2 className="home-blog-feature-title">{post.title}</h2>}
                     {labels.length > 0 && (
                         <div className="home-blog-labels">
                             {labels.map((label) => (
@@ -37,7 +40,6 @@ const BlogCard = ({post, isLatest = false, language = DEFAULT_BLOG_LANGUAGE}) =>
                             ))}
                         </div>
                     )}
-                    <h2 className="home-blog-feature-title">{post.title}</h2>
                     <p>{post.summary}</p>
                     <div className="home-blog-footer">
                         <span>{formatDate(post.publishedAt || post.updatedAt, language)}</span>
@@ -49,11 +51,7 @@ const BlogCard = ({post, isLatest = false, language = DEFAULT_BLOG_LANGUAGE}) =>
                                 <span>{post.viewCount} {copy.views}</span>
                             </>
                         )}
-                        <span className="home-blog-arrow" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
-                                <path d="M5 19 19 5M5 5h14v14"/>
-                            </svg>
-                        </span>
+                        <span className="home-blog-arrow">→</span>
                     </div>
                 </div>
             </Link>

@@ -12,8 +12,8 @@ const Projects = ({language = DEFAULT_BLOG_LANGUAGE}) => {
         <div id="projects">
             <SectionHeader eyebrow={copy.projectsEyebrow} title={copy.projectsTitle} sectionId="projects" />
             <div className="projects-grid">
-                {projects.map((project) => (
-                    <ProjectCard key={project.title} project={project} ctaLabel={copy.projectExplore}/>
+                {projects.map((project, index) => (
+                    <ProjectCard key={project.title} project={project} index={index} ctaLabel={copy.projectExplore}/>
                 ))}
             </div>
         </div>
