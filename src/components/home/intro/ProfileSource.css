@@ -1,0 +1,81 @@
+.profile-source {
+    background: rgba(15, 14, 13, 0.62);
+    border: 1px solid rgba(241, 222, 196, 0.1);
+    border-radius: 0.9rem;
+    color: #d6cdbf;
+    font-family: "DM Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: clamp(0.72rem, 1vw, 0.8rem);
+    line-height: 1.85;
+    margin: 0;
+    max-height: 26rem;
+    max-width: 100%;
+    overflow: auto;
+    padding: 1.1rem 1.15rem;
+    scrollbar-color: rgba(222, 190, 148, 0.32) transparent;
+    scrollbar-width: thin;
+    tab-size: 2;
+    white-space: pre;
+}
+
+.profile-source:focus-visible {
+    outline: 2px solid #c8a66d;
+    outline-offset: 4px;
+}
+
+.profile-source > code {
+    color: inherit;
+    display: block;
+    font: inherit;
+    min-width: max-content;
+}
+
+.profile-source-line {
+    display: grid;
+    gap: 1.2rem;
+    grid-template-columns: 2ch minmax(0, 1fr);
+    min-height: 1.85em;
+}
+
+.profile-source-number {
+    color: #81776b;
+    text-align: right;
+    user-select: none;
+}
+
+.profile-source-text {
+    display: block;
+    padding-left: calc(var(--source-indent) * 2ch);
+}
+
+.profile-source-class {
+    color: #c6c4a0;
+}
+
+.profile-source-method {
+    color: #e2bf82;
+}
+
+.profile-source-string {
+    color: #aab9a0;
+}
+
+.profile-source-value,
+.profile-source .code-number {
+    color: #d0ad9b;
+    font-variant-numeric: tabular-nums;
+}
+
+.profile-source-keyword {
+    color: #c2a9b4;
+}
+
+@media (max-width: 640px) {
+    .profile-source {
+        max-height: 24rem;
+        padding: 0.85rem 0.75rem;
+    }
+
+    .profile-source-line {
+        gap: 0.85rem;
+    }
+}

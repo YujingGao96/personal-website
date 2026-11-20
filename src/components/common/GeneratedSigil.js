@@ -2,6 +2,10 @@ import {hashText} from "../../util/GenArtUtil";
 
 const SIGIL_TYPES = ["orbit", "prism", "helix"];
 
+// Math.sin/cos can differ in their last bits between server and browser engines.
+// SVG precision below a ten-thousandth of this 100-unit viewBox is invisible.
+const svgNumber = (value) => Number(value.toFixed(4));
+
 function getSigilHue(name) {
     return hashText(name) % 360;
 }
@@ -35,30 +39,30 @@ export default function GeneratedSigil({name, size = 72}) {
             {rings.map((rad, ri) => (
                 <g key={ri}>
                     <ellipse
-                        cx={cx} cy={cy} rx={rad} ry={rad * 0.38}
+                        cx={cx} cy={cy} rx={rad} ry={svgNumber(rad * 0.38)}
                         fill="none"
                         stroke={ri === 0 ? c1 : ri === 1 ? c2 : c3}
                         strokeWidth={0.8} opacity={0.6}
-                        transform={`rotate(${rotations[ri] + ri * 25} ${cx} ${cy})`}
+                        transform={`rotate(${svgNumber(rotations[ri] + ri * 25)} ${cx} ${cy})`}
                     />
                     <ellipse
-                        cx={cx} cy={cy} rx={rad * 0.78} ry={rad * 0.24}
+                        cx={cx} cy={cy} rx={svgNumber(rad * 0.78)} ry={svgNumber(rad * 0.24)}
                         fill="none"
                         stroke={ri === 0 ? c4 : c1}
                         strokeWidth={0.35} opacity={0.34}
-                        transform={`rotate(${rotations[ri] + ri * 25 + 90} ${cx} ${cy})`}
+                        transform={`rotate(${svgNumber(rotations[ri] + ri * 25 + 90)} ${cx} ${cy})`}
                     />
                     {Array.from({length: nodeCounts[ri]}, (_, i) => {
                         const a = (i / nodeCounts[ri]) * Math.PI * 2 + rotations[ri] * Math.PI / 180;
                         return (
                             <circle
                                 key={i}
-                                cx={cx + Math.cos(a) * rad}
-                                cy={cy + Math.sin(a) * rad * 0.38}
+                                cx={svgNumber(cx + Math.cos(a) * rad)}
+                                cy={svgNumber(cy + Math.sin(a) * rad * 0.38)}
                                 r={1.2}
                                 fill={ri === 0 ? c1 : ri === 1 ? c2 : c3}
                                 opacity={0.9}
-                                transform={`rotate(${rotations[ri] + ri * 25} ${cx} ${cy})`}
+                                transform={`rotate(${svgNumber(rotations[ri] + ri * 25)} ${cx} ${cy})`}
                             />
                         );
                     })}
@@ -78,7 +82,7 @@ export default function GeneratedSigil({name, size = 72}) {
     const polyPoints = (n, radius, offsetDeg) =>
         Array.from({length: n}, (_, i) => {
             const a = (i / n) * Math.PI * 2 + offsetDeg * Math.PI / 180;
-            return `${cx + Math.cos(a) * radius},${cy + Math.sin(a) * radius}`;
+            return `${svgNumber(cx + Math.cos(a) * radius)},${svgNumber(cy + Math.sin(a) * radius)}`;
         }).join(" ");
 
     const renderPrismSigil = () => (
@@ -98,7 +102,7 @@ export default function GeneratedSigil({name, size = 72}) {
                 return (
                     <line key={i}
                         x1={cx} y1={cy}
-                        x2={cx + Math.cos(a) * 36} y2={cy + Math.sin(a) * 36}
+                        x2={svgNumber(cx + Math.cos(a) * 36)} y2={svgNumber(cy + Math.sin(a) * 36)}
                         stroke={c2} strokeWidth={0.5} opacity={0.4}
                     />
                 );
@@ -117,8 +121,8 @@ export default function GeneratedSigil({name, size = 72}) {
         const base = 32, amp = 14;
         const r1 = base + Math.sin(t * freq + r(6) * Math.PI) * amp;
         const r2 = base + Math.sin(t * freq + Math.PI + r(6) * Math.PI) * amp;
-        pts1.push(`${cx + Math.cos(t) * r1},${cy + Math.sin(t) * r1}`);
-        pts2.push(`${cx + Math.cos(t) * r2},${cy + Math.sin(t) * r2}`);
+        pts1.push(`${svgNumber(cx + Math.cos(t) * r1)},${svgNumber(cy + Math.sin(t) * r1)}`);
+        pts2.push(`${svgNumber(cx + Math.cos(t) * r2)},${svgNumber(cy + Math.sin(t) * r2)}`);
     }
     const dashLen = 2 + r(24) * 6;
     const dashGap = 4 + r(28) * 8;
@@ -129,13 +133,13 @@ export default function GeneratedSigil({name, size = 72}) {
             <polyline points={pts2.join(" ")} fill="none" stroke={c2} strokeWidth={0.9} opacity={0.7}/>
             <polyline points={pts1.filter((_, index) => index % 2 === 0).join(" ")} fill="none" stroke={c4} strokeWidth={0.35} opacity={0.5}/>
             <circle cx={cx} cy={cy} r={28} fill="none" stroke={c3} strokeWidth={0.5}
-                strokeDasharray={`${dashLen} ${dashGap}`} opacity={0.45}/>
+                strokeDasharray={`${svgNumber(dashLen)} ${svgNumber(dashGap)}`} opacity={0.45}/>
             <circle cx={cx} cy={cy} r={4} fill={c4} opacity={0.94}/>
             <circle cx={cx} cy={cy} r={8} fill="none" stroke={c1} strokeWidth={0.5} opacity={0.3}/>
         </g>
     );
 
-    const outerDash = `${2 + r(24) * 6} ${4 + r(28) * 8}`;
+    const outerDash = `${svgNumber(2 + r(24) * 6)} ${svgNumber(4 + r(28) * 8)}`;
     const spokes = 8 + (seed % 5);
     const starRadius = 34 + r(16) * 7;
 
@@ -184,8 +188,8 @@ export default function GeneratedSigil({name, size = 72}) {
                                 key={i}
                                 x1={cx}
                                 y1={cy}
-                                x2={x}
-                                y2={y}
+                                x2={svgNumber(x)}
+                                y2={svgNumber(y)}
                                 stroke={i % 2 ? c2 : c4}
                                 strokeWidth="0.28"
                                 opacity="0.28"

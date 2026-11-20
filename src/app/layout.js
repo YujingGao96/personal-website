@@ -26,11 +26,12 @@ export const viewport = {
 };
 
 export default function RootLayout({children}) {
+    const authEnabled = hasClerkConfig();
     const layout = (
         <html lang="en" data-scroll-behavior="smooth">
             <body>
                 <SiteSkeletonProvider>
-                    <NavBar/>
+                    <NavBar authEnabled={authEnabled}/>
                     <div className="page-top-progressive-blur" aria-hidden="true">
                         <span className="page-top-progressive-blur-layer" />
                     </div>
@@ -180,5 +181,5 @@ export default function RootLayout({children}) {
         },
     };
 
-    return hasClerkConfig() ? <ClerkProvider appearance={darkAppearance}>{layout}</ClerkProvider> : layout;
+    return authEnabled ? <ClerkProvider appearance={darkAppearance}>{layout}</ClerkProvider> : layout;
 }
